@@ -1,12 +1,7 @@
 #include "Fraction.h"
 #include <iostream>
 
-using std::cout;
-
-const char* print_bool(bool b){
-    if(b) return "true";
-    return "false";
-}
+using std::cout, std::boolalpha;
 
 void test_arithmetic(){
     Fraction<int>f0 (1,2);
@@ -26,13 +21,13 @@ void test_comparison() {
   cout << "\ntesting comparison:\n";
 
   bool flag = F0 == F1;
-  cout << '\t' << F0 << " == " << F1 << " => " << print_bool(flag) << '\n';
+  cout << '\t' << F0 << " == " << F1 << " => " << boolalpha << flag << '\n';
   flag = F0 != F1;
-  cout << '\t' << F0 << " != " << F1 << " => " << print_bool(flag) << '\n';
+  cout << '\t' << F0 << " != " << F1 << " => " << boolalpha << flag << '\n';
   flag = F0 < F1;
-  cout << '\t' << F0 << " < " << F1 << " => " << print_bool(flag) << '\n';
+  cout << '\t' << F0 << " < " << F1 << " => " << boolalpha << flag << '\n';
   flag = F0 > F1;
-  cout << '\t' << F0 << " > " << F1 << " => " << print_bool(flag) << '\n';
+  cout << '\t' << F0 << " > " << F1 << " => " << boolalpha << flag << '\n';
 }
 
 int main() {

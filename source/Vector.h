@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <initializer_list>
 #include <iostream>
+#include <type_traits>
+#include <math.h>
 #include <stdexcept>
 #include <vector>
 
@@ -36,7 +38,7 @@ public:
     }
 
     vector<T> result(rhs.size());
-    std::transform(m_vector.cbegin, m_vector.cend(), rhs.m_vector.cbegin(),
+    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
                    result.begin(),
                    [](const T &a, const T &b) -> T { return a * b; });
 
@@ -57,7 +59,7 @@ public:
     }
 
     vector<T> result(rhs.size());
-    std::transform(m_vector.cbegin, m_vector.cend(), rhs.m_vector.cbegin(),
+    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
                    result.begin(),
                    [](const T &a, const T &b) -> T { return a + b; });
 
@@ -78,7 +80,7 @@ public:
     }
 
     vector<T> result(rhs.size());
-    std::transform(m_vector.cbegin, m_vector.cend(), rhs.m_vector.cbegin(),
+    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
                    result.begin(),
                    [](const T &a, const T &b) -> T { return a - b; });
 
@@ -99,7 +101,7 @@ public:
     }
 
     vector<T> result(rhs.size());
-    std::transform(m_vector.cbegin, m_vector.cend(), rhs.m_vector.cbegin(),
+    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
                    result.begin(),
                    [](const T &a, const T &b) -> T { return a / b; });
 
@@ -126,15 +128,24 @@ public:
   unsigned int size() const { return m_vector.size(); }
 
   template <typename U>
-  friend std::ostream& operator<< (std::ostream& ss, const Vector<U>& v);
+  friend std::ostream &operator<<(std::ostream &ss, const Vector<U> &v);
 };
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ss, const Vector<T>& v){
+std::ostream &operator<<(std::ostream &ss, const Vector<T> &v) {
   ss << "[ ";
-  for (auto const& i: v.m_vector){
+  for (auto const &i : v.m_vector) {
     ss << i << " ";
   }
   return ss << "]";
 };
 
+template <typename T,
+          std::enable_if_t<std::is_arithmetic<T>::value, bool> = true> 
+constexpr double dist(const Vector<T> &v) {
+  double result = 0.0;
+  for(auto const&i: v)
+    result += pow(i,2);
+
+  return sqrt(result);
+}
