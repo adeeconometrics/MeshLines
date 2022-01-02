@@ -26,11 +26,14 @@ void test_arithmetic(const Vector<T>& a, const Vector<T>& b, int c = 1){
 
 template <typename T>
 void test_comparison(const Vector<T>& a, const Vector<T>& b){
+  bool flag{};
   cout << "testing comparison: \n";
   cout << "\tvector a: " << a << '\n';
   cout << "\tvector b: " << b << '\n';
-  cout << "\ta == b: " << std::boolalpha << a == b << '\n';
-  cout << "\ta != b: " << std::boolalpha << a != b << '\n';
+  flag = a == b;
+  cout << "\ta == b: " << std::boolalpha << flag << '\n';
+  flag = a != b;
+  cout << "\ta != b: " << std::boolalpha << flag << '\n';
 }
 
 int main() {
