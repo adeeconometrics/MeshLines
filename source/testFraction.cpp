@@ -1,7 +1,7 @@
 #include "Fraction.h"
 #include <iostream>
 
-using std::cout, std::boolalpha;
+using std::cout;
 
 void test_arithmetic(){
     Fraction<int>f0 (1,2);
@@ -21,13 +21,13 @@ void test_comparison() {
   cout << "\ntesting comparison:\n";
 
   bool flag = F0 == F1;
-  cout << '\t' << F0 << " == " << F1 << " => " << boolalpha << flag << '\n';
+  cout << '\t' << F0 << " == " << F1 << " => " << std::boolalpha << flag << '\n';
   flag = F0 != F1;
-  cout << '\t' << F0 << " != " << F1 << " => " << boolalpha << flag << '\n';
+  cout << '\t' << F0 << " != " << F1 << " => " << std::boolalpha << flag << '\n';
   flag = F0 < F1;
-  cout << '\t' << F0 << " < " << F1 << " => " << boolalpha << flag << '\n';
+  cout << '\t' << F0 << " < " << F1 << " => " << std::boolalpha << flag << '\n';
   flag = F0 > F1;
-  cout << '\t' << F0 << " > " << F1 << " => " << boolalpha << flag << '\n';
+  cout << '\t' << F0 << " > " << F1 << " => " << std::boolalpha << flag << '\n';
 }
 
 int main() {

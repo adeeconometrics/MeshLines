@@ -13,7 +13,9 @@
 #include <iostream>
 #include <type_traits>
 
-template <typename T> class Fraction {
+template <typename T,
+          typename = std::enable_if_t<std::is_integral<T>::value>> 
+class Fraction {
 private:
   T m_n{}, m_d{}, m_gcd{};
 
@@ -25,10 +27,10 @@ public:
     m_d = d / m_gcd;
   }
 
-  constexpr double as_ratio() const { return m_n / m_d; }
-  constexpr T get_num() const { return m_n; }
-  constexpr T get_den() const { return m_d; }
-  constexpr T get_gcd() const { return m_gcd; }
+  constexpr auto as_ratio() const -> double { return m_n / m_d; }
+  constexpr auto get_num() const -> T { return m_n; }
+  constexpr auto get_den() const -> T { return m_d; }
+  constexpr auto get_gcd() const -> T { return m_gcd; }
 
 private:
   constexpr T gcd(T a, T b) const noexcept {

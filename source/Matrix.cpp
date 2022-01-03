@@ -51,53 +51,61 @@ public:
   Matrix(Matrix&&) = default;
   ~Matrix() = default;
 
-  Matrix operator=(const Matrix &rhs) const;
-  Matrix operator=(Matrix &&rhs) const;
+  auto operator=(const Matrix &rhs) const -> Matrix&;
+  auto operator=(Matrix &&rhs) const -> Matrix&;
 
-  Matrix& operator*=(const Matrix &rhs) const;
-  Matrix& operator*=(float scalar) const;
-  Matrix& operator+=(const Matrix &rhs) const;
-  Matrix& operator+=(float scalar) const;
-  Matrix& operator-=(const Matrix &rhs) const;
-  Matrix& operator-=(float scalar) const;
-  Matrix& operator/=(const Matrix &rhs) const;
-  Matrix& operator/=(float scalar) const;
+  auto operator*=(const Matrix &rhs) const -> Matrix&;
+  auto operator*=(float scalar) const -> Matrix&;
+  auto operator+=(const Matrix &rhs) const -> Matrix&;
+  auto operator+=(float scalar) const -> Matrix&;
+  auto operator-=(const Matrix &rhs) const -> Matrix&;
+  auto operator-=(float scalar) const -> Matrix&;
+  auto operator/=(const Matrix &rhs) const -> Matrix&;
+  auto operator/=(float scalar) const -> Matrix&;
 
-  Matrix operator*(const Matrix &lhs, const Matrix &rhs) const;
-
-  template <typename U,
-            typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
-  Matrix operator*(const Matrix &lhs, U scalar) const;
-
-  Matrix operator+(const Matrix &lhs, const Matrix &rhs) const;
-  
-  template <typename U,
-            typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
-  Matrix operator+(const Matrix &lhs, U scalar) const;
-  
-  Matrix operator-(const Matrix &lhs, const Matrix &rhs) const;
+  auto operator*(const Matrix &lhs, const Matrix &rhs) const -> Matrix;
 
   template <typename U,
             typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
-  Matrix operator-(const Matrix &lhs, U scalar) const;
-  
-  Matrix operator/(const Matrix &lhs, const Matrix &rhs) const;
+  auto operator*(const Matrix &lhs, U scalar) const -> Matrix;
+
+  auto operator+(const Matrix &lhs, const Matrix &rhs) const -> Matrix;
   
   template <typename U,
             typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
-  Matrix operator/(const Matrix &lhs, U scalar) const;
+  auto operator+(const Matrix &lhs, U scalar) const -> Matrix;
+  
+  auto operator-(const Matrix &lhs, const Matrix &rhs) const -> Matrix;
 
-  bool operator==(const Matrix &rhs) const noexcept;
-  bool operator!=(const Matrix &rhs) const noexcept;
+  template <typename U,
+            typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
+  auto operator-(const Matrix &lhs, U scalar) const -> Matrix;
+  
+  auto operator/(const Matrix &lhs, const Matrix &rhs) const -> Matrix;
+  
+  template <typename U,
+            typename std::enable_if<std::is_arithmetic<T>::value, bool> = true>
+  auto operator/(const Matrix &lhs, U scalar) const -> Matrix;
+
+  auto operator==(const Matrix &rhs) const noexcept -> bool;
+  auto operator!=(const Matrix &rhs) const noexcept -> bool;
 
   bool is_square() const noexcept;
   bool is_invertible() const noexcept;
 
-  size_t row();
-  size_t col();
+  auto row() const noexcept -> size_t;
+  auto col() const noexcept -> size_t;
 
-  vector<T> get_row_at(size_t idx);
-  vector<T> get_col_at(size_t idx);
+  auto get_row_at(size_t idx) -> vector<T>;
+  auto get_col_at(size_t idx) -> vector<T>;
+
+  auto end() -> decltype(m_matrix.end()) {return m_matrix.end(); }
+  auto cend() -> decltype(m_matrix.cend()) { return m_matrix.cend(); }
+  auto rend() -> decltype(m_matrix.rend()) { return m_matrix.rend(); }
+
+  auto begin() -> decltype(m_matrix.begin()) {return m_matrix.begin();}
+  auto cbegin() -> decltype(m_matrix.cbegin()) { return m_matrix.cbegin(); }
+  auto rbegin() -> decltype(m_matrix.rbegin()) { return m_matrix.rbegin(); }
 };
 
 
