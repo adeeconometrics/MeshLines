@@ -1,11 +1,11 @@
 #include <iostream>
-#include "Vector.h"
+#include "vector.h"
 
 using std::cout;
 
 
-template <typename T>
-void test_arithmetic(const Vector<T>& a, const Vector<T>& b, int c = 1){
+template <typename T, size_t N>
+void test_arithmetic(const vector<T,N>& a, const vector<T,N>& b, int c = 1){
   cout << "testing arithmetic operators: \n";
   cout << "\tvector a: " << a << '\n';
   cout << "\tvector b: " << b << '\n';
@@ -24,8 +24,8 @@ void test_arithmetic(const Vector<T>& a, const Vector<T>& b, int c = 1){
   cout << "\ta / c: " << a / c << '\n';
 }
 
-template <typename T>
-void test_comparison(const Vector<T>& a, const Vector<T>& b){
+template <typename T, size_t N>
+void test_comparison(const vector<T,N> &a, const vector<T,N> &b) {
   bool flag{};
   cout << "testing comparison: \n";
   cout << "\tvector a: " << a << '\n';
@@ -37,9 +37,9 @@ void test_comparison(const Vector<T>& a, const Vector<T>& b){
 }
 
 int main() {
-  Vector<int> a{1, 2, 3};
-  Vector<int> b{1, 1, 1};
-  Vector<int> c{1, 1, 1};
-  test_arithmetic<int>(a,b);
-  test_comparison<int>(b,c);
+  vector<int,3> a{1, 2, 3};
+  vector<int,3> b{1, 1, 1};
+  vector<int,3> c{1, 1, 1};
+  test_arithmetic(a,b);
+  test_comparison(b,c);
 }

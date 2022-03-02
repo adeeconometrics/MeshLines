@@ -1,186 +1,158 @@
-/**
- * @file Vector.h
- * @author ddamiana
- * @brief representation of a mathematical vector
- * @version 0.1
- * @date 2021-12-23
- *
- * @copyright Copyright (c) 2021
- *
- */
-
-#pragma once
-// #include "Matrix.h"
 #include <algorithm>
-#include <initializer_list>
+#include <array>
 #include <iostream>
 #include <limits>
 #include <math.h>
-#include <stdexcept>
 #include <type_traits>
-#include <vector>
 
-using std::vector;
+#if __cplusplus >= 201703L
+using std::array;
+using std::cout;
 
-template <typename T> class Vector {
+template <typename T, size_t N> class vector : public array<T, N> {
 public:
-  typedef vector<T> value_type;
-  typedef value_type &reference;
-  typedef value_type *pointer_type;
-  typedef const value_type const_type;
-  typedef const reference const_reference;
-  typedef const pointer_type const_pointer;
-
-private:
-  value_type m_vector;
-
-public:
-  Vector(const vector<T> &_vector) : m_vector(_vector) {}
-  Vector(std::initializer_list<T> _list) : m_vector((value_type)_list) {}
-  Vector(const Vector<T> &) = default;
-  Vector(Vector<T> &&) = default;
-  // Vector(const Matrix& m);
-
-  ~Vector() = default;
-
-  auto operator=(const Vector &) noexcept -> Vector & = default;
-  auto operator=(Vector &&) noexcept -> Vector & = default;
-  // explicit operator Matrix();
-
-  auto operator*(const Vector &rhs) const -> Vector {
-    if (size() != rhs.size()) {
-      throw std::domain_error(
-          "size of vector is expected to have the same size");
-    }
-
-    value_type result(rhs.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
-                   result.begin(),
-                   [](const T &a, const T &b) -> T { return a * b; });
-
-    return result;
-  }
-
-  auto operator*(float scalar) const noexcept -> Vector {
-    value_type result(m_vector.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), result.begin(),
-                   [&scalar](const T &a) -> T { return a * scalar; });
-    return result;
-  }
-
-  auto operator+(const Vector &rhs) const -> Vector {
-    if (size() != rhs.size()) {
-      throw std::domain_error(
-          "size of vector is expected to have the same size");
-    }
-
-    value_type result(rhs.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
-                   result.begin(),
-                   [](const T &a, const T &b) -> T { return a + b; });
-
-    return result;
-  }
-
-  auto operator+(float scalar) const noexcept -> Vector {
-    value_type result(m_vector.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), result.begin(),
-                   [&scalar](const T &a) -> T { return a + scalar; });
-    return result;
-  }
-
-  auto operator-(const Vector &rhs) const -> Vector {
-    if (size() != rhs.size()) {
-      throw std::domain_error(
-          "size of vector is expected to have the same size");
-    }
-
-    value_type result(rhs.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
-                   result.begin(),
-                   [](const T &a, const T &b) -> T { return a - b; });
-
-    return result;
-  }
-
-  auto operator-(float scalar) const noexcept -> Vector {
-    value_type result(m_vector.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), result.begin(),
-                   [&scalar](const T &a) -> T { return a - scalar; });
-    return result;
-  }
-
-  auto operator/(const Vector &rhs) const -> Vector {
-    if (size() != rhs.size()) {
-      throw std::domain_error(
-          "size of vector is expected to have the same size");
-    }
-
-    value_type result(rhs.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), rhs.m_vector.cbegin(),
-                   result.begin(),
-                   [](const T &a, const T &b) -> T { return a / b; });
-
-    return result;
-  }
-
-  auto operator/(float scalar) const noexcept -> Vector {
-    value_type result(m_vector.size());
-    std::transform(m_vector.cbegin(), m_vector.cend(), result.begin(),
-                   [&scalar](const T &a) -> T { return a / scalar; });
-    return result;
-  }
-
-  auto operator==(const Vector &rhs) const noexcept -> bool {
-    for (size_t i = 0; i < m_vector.size(); i++) {
-      if (m_vector[i] != rhs.m_vector[i])
-        return false;
-    }
-    return true;
-  }
-
-  auto operator!=(const Vector &rhs) const noexcept -> bool {
-    return !(*this == rhs);
-  }
-
-  auto size() const -> decltype(m_vector.size()) { return m_vector.size(); }
-
-  template <typename U>
-  friend auto operator<<(std::ostream &ss, const Vector<U> &v)
-      -> std::ostream &;
-
-  auto begin() const noexcept -> decltype(m_vector.begin()) {
-    return m_vector.begin();
-  }
-  auto end() const noexcept -> decltype(m_vector.end()) {
-    return m_vector.end();
-  }
-  auto cbegin() const noexcept -> decltype(m_vector.cbegin()) {
-    return m_vector.cbegin();
-  }
-  auto cend() const noexcept -> decltype(m_vector.cend()) {
-    return m_vector.cend();
-  }
-  auto rbegin() const noexcept -> decltype(m_vector.rbegin()) {
-    return m_vector.rbegin();
-  }
-  auto rend() const noexcept -> decltype(m_vector.rend()) {
-    return m_vector.rend();
-  }
+  auto operator+=(const vector<T, N> &rhs) -> vector<T, N>;
+  auto operator-=(const vector<T, N> &rhs) -> vector<T, N>;
+  auto operator/=(const vector<T, N> &rhs) -> vector<T, N>;
+  auto operator*=(const vector<T, N> &rhs) -> vector<T, N>;
 };
 
-template <typename T>
-auto operator<<(std::ostream &ss, const Vector<T> &v) -> std::ostream & {
-  ss << "[ ";
-  for (auto const &i : v.m_vector) {
-    ss << i << " ";
-  }
-  return ss << "]";
-};
+template <typename T, size_t N>
+auto operator+(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
+  vector<T, N> result{};
 
-template <typename T,
-          typename std::enable_if<std::is_arithmetic<T>::value>::type>
-auto dist(const Vector<T> &v) -> double {
+  std::transform(
+      lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
+      [](const T &a, const T &b) -> decltype(a + b) { return a + b; });
+
+  return result;
+}
+
+template <typename T, size_t N>
+auto operator-(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
+  vector<T, N> result{};
+  std::transform(
+      lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
+      [](const T &a, const T &b) -> decltype(a - b) { return a - b; });
+  return result;
+}
+
+template <typename T, size_t N>
+auto operator*(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
+  vector<T, N> result{};
+  std::transform(
+      lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
+      [](const T &a, const T &b) -> decltype(a * b) { return a * b; });
+  return result;
+}
+
+template <typename T, size_t N>
+auto operator/(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
+  vector<T, N> result{};
+  std::transform(
+      lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
+      [](const T &a, const T &b) -> decltype(a / b) { return a / b; });
+  return result;
+}
+
+template <typename T, size_t N>
+auto operator==(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> bool {
+  for (size_t i{}; i < N; ++i)
+    if (lhs[i] != rhs[i])
+      return false;
+  return true;
+}
+
+template <typename T, size_t N>
+auto operator!=(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> bool {
+  return !(lhs == rhs);
+}
+
+template <typename T, size_t N>
+std::ostream &operator<<(std::ostream &os, const vector<T, N> &vec) {
+  os << "[ ";
+  for (auto i : vec)
+    os << i << " ";
+  return os << "]";
+}
+
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator+(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
+  vector<U, N> result{};
+
+  std::transform(lhs.cbegin(), lhs.cend(), result.begin(),
+                 [&rhs](const T &a) -> decltype(a + rhs) { return a + rhs; });
+
+  return result;
+}
+// forward declaration for associative operator+
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator+(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
+  return rhs + lhs;
+}
+
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator-(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
+  vector<U, N> result{};
+
+  std::transform(lhs.cbegin(), lhs.cend(), result.begin(),
+                 [&rhs](const T &a) -> decltype(a - rhs) { return a - rhs; });
+
+  return result;
+}
+// forward declaration for associative operator-
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator-(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
+  return rhs - lhs;
+}
+
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator*(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
+  vector<U, N> result{};
+
+  std::transform(lhs.cbegin(), lhs.cend(), result.begin(),
+                 [&rhs](const T &a) -> decltype(a * rhs) { return a * rhs; });
+
+  return result;
+}
+// forward declaration for associative operator*
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator*(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
+  return rhs * lhs;
+}
+
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator/(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
+  vector<U, N> result{};
+
+  std::transform(lhs.cbegin(), lhs.cend(), result.begin(),
+                 [&rhs](const T &a) -> decltype(a / rhs) { return a / rhs; });
+
+  return result;
+}
+// forward declaration for associative operator/
+template <typename T, size_t N, typename U = float,
+          typename = std::enable_if_t<std::is_arithmetic<U>::value>>
+auto operator/(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
+  return rhs / lhs;
+}
+
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
+constexpr auto dist(const vector<T, N> &v) -> double {
   double result{};
   for (auto const &i : v)
     result += pow(i, 2);
@@ -188,9 +160,9 @@ auto dist(const Vector<T> &v) -> double {
   return sqrt(result);
 }
 
-template <typename T,
-          typename std::enable_if<std::is_arithmetic<T>::value>::type>
-auto lp_norm(const Vector<T> &v, float p) -> double {
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
+constexpr auto lp_norm(const vector<T, N> &v, float p) -> double {
   if (p == 0.0)
     return std::count_if(v.begin(), v.end(),
                          [](const T &x) -> bool { return x != 0; });
@@ -209,22 +181,52 @@ auto lp_norm(const Vector<T> &v, float p) -> double {
   return pow(result, 1 / p);
 }
 
-template <typename T,
-          typename std::enable_if<std::is_arithmetic<T>::value>::type>
-auto sum(const Vector<T> &v) -> double {
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
+constexpr auto sum(const vector<T, N> &v) -> double {
   double result{};
-  for (const T &i : v)
+  for (auto const &i : v)
     result += i;
 
   return result;
 }
 
-template <typename T,
-          typename std::enable_if<std::is_arithmetic<T>::value>::type>
-auto prod(const Vector<T> &v) -> double {
-  double result{};
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
+constexpr auto prod(const vector<T, N> &v) -> double {
+  double result{1};
   for (const T &i : v)
     result *= i;
 
   return result;
 }
+
+// template <typename T, size_t N>
+// constexpr auto is_linearly_independent(const vector<T,N>& vec) -> bool {}
+
+template <typename T, size_t N>
+auto dot(const vector<T, N> &lhs, const vector<T, N> &rhs) -> double {
+  return sum(rhs * lhs);
+}
+
+template <typename T, size_t N>
+constexpr auto get_angle(const vector<T, N> &lhs, const vector<T, N> &rhs)
+    -> double {
+  return acos(dot(lhs, rhs) / (dist(lhs) * dist(rhs)));
+}
+
+template <typename T, size_t N, typename U = double>
+constexpr auto normalize(const vector<T, N> &vec) -> vector<U, N> {
+  // check for non-zero vector
+  return vec / dist(vec);
+}
+
+// test this method either consider this or implement R2 and R3 version
+template <typename T, size_t N>
+constexpr auto cross(const vector<T, N> &lhs, const vector<T, N> &rhs)
+    -> decltype(dist(lhs) * dist(rhs) * sin(get_angle(lhs, rhs)) *
+                normalize(rhs)) {
+  return dist(lhs) * dist(rhs) * sin(get_angle(lhs, rhs)) * normalize(rhs);
+}
+
+#endif

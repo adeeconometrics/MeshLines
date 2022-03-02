@@ -13,15 +13,12 @@
 #include <iostream>
 #include <type_traits>
 #include <initializer_list>
-#include <vector>
 #include "Vector.h"
 
 
-using std::vector;
-
 template <typename T> class Matrix {
 public:
-  typedef vector<vector<T>> value_type;
+  typedef Vector<Vector<T>> value_type;
   typedef value_type& reference;
   typedef const value_type const_type;
   typedef const reference const_reference;
@@ -39,7 +36,7 @@ public:
 
   }
 
-  Matrix(const std::initializer_list<vector<T>>& _list): m_row(_list.size()){
+  Matrix(const std::initializer_list<Vector<T>>& _list): m_row(_list.size()){
 
   }
 
@@ -49,10 +46,10 @@ public:
 
   Matrix(const Matrix&) = default;
   Matrix(Matrix&&) = default;
-  ~Matrix() = default;
+  virtual ~Matrix() = default;
 
-  auto operator=(const Matrix &rhs) const -> Matrix&;
-  auto operator=(Matrix &&rhs) const -> Matrix&;
+  auto operator=(const Matrix &rhs) const -> Matrix& = default;
+  auto operator=(Matrix &&rhs) const -> Matrix& = default;
 
   auto operator*=(const Matrix &rhs) const -> Matrix&;
   auto operator*=(float scalar) const -> Matrix&;
@@ -96,8 +93,8 @@ public:
   auto row() const noexcept -> size_t;
   auto col() const noexcept -> size_t;
 
-  auto get_row_at(size_t idx) -> vector<T>;
-  auto get_col_at(size_t idx) -> vector<T>;
+  auto get_row_vec(size_t idx) -> vector<T>;
+  auto get_col_vec(size_t idx) -> vector<T>;
 
   auto end() -> decltype(m_matrix.end()) {return m_matrix.end(); }
   auto cend() -> decltype(m_matrix.cend()) { return m_matrix.cend(); }
