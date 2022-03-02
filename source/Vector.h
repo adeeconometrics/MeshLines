@@ -11,10 +11,33 @@ using std::cout;
 
 template <typename T, size_t N> class vector : public array<T, N> {
 public:
-  auto operator+=(const vector<T, N> &rhs) -> vector<T, N>;
-  auto operator-=(const vector<T, N> &rhs) -> vector<T, N>;
-  auto operator/=(const vector<T, N> &rhs) -> vector<T, N>;
-  auto operator*=(const vector<T, N> &rhs) -> vector<T, N>;
+  auto operator+=(const vector<T, N> &rhs) -> vector<T, N> & {
+    std::transform(
+        this->begin(), this->end(), rhs.cbegin(), this->begin(),
+        [](const T &a, const T &b) -> decltype(a + b) { return a + b; });
+    return *this;
+  }
+
+  auto operator-=(const vector<T, N> &rhs) -> vector<T, N> & {
+    std::transform(
+        this->begin(), this->end(), rhs.cbegin(), this->begin(),
+        [](const T &a, const T &b) -> decltype(a + b) { return a - b; });
+    return *this;
+  }
+  
+  auto operator/=(const vector<T, N> &rhs) -> vector<T, N> & {
+    std::transform(
+        this->begin(), this->end(), rhs.cbegin(), this->begin(),
+        [](const T &a, const T &b) -> decltype(a + b) { return a / b; });
+    return *this;
+  }
+
+  auto operator*=(const vector<T, N> &rhs) -> vector<T, N> & {
+    std::transform(
+        this->begin(), this->end(), rhs.cbegin(), this->begin(),
+        [](const T &a, const T &b) -> decltype(a + b) { return a * b; });
+    return *this;
+  }
 };
 
 template <typename T, size_t N>
