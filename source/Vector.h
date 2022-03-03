@@ -1,3 +1,14 @@
+/**
+ * @file Vector.h
+ * @author ddamiana
+ * @brief contains concepts related to mathematical vector
+ * @version 0.3
+ * @date 2022-03-03
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+ 
 #include <algorithm>
 #include <array>
 #include <iostream>

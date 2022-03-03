@@ -17,7 +17,7 @@
 
 template <typename T> class BaseMatrix {
 public:
-  typedef Vector<Vector<T>> value_type;
+  typedef vector<vector<T>> value_type;
   typedef value_type &reference;
   typedef const value_type const_type;
   typedef const reference const_reference;
@@ -25,7 +25,7 @@ public:
   typedef const pointer_type const_pointer;
 
 private:
-  Vector<Vector<T>> m_vector;
+  value_type m_vector;
   size_t m_row{}, m_col{};
 
 public:
