@@ -37,9 +37,9 @@ void test_comparison(const vector<T,N> &a, const vector<T,N> &b) {
 }
 
 int main() {
-  vector<int,3> a{1, 2, 3};
-  vector<int,3> b{1, 1, 1};
-  vector<int,3> c{1, 1, 1};
+  const vector<int,3> a{1, 2, 3};
+  const vector<int,3> b{1, 1, 1};
+  const vector<int,3> c{1, 1, 1};
   test_arithmetic(a,b);
   test_comparison(b,c);
 }
