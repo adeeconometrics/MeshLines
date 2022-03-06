@@ -17,9 +17,9 @@ void test_comparison(const SquareMatrix<T,N>& lhs, const SquareMatrix<T,N>& rhs)
 }
 
 int main(){
-    const SquareMatrix<int,3> M0 {{{1,2,3},{4,5,6},{7,8,9}}};
-    const SquareMatrix<int,3> M1 {{{2,4,6},{8,2,4},{6,8,2}}};
+    const SquareMatrix<int,3> M0 {{{{1,2,3},{4,5,6},{7,8,9}}}};
+    // const SquareMatrix<int,3> M1 {{{2,4,6},{8,2,4},{6,8,2}}};
     // const vector<int,3> v0 {1,2,3};
     
-    test_comparison(M0,M1);
+    cout << det(M0);
 }

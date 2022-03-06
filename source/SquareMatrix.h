@@ -15,6 +15,7 @@
 #pragma once
 #include "Vector.h"
 #include <algorithm>
+#include <utility>
 
 template <typename T, size_t N> using SquareMatrix = vector<vector<T, N>, N>;
 
@@ -128,9 +129,6 @@ constexpr auto operator/(const SquareMatrix<T, N> &lhs, U rhs) noexcept
   return result;
 }
 
-// template <typename T, size_t N>
-// auto det(const SquareMatrix<T, N> &rhs) -> double {}
-
 template <typename T, size_t N>
 constexpr auto trace(const SquareMatrix<T, N> &rhs) -> double {
 
@@ -177,8 +175,8 @@ constexpr auto col_vector(SquareMatrix<T, N> &rhs, int index) -> vector<T, N> {
 
 template <typename T, size_t N>
 constexpr auto lu_decomposition(const SquareMatrix<T,N>& M) 
-  -> pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
-    
+  -> std::pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
+
     SquareMatrix<T,N> lower{}, upper{};
     
     auto upper_triangular = [&lower, &upper, &M](size_t i, size_t k)mutable {
@@ -209,4 +207,18 @@ constexpr auto lu_decomposition(const SquareMatrix<T,N>& M)
     }
     
     return std::make_pair(lower, upper);
+}
+
+template <typename T, size_t N>
+constexpr auto det(const SquareMatrix<T, N> &rhs) -> double {
+  double p0{1}, p1{1};
+
+  auto LU = lu_decomposition(rhs);
+
+  for(size_t i{}; i < N; ++i){
+    p0 *= LU.first[i][i];
+    p1 *= LU.second[i][i];
+  }
+
+  return p0*p1;
 }
