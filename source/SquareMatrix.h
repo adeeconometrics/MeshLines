@@ -174,3 +174,39 @@ constexpr auto col_vector(SquareMatrix<T, N> &rhs, int index) -> vector<T, N> {
 
   return col_vec;
 }
+
+template <typename T, size_t N>
+constexpr auto lu_decomposition(const SquareMatrix<T,N>& M) 
+  -> pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
+    
+    SquareMatrix<T,N> lower{}, upper{};
+    
+    auto upper_triangular = [&lower, &upper, &M](size_t i, size_t k)mutable {
+        T sum{};
+        for(size_t j{}; j < i; ++j) 
+            sum += (lower[i][j] * upper[j][k]);
+            
+        upper[i][k] = M[i][k] - sum;
+    };
+    
+    auto lower_triangular = [&lower, &upper, &M](size_t i, size_t k)mutable {
+        if (i == k) 
+                lower[i][i] = 1;
+        else {
+            T sum{};
+            for(size_t j{}; j < i; ++j) 
+                sum += (lower[k][j] * upper[j][i]);
+                
+            lower[k][i] = (M[k][i] - sum) /upper[i][i];
+        }
+    };
+    
+    for (size_t i{}; i < N; ++i){
+        for(size_t k{i}; k < N; ++k){
+            upper_triangular(i,k);
+            lower_triangular(i,k);
+        }
+    }
+    
+    return std::make_pair(lower, upper);
+}
