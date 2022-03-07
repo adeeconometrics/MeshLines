@@ -265,4 +265,14 @@ constexpr auto cross(const vector<T, N> &lhs, const vector<T, N> &rhs)
   return dist(lhs) * dist(rhs) * sin(get_angle(lhs, rhs)) * normalize(rhs);
 }
 
+template <typename T, size_t N>
+constexpr auto min(const vector<T,N>& rhs) noexcept -> T {
+  return *std::min_element(rhs.cbegin(), rhs.cend());
+}
+
+template <typename T, size_t N>
+constexpr auto max(const vector<T,N>& rhs) noexcept -> T {
+  return *std::max_element(rhs.cbegin(), rhs.cend());
+}
+
 #endif

@@ -222,3 +222,9 @@ constexpr auto det(const SquareMatrix<T, N> &rhs) -> double {
 
   return p0*p1;
 }
+
+// template <typename T, size_t N>
+// constexpr auto min(const SquareMatrix<T,N>& rhs) noexcept -> T {}
+
+// template <typename T, size_t N>
+// constexpr auto max(const SquareMatrix<T, N> &rhs) noexcept -> T {}
