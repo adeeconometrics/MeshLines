@@ -160,7 +160,7 @@ constexpr auto transpose_matrix(SquareMatrix<T, N> &rhs) -> SquareMatrix<T, N> {
 }
 
 template <typename T, size_t N>
-contexpr auto minor_submatrix(const SquareMatrix<T, N> &rhs, 
+constexpr auto minor_submatrix(const SquareMatrix<T, N> &rhs, 
                           size_t row = 0, size_t col = 0) -> SquareMatrix<T, N - 1> {
 
   SquareMatrix<T, N - 1> _minor{};
@@ -185,7 +185,7 @@ contexpr auto minor_submatrix(const SquareMatrix<T, N> &rhs,
 }
 
 template <typename T, size_t N>
-contexpr auto cofactor_submatrix(const SquareMatrix<T, N> &rhs, 
+constexpr auto cofactor_submatrix(const SquareMatrix<T, N> &rhs, 
                           size_t row = 0, size_t col = 0) -> SquareMatrix<T, N - 1> {
 
   SquareMatrix<T, N - 1> _cofactor{};
@@ -225,8 +225,8 @@ constexpr auto col_vector(SquareMatrix<T, N> &rhs, int index) -> vector<T, N> {
 }
 
 template <typename T, size_t N>
-constexpr auto lu_decomposition(const SquareMatrix<T,N>& M) 
-  -> std::pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
+constexpr auto lu_decomposition(const SquareMatrix<double,N>& M) 
+  -> std::pair<SquareMatrix<double,N>, SquareMatrix<double,N>>{
 
     SquareMatrix<T,N> lower{}, upper{};
     
@@ -290,13 +290,13 @@ constexpr auto min(const SquareMatrix<T,N>& rhs) noexcept -> T {
 }
 
 // template <typename T, size_t N>
-// contexpr auto cofactor(const SquareMatrix<T, N> &rhs, 
+// constexpr auto cofactor(const SquareMatrix<T, N> &rhs, 
 //                           size_t row = 0, size_t col = 0) -> double {
 //   return det(cofactor_submatrix(rhs,row,col));
 // }
 
 // template <typename T, size_t N>
-// contexpr auto cofactor_matrix(const SquareMatrix<T, N> &rhs)
+// constexpr auto cofactor_matrix(const SquareMatrix<T, N> &rhs)
 //     -> SquareMatrix<T, N> {
 
 //   SquareMatrix<T, N> _cofactor{};
@@ -310,7 +310,7 @@ constexpr auto min(const SquareMatrix<T,N>& rhs) noexcept -> T {
 // }
 
 template <typename T, size_t N>
-contexpr auto minor(const SquareMatrix<T, N> &rhs, size_t row = 0,
+constexpr auto minor(const SquareMatrix<T, N> &rhs, size_t row = 0,
                        size_t col = 0) -> double {
   return det(minor_submatrix(rhs, row, col));
 }
