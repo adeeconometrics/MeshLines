@@ -15,6 +15,7 @@
 #pragma once
 #include "Vector.h"
 #include <algorithm>
+#include <type_traits>
 #include <utility>
 
 template <typename T, size_t N> using SquareMatrix = vector<vector<T, N>, N>;
@@ -160,57 +161,6 @@ constexpr auto transpose_matrix(SquareMatrix<T, N> &rhs) -> SquareMatrix<T, N> {
 }
 
 template <typename T, size_t N>
-constexpr auto minor_submatrix(const SquareMatrix<T, N> &rhs, 
-                          size_t row = 0, size_t col = 0) -> SquareMatrix<T, N - 1> {
-
-  SquareMatrix<T, N - 1> _minor{};
-  size_t idx_row{0}, idx_col{0};
-  bool flag{false};
-
-  for (size_t i{}; i < N; ++i) {
-    for (size_t j{}; j < N; ++j) {
-      if (i == row || j == col) {
-        flag = true;
-        continue;
-      }
-      _minor[idx_row][idx_col] = rhs[i][j];
-      idx_col += 1;
-    }
-    if (flag)
-      flag = false;
-    else
-      idx_row += 1;
-  }
-  return _minor;
-}
-
-template <typename T, size_t N>
-constexpr auto cofactor_submatrix(const SquareMatrix<T, N> &rhs, 
-                          size_t row = 0, size_t col = 0) -> SquareMatrix<T, N - 1> {
-
-  SquareMatrix<T, N - 1> _cofactor{};
-  size_t idx_row{0}, idx_col{0};
-  bool flag{false};
-
-  for (size_t i{}; i < N; ++i) {
-    for (size_t j{}; j < N; ++j) {
-      if (i == row || j == col) {
-        flag = true;
-        continue;
-      }
-      _cofactor[idx_row][idx_col] = (i + j % 2 == 1) ? rhs[i][j] : -rhs[i][j];
-      idx_col += 1;
-    }
-    if (flag)
-      flag = false;
-    else
-      idx_row += 1;
-  }
-  return _cofactor;
-}
-
-
-template <typename T, size_t N>
 constexpr auto row_vector(SquareMatrix<T, N> &rhs, int index) -> vector<T, N> {
   return rhs[index];
 }
@@ -225,8 +175,8 @@ constexpr auto col_vector(SquareMatrix<T, N> &rhs, int index) -> vector<T, N> {
 }
 
 template <typename T, size_t N>
-constexpr auto lu_decomposition(const SquareMatrix<double,N>& M) 
-  -> std::pair<SquareMatrix<double,N>, SquareMatrix<double,N>>{
+constexpr auto lu_decomposition(const SquareMatrix<T,N>& M) 
+  -> std::pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
 
     SquareMatrix<T,N> lower{}, upper{};
     
@@ -260,6 +210,23 @@ constexpr auto lu_decomposition(const SquareMatrix<double,N>& M)
     return std::make_pair(lower, upper);
 }
 
+// template <typename T, size_t N>
+// constexpr auto qr_decomposition(const SquareMatrix<T,N>& M) 
+//   -> std::pair<SquareMatrix<T,N>, SquareMatrix<T,N>>{
+
+// }
+
+// template <typename T, size_t N>
+// constexpr auto cholesky_decomposition(const SquareMatrix<T, N> &M)
+//     -> SquareMatrix<T, N> {
+  
+//   SquareMatrix<T,N> L{};
+
+//   auto sum = std::accumulate();
+  
+//   return L;   
+// }
+
 template <typename T, size_t N>
 constexpr auto det(const SquareMatrix<T, N> &rhs) -> double {
   double p0{1}, p1{1};
@@ -280,39 +247,103 @@ constexpr auto det_2(const SquareMatrix<T, N> &rhs) -> double {
 }
 
 template <typename T, size_t N>
-constexpr auto min(const SquareMatrix<T,N>& rhs) noexcept -> T {
-  T min_element{rhs[0][0]};
-  for(const auto i: rhs){
-    if(min_element > min(i))
-      min_element = i;
+constexpr auto minor_submatrix(const SquareMatrix<T, N> &rhs, size_t row = 0,
+                               size_t col = 0) -> SquareMatrix<T, N - 1> {
+
+  SquareMatrix<T, N - 1> _minor{};
+  size_t idx_row{0}, idx_col{0};
+  bool flag{false};
+
+  for (size_t i{}; i < N; ++i) {
+    for (size_t j{}; j < N; ++j) {
+      if (i == row || j == col) {
+        flag = true;
+        continue;
+      }
+      _minor[idx_row][idx_col] = rhs[i][j];
+      idx_col += 1;
+    }
+    if (flag)
+      flag = false;
+    else
+      idx_row += 1;
   }
-  return min;
+  return _minor;
 }
 
-// template <typename T, size_t N>
-// constexpr auto cofactor(const SquareMatrix<T, N> &rhs, 
-//                           size_t row = 0, size_t col = 0) -> double {
-//   return det(cofactor_submatrix(rhs,row,col));
-// }
+template <typename T, size_t N>
+constexpr auto cofactor_submatrix(const SquareMatrix<T, N> &rhs, size_t row = 0,
+                                  size_t col = 0) -> SquareMatrix<T, N - 1> {
 
-// template <typename T, size_t N>
-// constexpr auto cofactor_matrix(const SquareMatrix<T, N> &rhs)
-//     -> SquareMatrix<T, N> {
+  SquareMatrix<T, N - 1> _cofactor{};
+  size_t idx_row{0}, idx_col{0};
+  bool flag{false};
 
-//   SquareMatrix<T, N> _cofactor{};
-//   for(size_t i{}; i < N; ++i){
-//     for(size_t j{}; j < N; ++j){
-//       _cofactor[i][j] = cofactor(rhs,i,j);
-//     }
-//   }
+  for (size_t i{}; i < N; ++i) {
+    for (size_t j{}; j < N; ++j) {
+      if (i == row || j == col) {
+        flag = true;
+        continue;
+      }
+      _cofactor[idx_row][idx_col] = ((i + j) % 2 == 0) ? rhs[i][j] : -rhs[i][j];
+      idx_col += 1;
+    }
+    if (flag)
+      flag = false;
+    else
+      idx_row += 1;
+  }
+  return _cofactor;
+}
 
-//   return _cofactor;
-// }
+template <typename T, size_t N>
+constexpr auto cofactor(const SquareMatrix<T, N> &rhs, 
+                        size_t row = 0, size_t col = 0) -> double {
+  return det(cofactor_submatrix(rhs, row, col));
+}
+
+template <typename T, size_t N>
+constexpr auto cofactor_matrix(const SquareMatrix<T, N> &rhs) 
+    -> SquareMatrix<T, N> {
+
+  SquareMatrix<T, N> _cofactor{};
+  for (size_t i{}; i < N; ++i) {
+    for (size_t j{}; j < N; ++j) {
+      _cofactor[i][j] = cofactor(rhs, i, j);
+    }
+  }
+
+  return _cofactor;
+}
 
 template <typename T, size_t N>
 constexpr auto minor(const SquareMatrix<T, N> &rhs, size_t row = 0,
                        size_t col = 0) -> double {
   return det(minor_submatrix(rhs, row, col));
+}
+
+template <typename T, size_t N>
+constexpr auto minor_matrix(const SquareMatrix<T, N> &rhs)
+    -> SquareMatrix<T, N> {
+
+  SquareMatrix<T, N> _minor{};
+  for (size_t i{}; i < N; ++i) {
+    for (size_t j{}; j < N; ++j) {
+      _minor[i][j] = minor(rhs, i, j);
+    }
+  }
+
+  return _minor;
+}
+
+template <typename T, size_t N>
+constexpr auto min(const SquareMatrix<T, N> &rhs) noexcept -> T {
+  T min_element{rhs[0][0]};
+  for (const auto i : rhs) {
+    if (min_element > min(i))
+      min_element = i;
+  }
+  return min;
 }
 
 template <typename T, size_t N>
