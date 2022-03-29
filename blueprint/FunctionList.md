@@ -69,6 +69,7 @@ eigenvector(Matrix) -> vector
   is_lower_triangular(SquareMatrix) -> bool
   is_upper_triangular(SquareMatrix) -> bool
   is_diagonal(SquareMatrix) -> bool
+  is_diagonizable(SquareMatrix) -> bool
   
   is_positive_definite(SquareMatrix) -> bool
   is_positive_semidefinite(SquareMatrix) -> bool
