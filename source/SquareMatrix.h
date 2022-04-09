@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <utility>
+#include <math.h>
 
 template <typename T, size_t N> using SquareMatrix = vector<vector<T, N>, N>;
 
@@ -216,16 +217,29 @@ constexpr auto lu_decomposition(const SquareMatrix<T,N>& M)
 
 // }
 
-// template <typename T, size_t N>
-// constexpr auto cholesky_decomposition(const SquareMatrix<T, N> &M)
-//     -> SquareMatrix<T, N> {
-  
-//   SquareMatrix<T,N> L{};
+template <typename T, size_t N>
+constexpr auto cholesky_decomposition(const SquareMatrix<T, N> &M)
+    -> std::pair<SquareMatrix<T,N>, SquareMatrix<T, N>> {
+  // static_assert(is_symmetric(M));
+    SquareMatrix<T, N> lower{};
 
-//   auto sum = std::accumulate();
-  
-//   return L;   
-// }
+    for (size_t i{}; i < N; ++i)
+      for (size_t j{}; j <= i; ++j) {
+        T sum{};
+        if (i == j) {
+          for (size_t k{}; k < i; ++k)
+            sum += pow(lower[i][k], 2);
+          lower[i][i] = sqrt(M[i][i] - sum);
+        } else {
+          for (size_t k{}; k < j; ++k)
+            sum += lower[i][k] * lower[j][k];
+          lower[i][j] = (M[i][j] - sum) / lower[j][j];
+        }
+      }
+
+    return lower;
+  }
+}
 
 template <typename T, size_t N>
 constexpr auto det(const SquareMatrix<T, N> &rhs) -> double {
