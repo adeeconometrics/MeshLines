@@ -1,6 +1,5 @@
-#ifndef SQUAREMATRIX_H
-#define SQUAREMATRIX_H
+#ifndef __SQUAREMATRIX_H__
+#define __SQUAREMATRIX_H__
 
 
-
-#endif // SQUAREMATRIX_H
+#endif // __SQUAREMATRIX_H__

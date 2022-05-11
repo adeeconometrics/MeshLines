@@ -1,4 +1,5 @@
-#ifndef BASEMATRIX_H
-#define BASEMATRIX_H
+#ifndef __BASEMATRIX_H__
+#define __BASEMATRIX_H__
 
-#endif // BASEMATRIX_H
+
+#endif // __BASEMATRIX_H__

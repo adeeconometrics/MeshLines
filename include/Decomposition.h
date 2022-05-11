@@ -1,4 +1,5 @@
-#ifndef DECOMPOSITION_H
-#define DECOMPOSITION_H
+#ifndef __DECOMPOSITION_H__
+#define __DECOMPOSITION_H__
 
-#endif // DECOMPOSITION_H
+
+#endif // __DECOMPOSITION_H__
