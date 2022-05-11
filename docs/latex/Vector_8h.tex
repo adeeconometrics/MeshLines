@@ -1,0 +1,582 @@
+\hypertarget{Vector_8h}{}\doxysection{/mnt/c/\+Users/amianadave/\+Documents/cpp/\+Linear\+Algebra/include/\+Vector.h File Reference}
+\label{Vector_8h}\index{/mnt/c/Users/amianadave/Documents/cpp/LinearAlgebra/include/Vector.h@{/mnt/c/Users/amianadave/Documents/cpp/LinearAlgebra/include/Vector.h}}
+
+
+contains methods for handling a mathematical vector  
+
+
+{\ttfamily \#include $<$type\+\_\+traits$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$array$>$}\newline
+Include dependency graph for Vector.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=288pt]{Vector_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classlin_1_1vector}{lin\+::vector}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{Vector_8h_a8fe03cf6d73c9ab9beaa4c6e1b16c5da}\label{Vector_8h_a8fe03cf6d73c9ab9beaa4c6e1b16c5da}} 
+\mbox{\hyperlink{classlin_1_1vector}{lin\+::vector}} array {\bfseries lin\+::operator} (std\+::ostream \&os, const vector$<$ T, N $>$ \&vec) -\/$>$ std\+::ostream \&
+\item 
+\mbox{\Hypertarget{Vector_8h_a25e7751237f02050526e0d0e6c5acc13}\label{Vector_8h_a25e7751237f02050526e0d0e6c5acc13}} 
+auto {\bfseries operator+=} (const vector$<$ T, N $>$ \&rhs) -\/$>$ vector$<$ T, N $>$ \&
+\item 
+\mbox{\Hypertarget{Vector_8h_aae92a2d67be6b27f0bb36c103ad5e271}\label{Vector_8h_aae92a2d67be6b27f0bb36c103ad5e271}} 
+auto {\bfseries operator-\/=} (const vector$<$ T, N $>$ \&rhs) -\/$>$ vector$<$ T, N $>$ \&
+\item 
+\mbox{\Hypertarget{Vector_8h_aad7a91669d93e4bcc6abd992b265987e}\label{Vector_8h_aad7a91669d93e4bcc6abd992b265987e}} 
+auto {\bfseries operator/=} (const vector$<$ T, N $>$ \&rhs) -\/$>$ vector$<$ T, N $>$ \&
+\item 
+\mbox{\Hypertarget{Vector_8h_a23c8f032ef1ad05a99d243cb37aaebe3}\label{Vector_8h_a23c8f032ef1ad05a99d243cb37aaebe3}} 
+auto {\bfseries operator$\ast$=} (const vector$<$ T, N $>$ \&rhs) -\/$>$ vector$<$ T, N $>$ \&
+\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_a915f1aa30ccc6ba75a0d6c0637fecaec}{lin\+::operator+}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ T, N $>$
+\begin{DoxyCompactList}\small\item\em performs element-\/wise addition on two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_a753cd130a716f0f73eff3af55aac8b53}{lin\+::operator-\/}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ T, N $>$
+\begin{DoxyCompactList}\small\item\em performs element-\/wise subtraction on two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_a7b2f557c3291950ff04e7475b7ec91b3}{lin\+::operator/}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ T, N $>$
+\begin{DoxyCompactList}\small\item\em performs element-\/wise division on two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_a0ce97162e2525bf7e3975909f14e4b20}{lin\+::operator$\ast$}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ T, N $>$
+\begin{DoxyCompactList}\small\item\em performs element-\/wise multiplication on two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_a7eab5329e4486170899b4e0d1b7b4286}{lin\+::operator==}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ bool
+\begin{DoxyCompactList}\small\item\em performs element-\/wise equality check for two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N$>$ }\\auto \mbox{\hyperlink{Vector_8h_aaa98c001e1ef5e2df734724bddd79fff}{lin\+::operator!=}} (const vector$<$ T, N $>$ \&lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ bool
+\begin{DoxyCompactList}\small\item\em performs element-\/wise equality check for two vectors \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a88331ad59fed4d0d8e4063d7273b87d5}{lin\+::operator+}} (const vector$<$ T, N $>$ \&lhs, U rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar addition \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a804ab3df6e44d77874b106c199b2da82}{lin\+::operator+}} (U lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar addition \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a2f80b1bf5842d2645dad30579ce87ef5}{lin\+::operator-\/}} (const vector$<$ T, N $>$ \&lhs, U rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar subtraction \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a1671d5c46ced8f15952444c78f9b65d7}{lin\+::operator-\/}} (U lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar subtraction \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_ad88dc87f6e2c278ad4a7fecfd4bade58}{lin\+::operator/}} (const vector$<$ T, N $>$ \&lhs, U rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar division \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a027000d09bd2a6f2b6c9354983634619}{lin\+::operator/}} (U lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em performs scalar division \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_a025f6d33f95b2d49630f59226cc169ef}{lin\+::operator$\ast$}} (const vector$<$ T, N $>$ \&lhs, U rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em perfoms scalar multiplication \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ }\\auto \mbox{\hyperlink{Vector_8h_ad9825822c30ca38a9fb860c5854c916d}{lin\+::operator$\ast$}} (U lhs, const vector$<$ T, N $>$ \&rhs) noexcept -\/$>$ vector$<$ U, N $>$
+\begin{DoxyCompactList}\small\item\em perfoms scalar multiplication \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , size\+\_\+t N, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic$<$\+T$>$\+::value$>$$>$ }\\constexpr auto \mbox{\hyperlink{Vector_8h_aefe697475648fb1008fac6ff39acf483}{lin\+::dist}} (const vector$<$ T, N $>$ \&v) -\/$>$ double
+\begin{DoxyCompactList}\small\item\em returns the Euclidean distance of a vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classlin_1_1vector}{lin\+::vector}} \mbox{\hyperlink{Vector_8h_a7523e6b44ded2e4beed6a33fa21cdddb}{lin\+::T}}
+\begin{DoxyCompactList}\small\item\em puts vector into output stream \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains methods for handling a mathematical vector 
+
+\begin{DoxyAuthor}{Author}
+ddamiana 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2022-\/05-\/11
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2022 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{Vector_8h_aefe697475648fb1008fac6ff39acf483}\label{Vector_8h_aefe697475648fb1008fac6ff39acf483}} 
+\index{Vector.h@{Vector.h}!dist@{dist}}
+\index{dist@{dist}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{dist()}{dist()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic$<$\+T$>$\+::value$>$$>$ \\
+constexpr auto lin\+::dist (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{v }\end{DoxyParamCaption}) -\/$>$  double\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+returns the Euclidean distance of a vector 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em N,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_aaa98c001e1ef5e2df734724bddd79fff}\label{Vector_8h_aaa98c001e1ef5e2df734724bddd79fff}} 
+\index{Vector.h@{Vector.h}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  bool\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise equality check for two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a0ce97162e2525bf7e3975909f14e4b20}\label{Vector_8h_a0ce97162e2525bf7e3975909f14e4b20}} 
+\index{Vector.h@{Vector.h}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise multiplication on two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+T, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a025f6d33f95b2d49630f59226cc169ef}\label{Vector_8h_a025f6d33f95b2d49630f59226cc169ef}} 
+\index{Vector.h@{Vector.h}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{U}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+perfoms scalar multiplication 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_ad9825822c30ca38a9fb860c5854c916d}\label{Vector_8h_ad9825822c30ca38a9fb860c5854c916d}} 
+\index{Vector.h@{Vector.h}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{U}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+perfoms scalar multiplication 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a915f1aa30ccc6ba75a0d6c0637fecaec}\label{Vector_8h_a915f1aa30ccc6ba75a0d6c0637fecaec}} 
+\index{Vector.h@{Vector.h}!operator+@{operator+}}
+\index{operator+@{operator+}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise addition on two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector $<$T,N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a88331ad59fed4d0d8e4063d7273b87d5}\label{Vector_8h_a88331ad59fed4d0d8e4063d7273b87d5}} 
+\index{Vector.h@{Vector.h}!operator+@{operator+}}
+\index{operator+@{operator+}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{U}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar addition 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector $<$U,N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a804ab3df6e44d77874b106c199b2da82}\label{Vector_8h_a804ab3df6e44d77874b106c199b2da82}} 
+\index{Vector.h@{Vector.h}!operator+@{operator+}}
+\index{operator+@{operator+}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator+ (\begin{DoxyParamCaption}\item[{U}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar addition 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a753cd130a716f0f73eff3af55aac8b53}\label{Vector_8h_a753cd130a716f0f73eff3af55aac8b53}} 
+\index{Vector.h@{Vector.h}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise subtraction on two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+T, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a2f80b1bf5842d2645dad30579ce87ef5}\label{Vector_8h_a2f80b1bf5842d2645dad30579ce87ef5}} 
+\index{Vector.h@{Vector.h}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{U}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar subtraction 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a1671d5c46ced8f15952444c78f9b65d7}\label{Vector_8h_a1671d5c46ced8f15952444c78f9b65d7}} 
+\index{Vector.h@{Vector.h}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator-\/ (\begin{DoxyParamCaption}\item[{U}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar subtraction 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a7b2f557c3291950ff04e7475b7ec91b3}\label{Vector_8h_a7b2f557c3291950ff04e7475b7ec91b3}} 
+\index{Vector.h@{Vector.h}!operator/@{operator/}}
+\index{operator/@{operator/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise division on two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector $<$T,N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_ad88dc87f6e2c278ad4a7fecfd4bade58}\label{Vector_8h_ad88dc87f6e2c278ad4a7fecfd4bade58}} 
+\index{Vector.h@{Vector.h}!operator/@{operator/}}
+\index{operator/@{operator/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{U}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar division 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a027000d09bd2a6f2b6c9354983634619}\label{Vector_8h_a027000d09bd2a6f2b6c9354983634619}} 
+\index{Vector.h@{Vector.h}!operator/@{operator/}}
+\index{operator/@{operator/}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N, typename U  = float, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+arithmetic\+\_\+v$<$\+U$>$$>$$>$ \\
+auto lin\+::operator/ (\begin{DoxyParamCaption}\item[{U}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ U, N $>$\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs scalar division 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+{\em U} & \\
+\hline
+{\em U,typename} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$\+U, N$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{Vector_8h_a7eab5329e4486170899b4e0d1b7b4286}\label{Vector_8h_a7eab5329e4486170899b4e0d1b7b4286}} 
+\index{Vector.h@{Vector.h}!operator==@{operator==}}
+\index{operator==@{operator==}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t N$>$ \\
+auto lin\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classlin_1_1vector}{vector}}$<$ T, N $>$ \&}]{rhs }\end{DoxyParamCaption}) -\/$>$  bool\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+performs element-\/wise equality check for two vectors 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & \\
+\hline
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{Vector_8h_a7523e6b44ded2e4beed6a33fa21cdddb}\label{Vector_8h_a7523e6b44ded2e4beed6a33fa21cdddb}} 
+\index{Vector.h@{Vector.h}!T@{T}}
+\index{T@{T}!Vector.h@{Vector.h}}
+\doxysubsubsection{\texorpdfstring{T}{T}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classlin_1_1vector}{lin\+::vector}} lin\+::T}
+
+
+
+puts vector into output stream 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em N} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em os} & \\
+\hline
+{\em vec} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::ostream\& 
+\end{DoxyReturn}
