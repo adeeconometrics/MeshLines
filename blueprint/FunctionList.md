@@ -21,8 +21,16 @@ row_vector(Matrix,int,int) -> vector
 to_col_vectors(Matrix) -> List[vector]
 to_row_vectors(Matrix) -> List[vector]
 
+to_rref(Matrix) -> Matrix
+to_ref(Matrix) -> Matrix
+
 eigenvalue(Matrix) -> number
 eigenvector(Matrix) -> vector
+rowspace(Matrix) -> List[vector]
+nullspace(Matrix) -> List[vector]
+colspace(Matrix) -> List[vector]
+rank(Matrix) -> Integer
+dims(Matrix) -> (Integer, Integer)
 ```
 
 
@@ -69,11 +77,14 @@ eigenvector(Matrix) -> vector
   is_lower_triangular(SquareMatrix) -> bool
   is_upper_triangular(SquareMatrix) -> bool
   is_diagonal(SquareMatrix) -> bool
+  is_diagonizable(SquareMatrix) -> bool
   
   is_positive_definite(SquareMatrix) -> bool
   is_positive_semidefinite(SquareMatrix) -> bool
   is_negative_definite(SquareMatrix) -> bool
   is_negative_semidefinite(SquareMatrix) -> bool
+
+  is_linearly_dependent(SquareMatrix) -> bool
   ```
 
 - RectangularMatrix
