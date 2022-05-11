@@ -1,16 +1,11 @@
 
-1. Come up with a cool project name [MeshLines]
-2. Initialize Doxygen 
-3. Include Doxygen generation in CMake workflow
-4. Refector project file structure 
-    1. Vector.h
-    2. SquareMatrix.h
-    3. VectorPredicates.h
-    4. SquareMatrixPredicate.h 
-
-- Refector the structure of LinearAlgebra
-- Set up CMake to automate workflow
-- Include Doxygen automation
-- Define TeX in code documentation 
-- Define implementation of Header files   
-- Change `vector` to `vec`*
+- [x] Come up with a cool project name [MeshLines]
+- [x] Initialize Doxygen 
+- [ ] Include Doxygen generation in CMake workflow
+- [ ] Refector project file structure 
+    - [x] Vector.h
+    - [ ] SquareMatrix.h
+    - [ ] VectorPredicates.h
+    - [ ] SquareMatrixPredicate.h 
+- [ ] Define TeX in code documentation   
+- [ ] Change `vector` to `vec`* and `matrix` to `mat`*
