@@ -14,7 +14,7 @@ Matrix factorization
 - [ ] QR Decomposition : inaccurate result (check property of QR and restore the A matrix)
   - [x] Gram Schmidt\*
   - [x] Hoseholder Reflections\*
-- [ ] Cholesky Decomposition
+- [x] Cholesky Decomposition
 
 Helper functions
 

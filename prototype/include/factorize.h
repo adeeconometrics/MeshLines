@@ -163,6 +163,7 @@ auto qr_householder(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
 
 // ldl factorization
 // conditions: square, hermitian positive definite matrix
+// type COMPLEX
 template <typename T>
 auto ldl(const Matrix<T> &A) -> tuple<Matrix<T>, vector<T>> {
   const std::size_t size = A.size();
@@ -213,5 +214,10 @@ template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
 
   return L;
 }
+
+// template <typename T>
+// auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
+
+// };
 
 #endif // __FACTORIZE_H__
