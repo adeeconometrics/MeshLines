@@ -7,13 +7,12 @@
  * @brief contains predicates for testing certain properties of a matrix
  * @version 1.0
  * @date 2022-05-11
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
-#include "SquareMatrix.h"
-
+#include "../inlcude/SquareMatrix.h"
 
 namespace lin {
 

@@ -1,6 +1,9 @@
 #ifndef __FACTORIZE_H__
 #define __FACTORIZE_H__
 
+// todo
+// make functions exclusive to integral type
+
 #include <cmath>
 #include <iostream>
 #include <numeric> // inner_product

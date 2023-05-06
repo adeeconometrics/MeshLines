@@ -3,36 +3,38 @@
 #include <limits>
 #include <math.h>
 
-
 namespace lin {
-auto vector::operator+=(const vector<T, N> &rhs) -> vector<T, N> & {
+
+template <typename T, size_t N>
+auto vector<T, N>::operator+=(const vector<T, N> &rhs) -> vector<T, N> & {
   std::transform(this->begin(), this->end(), rhs.cbegin(), this->begin(),
                  [](const auto &a, const auto &b) { return a + b; });
   return *this;
 }
 
-auto vector::operator-=(const vector<T, N> &rhs) -> vector<T, N> & {
+template <typename T, size_t N>
+auto vector<T, N>::operator-=(const vector<T, N> &rhs) -> vector<T, N> & {
   std::transform(this->begin(), this->end(), rhs.cbegin(), this->begin(),
                  [](const auto &a, const auto &b) { return a - b; });
   return *this;
 }
 
-auto vector::operator/=(const vector<T, N> &rhs) -> vector<T, N> & {
+template <typename T, size_t N>
+auto vector<T, N>::operator/=(const vector<T, N> &rhs) -> vector<T, N> & {
   std::transform(this->begin(), this->end(), rhs.cbegin(), this->begin(),
                  [](const auto &a, const auto &b) { return a / b; });
   return *this;
 }
 
-auto vector::operator*=(const vector<T, N> &rhs) -> vector<T, N> & {
+template <typename T, size_t N>
+auto vector<T, N>::operator*=(const vector<T, N> &rhs) -> vector<T, N> & {
   std::transform(this->begin(), this->end(), rhs.cbegin(), this->begin(),
                  [](const auto &a, const auto &b) { return a * b; });
   return *this;
 }
 
-
 template <typename T, size_t N>
-auto operator<<(std::ostream &os, 
-                const vector<T, N> &vec) -> std::ostream & {
+auto operator<<(std::ostream &os, const vector<T, N> &vec) -> std::ostream & {
   os << "[ ";
   for (auto i : vec)
     os << i << " ";
@@ -40,8 +42,8 @@ auto operator<<(std::ostream &os,
 }
 
 template <typename T, size_t N>
-auto operator+(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> vector<T, N> {
+auto operator+(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
 
   vector<T, N> result{};
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
@@ -51,8 +53,8 @@ auto operator+(const vector<T, N> &lhs,
 }
 
 template <typename T, size_t N>
-auto operator-(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> vector<T, N> {
+auto operator-(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
 
   vector<T, N> result{};
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
@@ -61,8 +63,8 @@ auto operator-(const vector<T, N> &lhs,
 }
 
 template <typename T, size_t N>
-auto operator*(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> vector<T, N> {
+auto operator*(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
 
   vector<T, N> result{};
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
@@ -71,8 +73,8 @@ auto operator*(const vector<T, N> &lhs,
 }
 
 template <typename T, size_t N>
-auto operator/(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> vector<T, N> {
+auto operator/(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> vector<T, N> {
 
   vector<T, N> result{};
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
@@ -80,17 +82,16 @@ auto operator/(const vector<T, N> &lhs,
   return result;
 }
 
-
 template <typename T, size_t N>
-auto operator==(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> bool {
+auto operator==(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> bool {
   return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
 }
 
 template <typename T, size_t N>
-auto operator!=(const vector<T, N> &lhs, 
-            const vector<T, N> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
+auto operator!=(const vector<T, N> &lhs, const vector<T, N> &rhs) noexcept
+    -> bool {
+  return !(lhs == rhs);
 }
 
 template <typename T, size_t N, typename U = float,
@@ -108,7 +109,7 @@ auto operator+(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
 template <typename T, size_t N, typename U = float,
           typename = std::enable_if_t<std::is_arithmetic_v<U>>>
 auto operator+(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
-    return rhs + lhs;
+  return rhs + lhs;
 }
 
 template <typename T, size_t N, typename U = float,
@@ -125,7 +126,7 @@ auto operator-(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
 template <typename T, size_t N, typename U = float,
           std::enable_if_t<std::is_arithmetic_v<U>>>
 auto operator-(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
-    return rhs - lhs;
+  return rhs - lhs;
 }
 
 template <typename T, size_t N, typename U = float,
@@ -143,11 +144,11 @@ auto operator*(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
 template <typename T, size_t N, typename U = float,
           typename = std::enable_if_t<std::is_arithmetic_v<U>>>
 auto operator*(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
-    return rhs * lhs;
+  return rhs * lhs;
 }
 
 template <typename T, size_t N, typename U = float,
-        std::enable_if_t<std::is_arithmetic_v<U>> >
+          std::enable_if_t<std::is_arithmetic_v<U>>>
 auto operator/(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
 
   vector<U, N> result{};
@@ -159,13 +160,13 @@ auto operator/(const vector<T, N> &lhs, U rhs) noexcept -> vector<U, N> {
 }
 
 template <typename T, size_t N, typename U = float,
-        std::enable_if_t<std::is_arithmetic_v<U>> >
+          std::enable_if_t<std::is_arithmetic_v<U>>>
 auto operator/(U lhs, const vector<T, N> &rhs) noexcept -> vector<U, N> {
-    return rhs / lhs;
+  return rhs / lhs;
 }
 
-template <typename T, size_t N, 
-    typename = std::enable_if_t<std::is_arithmetic<T>::value> >
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
 constexpr auto dist(const vector<T, N> &v) -> double {
 
   double result{};
@@ -175,8 +176,8 @@ constexpr auto dist(const vector<T, N> &v) -> double {
   return sqrt(result);
 }
 
-template <typename T, size_t N, 
-    typename = std::enable_if_t<std::is_arithmetic<T>::value> >
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
 constexpr auto lp_norm(const vector<T, N> &v, float p) -> double {
 
   if (p == 0.0)
@@ -197,8 +198,8 @@ constexpr auto lp_norm(const vector<T, N> &v, float p) -> double {
   return pow(result, 1 / p);
 }
 
-template <typename T, size_t N, 
-    typename = std::enable_if_t<std::is_arithmetic<T>::value> >
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
 constexpr auto sum(const vector<T, N> &v) -> double {
 
   double result{};
@@ -208,8 +209,8 @@ constexpr auto sum(const vector<T, N> &v) -> double {
   return result;
 }
 
-template <typename T, size_t N, 
-    typename = std::enable_if_t<std::is_arithmetic<T>::value> >
+template <typename T, size_t N,
+          typename = std::enable_if_t<std::is_arithmetic<T>::value>>
 constexpr auto prod(const vector<T, N> &v) -> double {
 
   double result{1};
@@ -221,7 +222,7 @@ constexpr auto prod(const vector<T, N> &v) -> double {
 
 template <typename T, size_t N>
 auto dot(const vector<T, N> &lhs, const vector<T, N> &rhs) -> double {
-    return sum(rhs * lhs);
+  return sum(rhs * lhs);
 }
 
 template <typename T, size_t N>
@@ -238,7 +239,7 @@ constexpr auto normalize(const vector<T, N> &vec) -> vector<U, N> {
 
 template <typename T, size_t N>
 constexpr auto min(const vector<T, N> &rhs) noexcept -> T {
-    return *std::min_element(rhs.cbegin(), lhs.cend());
+  return *std::min_element(rhs.cbegin(), lhs.cend());
 }
 
 template <typename T, size_t N>
