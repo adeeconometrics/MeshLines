@@ -54,4 +54,13 @@ auto test_qr() -> void {
   print_matrix(R_h);
 }
 
+auto test_ch() -> void {
+  const Matrix<double> A = {{2.0, -1.0, 0}, {-1, 2, -1}, {0, -1, 2}};
+
+  const auto L = cholesky(A);
+
+  std::cout << "L: \n";
+  print_matrix(L);
+}
+
 #endif // __TEST_H__

@@ -5,6 +5,6 @@
 auto main() -> int {
 
   test_lu();
-  test_qr();
+  test_ch();
   return 0;
 }

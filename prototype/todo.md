@@ -11,7 +11,7 @@ Matrix factorization
 - [ ] LUP Decomposition
 - [ ] LL Decomposition
 - [ ] Block LU Decomposition
-- [ ] QR Decomposition
+- [ ] QR Decomposition : inaccurate result (check property of QR and restore the A matrix)
   - [x] Gram Schmidt\*
   - [x] Hoseholder Reflections\*
 - [ ] Cholesky Decomposition

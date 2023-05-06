@@ -190,4 +190,28 @@ auto ldl(const Matrix<T> &A) -> tuple<Matrix<T>, vector<T>> {
   return std::make_tuple(L, D);
 }
 
+// cholesky decomposition (L*L^T): returns L
+// conditions: symmetric positive definite matrix
+template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
+  const std::size_t size = A.size();
+  Matrix<T> L(size, vector<T>(size, 0));
+
+  // perform cholesky decomposition
+  for (std::size_t i = 0; i < size; i++) {
+    for (std::size_t j = 0; j <= i; j++) {
+      T sum = 0;
+      for (std::size_t k = 0; k < j; k++) {
+        sum += L[i][k] * L[j][k];
+      }
+      if (i == j) {
+        L[i][i] = std::sqrt(A[i][i] - sum);
+      } else {
+        L[i][j] = (A[i][j] - sum) / L[j][j];
+      }
+    }
+  }
+
+  return L;
+}
+
 #endif // __FACTORIZE_H__
