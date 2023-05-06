@@ -2,23 +2,29 @@
 
 This contains experiments of the module that is to be implemented in the main file.
 
-
 Matrix factorization
+
 - [ ] LU Decomposition
+  - [x] Crout's algorithm
+  - [ ] Gaussian Elimination
 - [ ] LDU Decomposition
 - [ ] LUP Decomposition
 - [ ] LL Decomposition
 - [ ] Block LU Decomposition
 - [ ] QR Decomposition
+  - [x] Gram Schmidt
+  - [ ] Hoseholder Reflections
 - [ ] Cholesky Decomposition
 
 Helper functions
-- [ ] Print Matrix function 
+
+- [ ] Print Matrix function
 - [ ] GFLOPS evaluation
 
 Project management matters
+
 - [x] Makefile script in py
+  - [ ] Update to glob compile
 - [x] Clang tidy
 - [x] Clang format
-- [ ] Documentation 
-
+- [ ] Documentation
