@@ -4,7 +4,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic")
 
-project(MeshLines VERSION 1.0)
+project("MeshLines"
+        VERSION 1.0
+        DESCRIPTION "Linear Algebra Routines"
+        LANGUAGES CXX)
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 
