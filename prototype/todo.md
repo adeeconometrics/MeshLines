@@ -12,13 +12,13 @@ Matrix factorization
 - [ ] LL Decomposition
 - [ ] Block LU Decomposition
 - [ ] QR Decomposition
-  - [x] Gram Schmidt
-  - [ ] Hoseholder Reflections
+  - [x] Gram Schmidt\*
+  - [x] Hoseholder Reflections\*
 - [ ] Cholesky Decomposition
 
 Helper functions
 
-- [ ] Print Matrix function
+- [x] Print Matrix function
 - [ ] GFLOPS evaluation
 
 Project management matters

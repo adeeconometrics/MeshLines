@@ -4,6 +4,7 @@
 
 auto main() -> int {
 
-  test_print();
+  test_lu();
+  test_qr();
   return 0;
 }
