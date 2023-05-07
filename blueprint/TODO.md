@@ -23,3 +23,16 @@
 - [ ] Tier 3: Performance Optimization
   - [ ] Re-implement the source code with STL functions, and light-weight routines that allows the compiler to optimize
   - [ ] Perform profiling and performance comparison
+
+High Prio
+
+- [ ] Google unit test framework
+- [ ] Google benchmark
+- [ ] Typesafe Matrix
+- [ ] Documentation in Sphinx
+
+Low Prio
+
+- [ ] OpenMP directives
+- [ ] CMake Configuration
+- [ ] Docker Image
