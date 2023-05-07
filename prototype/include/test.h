@@ -96,4 +96,13 @@ auto test_vector_arithmetic() -> void {
   std::cout << "dist : " << dist(a);
 };
 
+auto test_minmax() -> void{};
+auto test_lpnorm() -> void{};
+auto test_sum() -> void{};
+auto test_prod() -> void{};
+auto test_norm() -> void{};
+auto test_dist() -> void{};
+auto test_getangle() -> void{};
+auto test_normalize() -> void{};
+
 #endif // __TEST_H__

@@ -241,6 +241,19 @@ constexpr auto get_angle(const vector<T> &lhs, const vector<U> &rhs)
   return std::acos(dot(lhs, rhs) / (dist(lhs) * dist(rhs)));
 }
 
+template <typename T>
+constexpr auto normalize(const vector<T> &v) -> vector<T> {
+  return v / dist(v); // check for condition of [int]/[double] and [int]/[int]
+}
+
+template <typename T> constexpr auto max(const vector<T> &v) noexcept -> T {
+  return *std::max_element(v.cbegin(), v.cend());
+}
+
+template <typename T> constexpr auto min(const vector<T> &v) noexcept -> T {
+  return *std::min_element(v.cbegin(), v.cend());
+}
+
 } // namespace lin
 
 #endif // __VECTOR_H__
