@@ -3,23 +3,26 @@
 
 #include "../include/factorize.h"
 #include "../include/helper.h"
+#include "../include/vector.h"
 
+#include <cstdlib>
 #include <iostream>
+#include <vector>
 
 auto test_print() -> void {
-  // Test the print_matrix function
+  // Test the print function
   //   std::vector<std::vector<int>> A = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-  //   print_matrix(A);
+  //   print(A);
 
   Matrix<double> B = {{1.23456789, 2.3456789, 1.34, 3.1415926, 1000000000},
                       {3.456789, 4.56789, 1.3, 4},
                       {5.6789, 6.789, 5.5556, 6.777},
                       {7.89, 8.9, 0, 0}};
-  print_matrix(B);
+  print(B);
 
   //   std::vector<std::vector<std::string>> C = {
   //       {"abc", "defgh"}, {"ijklm", "nop"}, {"qrs", "tuvwx"}};
-  //   print_matrix(C);
+  //   print(C);
 }
 
 auto test_lu() -> void {
@@ -27,9 +30,9 @@ auto test_lu() -> void {
   auto [L, U] = lu_crout(A);
 
   std::cout << "L: \n";
-  print_matrix(L);
+  print(L);
   std::cout << "U: \n";
-  print_matrix(U);
+  print(U);
 }
 
 auto test_qr() -> void {
@@ -42,16 +45,16 @@ auto test_qr() -> void {
   auto [Q_h, R_h] = qr_householder(A);
 
   std::cout << "Q: \n";
-  print_matrix(Q_gm);
+  print(Q_gm);
   std::cout << "R: \n";
-  print_matrix(R_gm);
+  print(R_gm);
 
   std::cout << "-----------------\n";
 
   std::cout << "Q: \n";
-  print_matrix(Q_h);
+  print(Q_h);
   std::cout << "R: \n";
-  print_matrix(R_h);
+  print(R_h);
 }
 
 auto test_ch() -> void {
@@ -60,7 +63,37 @@ auto test_ch() -> void {
   const auto L = cholesky(A);
 
   std::cout << "L: \n";
-  print_matrix(L);
+  print(L);
 }
+
+auto test_vector_arithmetic() -> void {
+  using namespace lin;
+  std::vector<int> a{};
+  std::vector<int> b{};
+
+  for (size_t i{}; i < 10; i++) {
+    a.emplace_back(std::rand() % 100);
+    b.emplace_back(std::rand() % 100);
+  }
+  // b.emplace_back(3);
+
+  print(a);
+  print(b);
+
+  const auto add = a + b;
+  const auto sub = a - b;
+  const auto mul = a * b;
+  const auto div = a / b;
+
+  const auto sadd = a + 5.5;
+  std::cout << "---\n";
+  print(add);
+  print(sub);
+  print(mul);
+  print(div);
+  print(sadd);
+
+  std::cout << "dist : " << dist(a);
+};
 
 #endif // __TEST_H__

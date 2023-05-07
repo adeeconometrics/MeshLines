@@ -4,7 +4,8 @@
 
 auto main() -> int {
 
-  test_lu();
-  test_ch();
+  // test_lu();
+  // test_ch();
+  test_vector_arithmetic();
   return 0;
 }

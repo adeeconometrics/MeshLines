@@ -1,24 +1,43 @@
-CC = g++
-CFLAGS = -std=c++17 -Wall -Wextra
+# Compiler and compiler flags
+CC := g++
+CFLAGS := -std=c++17 -Wall -Wextra
 
-BIN_DIR = ./bin
-SRC_DIR = ./src
-INCLUDE_DIR = ./include
+# Directories
+SRCDIR := ./src
+INCDIR := ./include
+BUILDDIR := ./build
+BINDIR := ./bin
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.o,$(SRCS))
+# Names of the executable files
+TARGET := main
+TARGET_DEBUG := debug
 
-TARGET = proto
+# Names of the source files
+SOURCES := $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
 
-all: $(TARGET)
+# Include directories
+INCLUDES := -I$(INCDIR)
 
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $(BIN_DIR)/$@
+# Build version
+$(BINDIR)/$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) -O3 -fopenmp $(INCLUDES) $^ -o $@
 
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+# Debug version
+$(BINDIR)/$(TARGET_DEBUG): $(OBJECTS)
+	$(CC) $(CFLAGS) -O0 $(INCLUDES) $^ -o $@ -g
 
+# Object files
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Clean
 clean:
-	rm -f $(OBJS) $(BIN_DIR)/$(TARGET)
+	rm -f $(BUILDDIR)/*.o $(BINDIR)/$(TARGET) $(BINDIR)/$(TARGET_DEBUG)
+
+# Debug
+# debug:
+# 	$(BINDIR)/$(TARGET_DEBUG): $(OBJECTS)
+# 		$(CC) $(CFLAGS) $(INCLUDES) $^ -o $@ -g -O0
 
 .PHONY: clean

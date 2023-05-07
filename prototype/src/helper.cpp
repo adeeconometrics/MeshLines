@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-auto print_matrix(const Matrix<double> &matrix) -> void {
+auto print(const Matrix<double> &matrix) -> void {
   if (matrix.empty()) {
     std::cout << "[]" << std::endl;
     return;
@@ -37,5 +37,5 @@ auto print_matrix(const Matrix<double> &matrix) -> void {
       std::cout << '\n';
     }
   }
-  std::cout << "]" << '\n';
+  std::cout << "]\n";
 }
