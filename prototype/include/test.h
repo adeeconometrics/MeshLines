@@ -10,19 +10,19 @@
 #include <vector>
 
 auto test_print() -> void {
-  // Test the print function
-  //   std::vector<std::vector<int>> A = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-  //   print(A);
+  // Test the std::cout << function
+  std::vector<std::vector<int>> A = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  //   std::cout << A;
 
   Matrix<double> B = {{1.23456789, 2.3456789, 1.34, 3.1415926, 1000000000},
                       {3.456789, 4.56789, 1.3, 4},
                       {5.6789, 6.789, 5.5556, 6.777},
                       {7.89, 8.9, 0, 0}};
-  print(B);
+  std::cout << B;
 
   //   std::vector<std::vector<std::string>> C = {
   //       {"abc", "defgh"}, {"ijklm", "nop"}, {"qrs", "tuvwx"}};
-  //   print(C);
+  //   std::cout << C;
 }
 
 auto test_lu() -> void {
@@ -30,9 +30,9 @@ auto test_lu() -> void {
   auto [L, U] = lu_crout(A);
 
   std::cout << "L: \n";
-  print(L);
+  std::cout << L;
   std::cout << "U: \n";
-  print(U);
+  std::cout << U;
 }
 
 auto test_qr() -> void {
@@ -45,16 +45,16 @@ auto test_qr() -> void {
   auto [Q_h, R_h] = qr_householder(A);
 
   std::cout << "Q: \n";
-  print(Q_gm);
+  std::cout << Q_gm;
   std::cout << "R: \n";
-  print(R_gm);
+  std::cout << R_gm;
 
   std::cout << "-----------------\n";
 
   std::cout << "Q: \n";
-  print(Q_h);
+  std::cout << Q_h;
   std::cout << "R: \n";
-  print(R_h);
+  std::cout << R_h;
 }
 
 auto test_ch() -> void {
@@ -63,7 +63,7 @@ auto test_ch() -> void {
   const auto L = cholesky(A);
 
   std::cout << "L: \n";
-  print(L);
+  std::cout << L;
 }
 
 auto test_vector_arithmetic() -> void {
@@ -77,8 +77,8 @@ auto test_vector_arithmetic() -> void {
   }
   // b.emplace_back(3);
 
-  print(a);
-  print(b);
+  std::cout << a;
+  std::cout << b;
 
   const auto add = a + b;
   const auto sub = a - b;
@@ -87,16 +87,16 @@ auto test_vector_arithmetic() -> void {
 
   const auto sadd = a + 5.5;
   std::cout << "---\n";
-  print(add);
-  print(sub);
-  print(mul);
-  print(div);
-  print(sadd);
+  std::cout << add;
+  std::cout << sub;
+  std::cout << mul;
+  std::cout << div;
+  std::cout << sadd;
 
   std::cout << "dist : " << dist(a);
 };
 
-auto test_minmax() -> void{};
+auto test_minmax() -> void { const vector<int> a{1, 2, 4, 5}; };
 auto test_lpnorm() -> void{};
 auto test_sum() -> void{};
 auto test_prod() -> void{};

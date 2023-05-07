@@ -2,12 +2,17 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
-auto print(const Matrix<double> &matrix) -> void {
+template <typename T>
+auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
+  static_assert(std::is_arithmetic_v<T>,
+                "template parameter must be of type arithmetic");
+
   if (matrix.empty()) {
-    std::cout << "[]" << std::endl;
-    return;
+    os << "[]" << std::endl;
+    return os;
   }
 
   std::size_t max_width = 0;
@@ -20,22 +25,22 @@ auto print(const Matrix<double> &matrix) -> void {
     }
   }
 
-  std::cout << "[";
+  os << "[";
   for (std::size_t i = 0; i < matrix.size(); ++i) {
     if (i != 0) {
-      std::cout << " ";
+      os << " ";
     }
-    std::cout << "[";
+    os << "[";
     for (std::size_t j = 0; j < matrix[i].size(); ++j) {
-      std::cout << std::setw(max_width) << matrix[i][j];
+      os << std::setw(max_width) << matrix[i][j];
       if (j != matrix[i].size() - 1) {
-        std::cout << ", ";
+        os << ", ";
       }
     }
-    std::cout << "]";
+    os << "]";
     if (i != matrix.size() - 1) {
-      std::cout << '\n';
+      os << '\n';
     }
   }
-  std::cout << "]\n";
+  return os << "]\n";
 }
