@@ -30,8 +30,6 @@ constexpr auto operator+(const vector<T> &lhs, const vector<U> &rhs)
 
   if (lhs.size() != rhs.size())
     throw std::runtime_error("rhs size is not same as lhs size");
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameters must be of arithmetic type");
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -48,8 +46,6 @@ constexpr auto operator-(const vector<T> &lhs, const vector<U> &rhs)
 
   if (lhs.size() != rhs.size())
     throw std::runtime_error("rhs size is not same as lhs size");
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameters must be of arithmetic type");
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -66,14 +62,13 @@ constexpr auto operator*(const vector<T> &lhs, const vector<U> &rhs)
 
   if (lhs.size() != rhs.size())
     throw std::runtime_error("rhs size is not same as lhs size");
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameters must be of arithmetic type");
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
 
   for (size_t i{}; i < lhs.size(); i++) {
-    result.emplace_back(lhs[i] * rhs[i]);
+    result.emplace_back(static_cast<result_type>(lhs[i]) *
+                        static_cast<result_type>(rhs[i]));
   }
   return result;
 }
@@ -84,14 +79,13 @@ constexpr auto operator/(const vector<T> &lhs, const vector<U> &rhs)
 
   if (lhs.size() != rhs.size())
     throw std::runtime_error("rhs size is not same as lhs size");
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameters must be of arithmetic type");
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
 
   for (size_t i{}; i < lhs.size(); i++) {
-    result.emplace_back(lhs[i] / rhs[i]);
+    result.emplace_back(static_cast<result_type>(lhs[i]) /
+                        static_cast<result_type>(rhs[i]));
   }
   return result;
 }

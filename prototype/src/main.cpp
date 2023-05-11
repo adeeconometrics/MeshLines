@@ -3,9 +3,9 @@
 #include "../include/test.h"
 
 auto main() -> int {
-
   // test_lu();
   // test_ch();
-  test_vector_arithmetic();
+  test_vecops();
+  test_matops();
   return 0;
 }

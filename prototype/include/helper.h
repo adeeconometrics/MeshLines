@@ -56,7 +56,7 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   for (const auto i : v) {
     os << i << " ";
   }
-  os << "]\n";
+  return os << "]\n";
 };
 
 #endif // __HELPER_H__

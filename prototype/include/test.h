@@ -66,10 +66,10 @@ auto test_ch() -> void {
   std::cout << L;
 }
 
-auto test_vector_arithmetic() -> void {
+auto test_vecops() -> void {
   using namespace lin;
   std::vector<int> a{};
-  std::vector<int> b{};
+  std::vector<float> b{};
 
   for (size_t i{}; i < 10; i++) {
     a.emplace_back(std::rand() % 100);
@@ -104,5 +104,14 @@ auto test_norm() -> void{};
 auto test_dist() -> void{};
 auto test_getangle() -> void{};
 auto test_normalize() -> void{};
+
+auto test_matops() -> void {
+  using namespace lin;
+  const Matrix<float> A = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  const Matrix<float> B = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+
+  const auto C = A + B;
+  std::cout << C;
+}
 
 #endif // __TEST_H__
