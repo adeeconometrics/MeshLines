@@ -16,11 +16,11 @@
 // - [ ] change thowing function into assert statements
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
-#include <cassert>
 
 namespace lin {
 using std::is_arithmetic_v, std::common_type_t;
@@ -104,8 +104,6 @@ constexpr auto operator!=(const vector<T> &lhs, const vector<T> &rhs) -> bool {
 template <typename T, typename U = T>
 constexpr auto operator+(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameter must be of arithmetic type");
 
   using result_type = std::common_type_t<T, U>;
   vector<result_type> result;
@@ -120,8 +118,6 @@ constexpr auto operator+(const vector<T> &lhs, U rhs)
 template <typename T, typename U = T>
 constexpr auto operator-(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameter must be of arithmetic type");
 
   using result_type = std::common_type_t<T, U>;
   vector<result_type> result;
@@ -136,8 +132,6 @@ constexpr auto operator-(const vector<T> &lhs, U rhs)
 template <typename T, typename U = T>
 constexpr auto operator*(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameter must be of arithmetic type");
 
   using result_type = std::common_type_t<T, U>;
   vector<result_type> result;
@@ -152,8 +146,6 @@ constexpr auto operator*(const vector<T> &lhs, U rhs)
 template <typename T, typename U = T>
 constexpr auto operator/(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
-                "template parameter must be of arithmetic type");
 
   using result_type = std::common_type_t<T, U>;
   vector<result_type> result;
@@ -166,8 +158,6 @@ constexpr auto operator/(const vector<T> &lhs, U rhs)
 };
 
 template <typename T> constexpr auto dist(const vector<T> &v) -> double {
-  static_assert(is_arithmetic_v<T>,
-                "template parameter must be of arithmetic type");
 
   double result{};
   std::for_each(v.cbegin(), v.cend(),
