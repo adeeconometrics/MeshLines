@@ -13,12 +13,14 @@
 //      - [ ] make sure that this directive is only added when the compiler
 //      supports it
 // - [ ] profile performance
+// - [ ] change thowing function into assert statements
 
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
+#include <cassert>
 
 namespace lin {
 using std::is_arithmetic_v, std::common_type_t;
@@ -28,8 +30,7 @@ template <typename T, typename U = T>
 constexpr auto operator+(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
 
-  if (lhs.size() != rhs.size())
-    throw std::runtime_error("rhs size is not same as lhs size");
+  assert(lhs.size() == rhs.size());
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -100,7 +101,7 @@ constexpr auto operator!=(const vector<T> &lhs, const vector<T> &rhs) -> bool {
   return ~(lhs == rhs);
 }
 
-template <typename T, typename U = double>
+template <typename T, typename U = T>
 constexpr auto operator+(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
   static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
@@ -116,7 +117,7 @@ constexpr auto operator+(const vector<T> &lhs, U rhs)
   return result;
 };
 
-template <typename T, typename U = double>
+template <typename T, typename U = T>
 constexpr auto operator-(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
   static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
@@ -132,7 +133,7 @@ constexpr auto operator-(const vector<T> &lhs, U rhs)
   return result;
 };
 
-template <typename T, typename U = double>
+template <typename T, typename U = T>
 constexpr auto operator*(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
   static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
@@ -148,7 +149,7 @@ constexpr auto operator*(const vector<T> &lhs, U rhs)
   return result;
 };
 
-template <typename T, typename U = double>
+template <typename T, typename U = T>
 constexpr auto operator/(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
   static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,

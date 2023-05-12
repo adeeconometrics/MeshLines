@@ -23,8 +23,14 @@ Helper functions
 
 Project management matters
 
-- [x] Makefile script in py
-  - [ ] Update to glob compile
+- [x] ~~Makefile script in py~~
+  - [ ] ~~Update to glob compile ~~
+- [x] Makefile
 - [x] Clang tidy
 - [x] Clang format
 - [ ] Documentation
+- [ ] CMake build configuration  
+
+
+About setting conditions
+- [ ] `throw` vs `assert` 

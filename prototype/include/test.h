@@ -110,7 +110,8 @@ auto test_matops() -> void {
   const Matrix<float> A = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
   const Matrix<float> B = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
 
-  const auto C = A + B;
+  const int a =  5;
+  const auto C = A + a;
   std::cout << C;
 }
 
