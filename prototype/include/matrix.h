@@ -5,16 +5,16 @@
 #include "../include/vector.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
-#include <stdexcept>
+#include <functional>
 #include <type_traits>
 #include <vector>
-#include <cassert>
 
 namespace lin {
 
-using std::is_arithmetic_v, std::common_type_t;
-using std::runtime_error;
+using std::common_type_t;
+using std::transform, std::for_each;
 using std::vector;
 
 template <typename T> using Matrix = vector<vector<T>>;
@@ -30,6 +30,15 @@ constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)
                  [](const vector<T> &a, const vector<U> &b) { return a + b; });
 
   return result;
+}
+// see if it is possible to add U parameter for implicit typecast
+template <typename T>
+auto operator+=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
+  assert(lhs.size() == rhs.size());
+
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+            [](const auto &_lhs, const auto &_rhs) { return _lhs += _rhs; });
+  return lhs;
 }
 
 template <typename T, typename U = T>
@@ -66,31 +75,44 @@ constexpr auto operator/(const Matrix<T> &lhs, const Matrix<U> &rhs)
 }
 
 template <typename T, typename U = T>
-constexpr auto operator+(const Matrix<T>& lhs, const vector<U>& rhs)
-	-> Matrix<common_type_t<T,U>> {
-  
-  assert(lhs.size() == rhs.size());
+constexpr auto operator+(const Matrix<T> &lhs, const vector<U> &rhs)
+    -> Matrix<common_type_t<T, U>> {
 
-  using result_type = common_type_t<T,U>;
+  assert(lhs[0].size() == rhs.size());
+  assert(lhs.size() > 0 && rhs.size() > 0);
 
-  Matrix<result_type> result(lhs.size(), std::vector<result_type>(rhs.size())); // is this the right way to add vector and mat?
-  
+  using result_type = common_type_t<T, U>;
+
+  Matrix<result_type> result{};
+
+  transform(lhs.cbegin(), lhs.cend(), result.begin(),
+            [&](const vector<T> &row) -> vector<result_type> {
+              assert(row.size() == rhs.size());
+              vector<result_type> row_result(row.size());
+              transform(row.cbegin(), row.cend(), row_result.begin(),
+                        std::plus<result_type>());
+              return row_result;
+            });
+
   return result;
-
 }
 
-template <typename T, typename U = T>
-constexpr auto operator+(const Matrix<T>& lhs, U rhs)
-	->Matrix<common_type_t<T,U>> {
+template <typename T>
+constexpr auto operator+(Matrix<T> lhs, int rhs)
+    -> Matrix<common_type_t<T, int>> {
 
-  using result_type = common_type_t<T,U>;
-  
-  Matrix<result_type> result {};
-  std::for_each(lhs.cbegin(), lhs.cend(),
-	[&result, rhs](const auto &_lhs) {result.emplace_back(_lhs + rhs);}
-  );
+  using result_type = common_type_t<T, int>;
 
-  return result; 
+  Matrix<result_type> result{};
+  for (const auto vec : lhs) {
+    vector<result_type> __tmp{};
+    for (const auto elem : vec) {
+      __tmp.emplace_back(static_cast<result_type>(elem + rhs));
+    }
+    result.emplace_back(__tmp);
+  }
+
+  return result;
 }
 
 } // namespace lin

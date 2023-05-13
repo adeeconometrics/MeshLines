@@ -107,12 +107,17 @@ auto test_normalize() -> void{};
 
 auto test_matops() -> void {
   using namespace lin;
-  const Matrix<float> A = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
-  const Matrix<float> B = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  Matrix<float> A = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  Matrix<float> B = {{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
 
-  const int a =  5;
-  const auto C = A + a;
-  std::cout << C;
+  // todo
+  // - [ ] mat [op] vec
+  // - [ ] mat [op] scalar
+
+  // const float a = 5;
+  // const auto C = A + a;
+  A += B;
+  std::cout << A;
 }
 
 #endif // __TEST_H__
