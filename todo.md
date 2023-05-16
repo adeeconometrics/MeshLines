@@ -28,9 +28,6 @@ Project management matters
 - [x] Makefile
 - [x] Clang tidy
 - [x] Clang format
-- [ ] Documentation
-- [ ] CMake build configuration  
-
-
-About setting conditions
-- [ ] `throw` vs `assert` 
+- [ ] Documentation in Sphynx
+- [x] CMake build configuration
+- [x] Set up gtest
