@@ -53,3 +53,11 @@ TEST(VecOps, Scalar) {
   EXPECT_EQ(a * 2, a + a);
   EXPECT_EQ(a / 1, a);
 }
+
+TEST(VecOps, Equality) {
+  const vector<int> a{1, 2, 3};
+  const vector<int> b{2, 3, 4};
+
+  EXPECT_TRUE(a == a);
+  EXPECT_TRUE(a != b);
+}
