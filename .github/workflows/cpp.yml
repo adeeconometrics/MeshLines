@@ -14,12 +14,12 @@ jobs:
       - name: configure
         run: sudo apt-get install make cmake build-essential
       - name: gtest
-        run: cd ${{github.workspace}} && mkdir lib && /
-          git clone https://github.com/google/googletest.git && /
-          cd googletest && mkdir build && cd build && /
+        run: cd ${{github.workspace}} && mkdir lib && \
+          git clone https://github.com/google/googletest.git && \
+          cd googletest && mkdir build && cd build && \
           cmake ../ && make
       - name: build
-        run: cd ${{github.workspace}} && mkdir build && /
+        run: cd ${{github.workspace}} && mkdir build && \
           cd build && cmake ../ && make
       - name: test
         run: cd ${{github.workspace}}/build && ctest
