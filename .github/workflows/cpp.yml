@@ -11,15 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: git
+        run: git --version
       - name: configure
-        run: sudo apt-get install make cmake build-essential git
+        run: sudo apt-get install make cmake build-essential
       - name: gtest
-        run: cd ${{github.workspace}} && mkdir lib && \
-          git clone https://github.com/google/googletest.git && \
-          cd googletest && mkdir build && cd build && \
-          cmake ../ && make
+        run: | 
+          cd ${{github.workspace}} 
+          mkdir lib
+          git clone https://github.com/google/googletest.git 
+          cd googletest && mkdir build && cd build 
+          cmake ../  
+          make
       - name: build
-        run: cd ${{github.workspace}} && mkdir build && \
-          cd build && cmake ../ && make
+        run: | 
+          cd ${{github.workspace}} 
+          mkdir build
+          cd build 
+          cmake ../ 
+          make
       - name: test
-        run: cd ${{github.workspace}}/build && ctest
+        run: | 
+          cd ${{github.workspace}}/build 
+          ctest
