@@ -116,7 +116,7 @@ auto test_matops() -> void {
 
   // const float a = 5;
   // const auto C = A + a;
-  A += B;
+  // A += B;
   std::cout << A;
 }
 

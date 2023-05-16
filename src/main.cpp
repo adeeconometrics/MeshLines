@@ -6,6 +6,6 @@ auto main() -> int {
   // test_lu();
   // test_ch();
   // test_vecops();
-  test_matops();
+  // test_matops();
   return 0;
 }
