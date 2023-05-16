@@ -17,6 +17,7 @@ jobs:
         run: sudo apt-get install make cmake build-essential
       - name: gtest
         run: | 
+          sudo apt-get install libgtest-dev
           cd ${{github.workspace}} 
           mkdir lib
           cd lib
