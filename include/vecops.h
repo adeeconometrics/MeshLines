@@ -1,5 +1,5 @@
-#ifndef __VECTOR_H__
-#define __VECTOR_H__
+#ifndef __VECOPS_H__
+#define __VECOPS_H__
 
 /**
  * @brief the intention of this module is to write a convinient vector
@@ -304,4 +304,4 @@ template <typename T> constexpr auto min(const vector<T> &v) noexcept -> T {
 
 } // namespace lin
 
-#endif // __VECTOR_H__
+#endif // __VECOPS_H__

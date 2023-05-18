@@ -1,8 +1,8 @@
-#ifndef __MATRIX_H__
-#define __MATRIX_H__
+#ifndef __MATOPS_H__
+#define __MATOPS_H__
 
 #include "../include/factorize.h"
-#include "../include/vector.h"
+#include "../include/vecops.h"
 
 #include <algorithm>
 #include <cassert>
@@ -125,4 +125,4 @@ constexpr auto operator!=(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
 
 } // namespace lin
 
-#endif // __MATRIX_H__
+#endif // __MATOPS_H__

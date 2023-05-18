@@ -3,7 +3,7 @@
 
 #include "../include/factorize.h"
 #include "../include/helper.h"
-#include "../include/vector.h"
+#include "../include/vecops.h"
 
 #include <cstdlib>
 #include <iostream>

@@ -1,5 +1,7 @@
 #include "../include/helper.h"
-#include "../include/vector.h"
+// #include "../include/matops.h" -- find out why the compiler complains when I
+// include this
+#include "../include/vecops.h"
 #include <gtest/gtest.h>
 
 #include <type_traits>
@@ -45,7 +47,7 @@ TEST(VecOps, Elementwise) {
   EXPECT_EQ(a / a, one);
 }
 
-TEST(VecOps, Inplace) {
+TEST(VecOps, InPlace) {
   vector<int> a{1, 2, 3};
   vector<int> b{2, 4, 6};
   const vector<int> c{2, 2, 2};
@@ -90,6 +92,19 @@ TEST(VecOps, Equality) {
 }
 
 TEST(MatOps, Equality) {
+  Matrix<int> A{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<int> B{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+  const Matrix<int> C{{10, 10, 10}, {10, 10, 10}, {10, 10, 10}};
+  const Matrix<int> D{{9, 16, 21}, {24, 25, 24}, {21, 16, 9}};
+  const Matrix<int> E{{30, 24, 18}, {84, 69, 54}, {138, 114, 90}}; // matmul
+
+  EXPECT_EQ(C, A + B);
+  EXPECT_EQ(B, C - A);
+  EXPECT_EQ(D, A * B);
+  EXPECT_EQ(B, D / A);
+}
+
+TEST(MatOps, InPlace) {
   Matrix<int> A{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   Matrix<int> B{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
   const Matrix<int> C{{10, 10, 10}, {10, 10, 10}, {10, 10, 10}};
