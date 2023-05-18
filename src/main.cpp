@@ -1,5 +1,5 @@
-#include "../include/factorize.h"
 #include "../include/helper.h"
+#include "../include/matfunc.h"
 #include "../include/test.h"
 
 auto main() -> int {

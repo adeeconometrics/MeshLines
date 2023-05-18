@@ -1,7 +1,7 @@
 #ifndef __HELPER_H__
 #define __HELPER_H__
 
-#include "../include/factorize.h"
+#include "../include/matfunc.h"
 #include <iomanip>
 #include <iostream>
 #include <string>

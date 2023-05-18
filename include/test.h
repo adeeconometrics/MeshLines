@@ -3,6 +3,7 @@
 
 #include "../include/helper.h"
 #include "../include/matfunc.h"
+#include "../include/vecfunc.h"
 #include "../include/vecops.h"
 
 #include <cstdlib>
