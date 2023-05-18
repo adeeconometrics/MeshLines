@@ -51,15 +51,24 @@ TEST(VecOps, Inplace) {
   const vector<int> c{2, 2, 2};
   const vector<int> d{1, 2, 3};
   const vector<int> e{2, 4, 6};
+  const vector<int> f{2, 3, 4};
 
   a += a;
-  EXPECT_EQ(a, b) << a;
+  EXPECT_EQ(a, b) << a; // a = 2,4,6
   a -= d;
-  EXPECT_EQ(a, d) << a;
+  EXPECT_EQ(a, d) << a; // a = 1,2,3
   b /= a;
-  EXPECT_EQ(b, c) << b;
+  EXPECT_EQ(b, c) << b; // b = 2,2,2
   b *= d;
-  EXPECT_EQ(b, e) << b;
+  EXPECT_EQ(b, e) << b; // c = 2,4,6
+  a += 1;
+  EXPECT_EQ(a, f) << a; // a = 2,3,4
+  a -= 1;
+  EXPECT_EQ(a, d) << a; // a = 1,2,3
+  a *= 2;
+  EXPECT_EQ(a, e) << a; // a = 2,4,6
+  a /= 2;
+  EXPECT_EQ(a, d) << a; // a = 1,2,3
 }
 
 TEST(VecOps, Scalar) {

@@ -164,30 +164,68 @@ template <typename T> constexpr auto dist(const vector<T> &v) -> double {
 
 template <typename T>
 constexpr auto operator+=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
             [](auto _lhs, const auto _rhs) { return _lhs += _rhs; });
   return lhs;
 }
 
 template <typename T>
 constexpr auto operator-=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
             [](auto _lhs, const auto _rhs) { return _lhs -= _rhs; });
   return lhs;
 }
 
 template <typename T>
 constexpr auto operator*=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
             [](auto _lhs, const auto _rhs) { return _lhs *= _rhs; });
   return lhs;
 }
 
 template <typename T>
 constexpr auto operator/=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
             [](auto _lhs, const auto _rhs) { return _lhs /= _rhs; });
   return lhs;
+}
+
+template <typename T>
+constexpr auto operator+=(vector<T> &lhs, T rhs) -> vector<T> & {
+  transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
+            [&rhs](auto _lhs) { return _lhs += rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator-=(vector<T> &lhs, T rhs) -> vector<T> & {
+  transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
+            [&rhs](auto _lhs) { return _lhs -= rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator*=(vector<T> &lhs, T rhs) -> vector<T> & {
+  transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
+            [&rhs](auto _lhs) { return _lhs *= rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator/=(vector<T> &lhs, T rhs) -> vector<T> & {
+  transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
+            [&rhs](auto _lhs) { return _lhs /= rhs; });
+  return lhs;
+}
+
+template <typename T> constexpr auto ones(size_t t_size) -> vector<T> {
+  assert(std::is_arithmetic_v<T>);
+  return vector<T>(1, t_size);
+}
+
+template <typename T> constexpr auto zeros(size_t t_size) -> vector<T> {
+  assert(std::is_arithmetic_v<T>);
+  return vector<T>(0, t_size);
 }
 
 template <typename T>
