@@ -1,5 +1,5 @@
-#ifndef __FACTORIZE_H__
-#define __FACTORIZE_H__
+#ifndef __MATFUNC_H__
+#define __MATFUNC_H__
 
 // todo
 // make functions exclusive to integral type
@@ -223,4 +223,4 @@ template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
 
 // };
 
-#endif // __FACTORIZE_H__
+#endif // __MATFUNC_H__

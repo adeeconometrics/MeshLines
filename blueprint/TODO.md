@@ -15,8 +15,8 @@
 
 - [ ] Tier 1: Correctness
   - [ ] Write correct functions
-  - [ ] Write unit tests
-  - [ ] Write CI/CD workflow
+  - [x] Write unit tests
+  - [x] Write CI/CD workflow
 - [ ] Tier 2: Implement Predicates and Concepts
   - [ ] Use static metaprogramming to implement Matrix concepts
   - [ ] Make custom operator overloading
@@ -26,7 +26,7 @@
 
 High Prio
 
-- [ ] Google unit test framework
+- [x] Google unit test framework
 - [ ] Google benchmark
 - [ ] Typesafe Matrix
 - [ ] Documentation in Sphinx

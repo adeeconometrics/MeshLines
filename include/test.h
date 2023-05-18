@@ -1,8 +1,8 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#include "../include/factorize.h"
 #include "../include/helper.h"
+#include "../include/matfunc.h"
 #include "../include/vecops.h"
 
 #include <cstdlib>
@@ -95,15 +95,6 @@ auto test_vecops() -> void {
 
   std::cout << "dist : " << dist(a);
 };
-
-auto test_minmax() -> void { const vector<int> a{1, 2, 4, 5}; };
-auto test_lpnorm() -> void{};
-auto test_sum() -> void{};
-auto test_prod() -> void{};
-auto test_norm() -> void{};
-auto test_dist() -> void{};
-auto test_getangle() -> void{};
-auto test_normalize() -> void{};
 
 auto test_matops() -> void {
   using namespace lin;
