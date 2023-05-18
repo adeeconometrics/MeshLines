@@ -95,7 +95,7 @@ constexpr auto operator==(const vector<T> &lhs, const vector<T> &rhs) -> bool {
 
 template <typename T>
 constexpr auto operator!=(const vector<T> &lhs, const vector<T> &rhs) -> bool {
-  return ~(lhs == rhs);
+  return !(lhs == rhs);
 }
 
 template <typename T, typename U = T>
@@ -154,14 +154,6 @@ constexpr auto operator/(const vector<T> &lhs, U rhs)
   return result;
 };
 
-template <typename T> constexpr auto dist(const vector<T> &v) -> double {
-
-  double result{};
-  std::for_each(v.cbegin(), v.cend(),
-                [&result](const auto &i) { result += pow(i, 2); });
-  return std::sqrt(result);
-}
-
 template <typename T>
 constexpr auto operator+=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
   transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
@@ -216,6 +208,14 @@ constexpr auto operator/=(vector<T> &lhs, T rhs) -> vector<T> & {
   transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
             [&rhs](auto _lhs) { return _lhs /= rhs; });
   return lhs;
+}
+
+template <typename T> constexpr auto dist(const vector<T> &v) -> double {
+
+  double result{};
+  std::for_each(v.cbegin(), v.cend(),
+                [&result](const auto &i) { result += pow(i, 2); });
+  return std::sqrt(result);
 }
 
 template <typename T> constexpr auto ones(size_t t_size) -> vector<T> {

@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <functional>
+// #include <functional>
 #include <type_traits>
 #include <vector>
 
@@ -24,21 +24,12 @@ constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)
     -> Matrix<common_type_t<T, U>> {
   Matrix<common_type_t<T, U>> result(lhs.size(), std::vector<T>(lhs[0].size()));
 
-  assert(lhs.size() != rhs.size());
+  assert(lhs.size() == rhs.size());
 
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
                  [](const vector<T> &a, const vector<U> &b) { return a + b; });
 
   return result;
-}
-// see if it is possible to add U parameter for implicit typecast
-template <typename T>
-auto operator+=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
-  assert(lhs.size() == rhs.size());
-
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-            [](const auto &_lhs, const auto &_rhs) { return _lhs += _rhs; });
-  return lhs;
 }
 
 template <typename T, typename U = T>
@@ -72,6 +63,13 @@ constexpr auto operator/(const Matrix<T> &lhs, const Matrix<U> &rhs)
                  [](const vector<T> &a, const vector<U> &b) { return a / b; });
 
   return result;
+}
+
+template <typename T>
+constexpr auto operator+=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+            [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
+  return lhs;
 }
 
 template <typename T, typename U = T>
@@ -113,6 +111,16 @@ constexpr auto operator+(Matrix<T> lhs, int rhs)
   }
 
   return result;
+}
+
+template <typename T>
+constexpr auto operator==(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
+  return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template <typename T>
+constexpr auto operator!=(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
+  return !(lhs == rhs);
 }
 
 } // namespace lin
