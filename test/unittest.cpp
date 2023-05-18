@@ -107,14 +107,21 @@ TEST(MatOps, Equality) {
 TEST(MatOps, InPlace) {
   Matrix<int> A{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   Matrix<int> B{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+
+  const Matrix<int> AA{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int> BB{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
   const Matrix<int> C{{10, 10, 10}, {10, 10, 10}, {10, 10, 10}};
   const Matrix<int> D{{9, 16, 21}, {24, 25, 24}, {21, 16, 9}};
   const Matrix<int> E{{30, 24, 18}, {84, 69, 54}, {138, 114, 90}}; // matmul
 
-  EXPECT_EQ(C, A + B);
-  EXPECT_EQ(B, C - A);
-  EXPECT_EQ(D, A * B);
-  EXPECT_EQ(B, D / A);
+  A += BB;
+  EXPECT_EQ(A, C) << A;
+  A -= B;
+  EXPECT_EQ(A, AA) << A;
+  A *= B;
+  EXPECT_EQ(A, D) << A;
+  A /= B;
+  EXPECT_EQ(A, AA) << A;
 }
 
 TEST(MatOps, Elementwise) {

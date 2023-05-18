@@ -88,16 +88,6 @@ constexpr auto operator/(const vector<T> &lhs, const vector<U> &rhs)
   return result;
 }
 
-template <typename T>
-constexpr auto operator==(const vector<T> &lhs, const vector<T> &rhs) -> bool {
-  return std::equal(lhs.cbegin(), lhs.cend(), rhs.begin());
-}
-
-template <typename T>
-constexpr auto operator!=(const vector<T> &lhs, const vector<T> &rhs) -> bool {
-  return !(lhs == rhs);
-}
-
 template <typename T, typename U = T>
 constexpr auto operator+(const vector<T> &lhs, U rhs)
     -> vector<common_type_t<T, U>> {
@@ -208,6 +198,16 @@ constexpr auto operator/=(vector<T> &lhs, T rhs) -> vector<T> & {
   transform(lhs.cbegin(), lhs.cend(), lhs.begin(),
             [&rhs](auto _lhs) { return _lhs /= rhs; });
   return lhs;
+}
+
+template <typename T>
+constexpr auto operator==(const vector<T> &lhs, const vector<T> &rhs) -> bool {
+  return std::equal(lhs.cbegin(), lhs.cend(), rhs.begin());
+}
+
+template <typename T>
+constexpr auto operator!=(const vector<T> &lhs, const vector<T> &rhs) -> bool {
+  return !(lhs == rhs);
 }
 
 template <typename T> constexpr auto max(const vector<T> &v) noexcept -> T {

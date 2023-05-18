@@ -1,13 +1,13 @@
 #ifndef __MATOPS_H__
 #define __MATOPS_H__
 
-#include "../include/factorize.h"
+#include "../include/matfunc.h"
 #include "../include/vecops.h"
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-// #include <functional>
+#include <functional>
 #include <type_traits>
 #include <vector>
 
@@ -69,6 +69,27 @@ template <typename T>
 constexpr auto operator+=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
   transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
             [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator-=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+            [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator*=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+            [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator/=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
+  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+            [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
   return lhs;
 }
 
