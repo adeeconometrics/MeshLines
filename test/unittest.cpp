@@ -1,3 +1,4 @@
+#include "../include/helper.h"
 #include "../include/vector.h"
 #include <gtest/gtest.h>
 
@@ -42,6 +43,23 @@ TEST(VecOps, Elementwise) {
   EXPECT_EQ(c - b, a);
   EXPECT_EQ(a * a, a2);
   EXPECT_EQ(a / a, one);
+}
+
+TEST(VecOps, Inplace) {
+  vector<int> a{1, 2, 3};
+  vector<int> b{2, 4, 6};
+  const vector<int> c{2, 2, 2};
+  const vector<int> d{1, 2, 3};
+  const vector<int> e{2, 4, 6};
+
+  a += a;
+  EXPECT_EQ(a, b) << a;
+  a -= d;
+  EXPECT_EQ(a, d) << a;
+  b /= a;
+  EXPECT_EQ(b, c) << b;
+  b *= d;
+  EXPECT_EQ(b, e) << b;
 }
 
 TEST(VecOps, Scalar) {

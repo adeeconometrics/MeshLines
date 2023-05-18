@@ -13,7 +13,7 @@
 //      - [ ] make sure that this directive is only added when the compiler
 //      supports it
 // - [ ] profile performance
-// - [ ] change thowing function into assert statements
+// - [x] change thowing function into assert statements
 
 #include <algorithm>
 #include <cassert>
@@ -45,8 +45,7 @@ template <typename T, typename U = T>
 constexpr auto operator-(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
 
-  if (lhs.size() != rhs.size())
-    throw std::runtime_error("rhs size is not same as lhs size");
+  assert(lhs.size() == rhs.size());
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -61,8 +60,7 @@ template <typename T, typename U = T>
 constexpr auto operator*(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
 
-  if (lhs.size() != rhs.size())
-    throw std::runtime_error("rhs size is not same as lhs size");
+  assert(lhs.size() == rhs.size());
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -78,8 +76,7 @@ template <typename T, typename U = T>
 constexpr auto operator/(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
 
-  if (lhs.size() != rhs.size())
-    throw std::runtime_error("rhs size is not same as lhs size");
+  assert(lhs.size() == rhs.size());
 
   using result_type = common_type_t<T, U>;
   vector<result_type> result{};
@@ -163,6 +160,34 @@ template <typename T> constexpr auto dist(const vector<T> &v) -> double {
   std::for_each(v.cbegin(), v.cend(),
                 [&result](const auto &i) { result += pow(i, 2); });
   return std::sqrt(result);
+}
+
+template <typename T>
+constexpr auto operator+=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+            [](auto _lhs, const auto _rhs) { return _lhs += _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator-=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+            [](auto _lhs, const auto _rhs) { return _lhs -= _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator*=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+            [](auto _lhs, const auto _rhs) { return _lhs *= _rhs; });
+  return lhs;
+}
+
+template <typename T>
+constexpr auto operator/=(vector<T> &lhs, const vector<T> &rhs) -> vector<T> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+            [](auto _lhs, const auto _rhs) { return _lhs /= _rhs; });
+  return lhs;
 }
 
 template <typename T>
