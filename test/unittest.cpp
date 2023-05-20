@@ -124,6 +124,56 @@ TEST(MatOps, InPlace) {
   EXPECT_EQ(A, AA) << A;
 }
 
+TEST(MatOps, MatVec) {
+  Matrix<int> A{{1, 2, 3}, {4, 5, 6}};
+  vector<int> b{1, 2, 3};
+
+  const Matrix<int> B{{2, 4, 6}, {5, 7, 9}};
+  const Matrix<int> C{{0, 0, 0}, {3, 3, 3}};
+  const Matrix<int> D{{1, 4, 9}, {4, 10, 18}};
+  const Matrix<int> E{{1, 1, 1}, {4, 2, 2}};
+
+  const auto Add = A + b;
+  const auto Sub = A - b;
+  const auto Mul = A * b;
+  const auto Div = A / b; // THIS SHOULD BE CASTED TO DOUBLE
+
+  EXPECT_EQ(Add, B) << Add;
+  EXPECT_EQ(Sub, C) << Sub;
+  EXPECT_EQ(Mul, D) << Mul;
+  EXPECT_EQ(Div, E) << Div;
+}
+
+TEST(MatOps, MatVecInplace) {
+  Matrix<int> A{{1, 2, 3}, {4, 5, 6}};
+  vector<int> b{1, 2, 3};
+
+  const Matrix<int> B{{2, 4, 6}, {5, 7, 9}};
+  const Matrix<int> C{{1, 2, 3}, {4, 5, 6}};
+  const Matrix<int> D{{1, 4, 9}, {4, 10, 18}};
+  const Matrix<int> E{{1, 2, 3}, {4, 5, 6}};
+
+  A += b;
+  EXPECT_EQ(A, B) << A;
+  A -= b;
+  EXPECT_EQ(A, C) << C;
+  A *= b;
+  EXPECT_EQ(A, D) << A;
+  A /= b;
+  EXPECT_EQ(A, E) << A;
+}
+
+// TEST(MatOps, MatScalar) {
+//   Matrix<int> A{{1, 2, 3}, {4, 5, 6}};
+//   int a = 3;
+
+//   const Matrix<int> B{{4, 5, 6}, {7, 8, 9}};
+
+//   const auto C = A + a;
+
+//   EXPECT_EQ(C, B);
+// }
+
 TEST(MatOps, Elementwise) {
   Matrix<int> A{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   Matrix<int> B{{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};

@@ -1,6 +1,7 @@
 lib/
 build/
 bin/
+docs/
 */bin
 */**.o
 */.exe
