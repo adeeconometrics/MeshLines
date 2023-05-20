@@ -11,8 +11,8 @@ Matrix Decomposition:
 
 Matrix Operations:
 
-- [ ] Matrix-Matrix operations
-- [ ] Matrix-Vector operations
+- [x] Matrix-Matrix operations
+- [x] Matrix-Vector operations
 - [ ] Matrix-Scalar operations
 
 Algorithms for checking Matrix Properties

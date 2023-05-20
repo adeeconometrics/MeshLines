@@ -49,6 +49,11 @@ auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   return std::make_tuple(L, U);
 }
 
+// template <typename T>
+// auto lu_gaussian(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>> {
+
+// }
+
 // gram-schmidt process
 // conditions: linearly independent cols
 template <typename T>
