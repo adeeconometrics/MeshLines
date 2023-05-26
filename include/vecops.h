@@ -23,7 +23,7 @@
 #include <vector>
 
 namespace lin {
-using std::is_arithmetic_v, std::common_type_t;
+using std::common_type_t;
 using std::vector;
 
 template <typename T, typename U = T>

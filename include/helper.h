@@ -1,12 +1,15 @@
 #ifndef __HELPER_H__
 #define __HELPER_H__
 
-#include "../include/matfunc.h"
+#include "../include/matrix.h"
+
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <type_traits>
 #include <vector>
+
+using lin::Matrix;
 
 template <typename T>
 auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
@@ -47,8 +50,6 @@ auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
   }
   return os << "]\n";
 }
-
-auto print(const Matrix<double> &matrix) -> void;
 
 template <typename T>
 auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {

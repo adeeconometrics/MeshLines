@@ -4,31 +4,78 @@
 // todo
 // make functions exclusive to integral type
 
+#include "../include/matrix.h"
+
+#include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <numeric> // inner_product
 #include <tuple>
 #include <vector>
 
-using std::cout;
-using std::endl;
+using lin::Matrix;
+
 using std::tuple;
 using std::vector;
 
-template <typename T> using Matrix = vector<vector<T>>;
+template <typename T> auto zero_mat(size_t n) -> Matrix<T> {
+  return Matrix<T>{n, vector<T>(n, 0)};
+}
 
-// crout's algorithm
+template <typename T> auto eye_mat(size_t n) -> Matrix<T> {
+  Matrix<T> res = zero_mat<T>(n);
+
+  for (std::size_t i{}; i < n; i++) {
+    res[i][i] = 1;
+  }
+  return res;
+}
+/**
+ * @brief transpose function that returns a new Matrix
+ *
+ * @tparam T
+ * @param A
+ * @return Matrix<T>
+ */
+template <typename T> auto transpose(const Matrix<T> &A) -> Matrix<T> {
+  Matrix<T> TA = A;
+
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  for (std::size_t i = 0; i < rows; i++)
+    for (std::size_t j = 0; j < cols; j++)
+      TA[j][i] = A[i][j];
+
+  return TA;
+}
+/**
+ * @brief In-place transpose
+ *
+ * @tparam U arithmetic type
+ * @param A Matrix
+ */
+template <typename U> auto T(Matrix<U> &A) -> void {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  for (std::size_t i = 0; i < rows; i++)
+    for (std::size_t j = i + 1; j < cols; j++)
+      std::swap(A[i][j], A[j][i]);
+}
+
+/**
+ * @brief Crout's algorithm implementation of LU Decomposition
+ *
+ * @tparam T
+ * @param A
+ * @return tuple<Matrix<T>, Matrix<T>>
+ */
 template <typename T>
 auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
-  Matrix<T> L(A.size(), vector<T>(A.size(), 0));
-  Matrix<T> U(A.size(), vector<T>(A.size(), 0));
 
-  // Copy A to U
-  for (std::size_t i = 0; i < A.size(); ++i) {
-    for (std::size_t j = 0; j < A.size(); ++j) {
-      U[i][j] = A[i][j];
-    }
-  }
+  const std::size_t _size = A.size();
+  Matrix<T> U(A);
+  Matrix<T> L(_size, vector<T>(_size, 0));
 
   // Initialize L to the identity matrix
   for (std::size_t i = 0; i < L.size(); ++i) {
@@ -36,11 +83,11 @@ auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   }
 
   // Perform LU decomposition
-  for (std::size_t j = 0; j < U.size(); ++j) {
-    for (std::size_t i = j + 1; i < U.size(); ++i) {
+  for (std::size_t j = 0; j < _size; ++j) {
+    for (std::size_t i = j + 1; i < _size; ++i) {
       T factor = U[i][j] / U[j][j];
       L[i][j] = factor;
-      for (std::size_t k = j; k < U.size(); ++k) {
+      for (std::size_t k = j; k < _size; ++k) {
         U[i][k] -= factor * U[j][k];
       }
     }
@@ -48,12 +95,95 @@ auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
 
   return std::make_tuple(L, U);
 }
+/**
+ * @brief LU Decomposition using Gaussian Elimination -- ideal for sparse
+ * matrix and more numerically stable than Crout's algorithm.
+ * This implementation is also more efficient when the matrix is large.
+ *
+ * @tparam T
+ * @param A
+ * @return tuple<Matrix<T>, Matrix<T>>
+ */
+template <typename T>
+auto lu_gaussian(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
+  const std::size_t _size = A.size();
+  Matrix<T> U(_size, vector<T>(_size, 0));
+  Matrix<T> L(_size, vector<T>(_size, 0));
 
-// template <typename T>
-// auto lu_gaussian(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>> {
+  for (std::size_t i = 0; i < _size; i++) {
+    for (std::size_t upper_iter = i; upper_iter < _size; upper_iter++) {
+      T sum = 0;
+      for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
+        sum += L[i][inner_iter] * U[inner_iter][upper_iter];
+      }
+      U[i][upper_iter] = A[i][upper_iter] - sum;
+    }
 
-// }
+    for (std::size_t lower_iter = 0; lower_iter < _size; lower_iter++) {
+      if (i == lower_iter) {
+        L[i][i] = 1;
+      } else {
+        T sum = 0;
+        for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
+          sum += L[lower_iter][inner_iter] * U[inner_iter][i];
+        }
+        L[lower_iter][i] = (A[lower_iter][i] - sum) / U[i][i];
+      }
+    }
+  }
 
+  return std::make_tuple(L, U);
+}
+
+template <typename T>
+auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
+
+  const std::size_t n = A.size();
+  Matrix<T> L = zero_mat<T>(n);
+  Matrix<T> U = zero_mat<T>(n);
+  Matrix<T> P = eye_mat<T>(n);
+
+  for (std::size_t k = 0; k < n; k++) {
+    // Find pivot row and swap rows
+    std::size_t p = k;
+    for (std::size_t i = k + 1; i < n; i++) {
+      if (std::abs(A[i][k]) > std::abs(A[p][k])) {
+        p = i;
+      }
+    }
+    if (p != k) {
+      std::swap(A[k], A[p]);
+      std::swap(P[k], P[p]);
+    }
+
+    // Perform elimination
+    for (std::size_t i = k + 1; i < n; i++) {
+      T factor = A[i][k] / A[k][k];
+      A[i][k] = factor;
+      for (std::size_t j = k + 1; j < n; j++) {
+        A[i][j] -= A[k][j] * factor;
+      }
+    }
+  }
+
+  // Extract L and U from A
+  for (std::size_t i = 0; i < n; i++) {
+    for (std::size_t j = 0; j < n; j++) {
+      if (i > j) {
+        L[i][j] = A[i][j];
+        U[i][j] = 0;
+      } else if (i == j) {
+        L[i][j] = 1;
+        U[i][j] = A[i][j];
+      } else {
+        L[i][j] = 0;
+        U[i][j] = A[i][j];
+      }
+    }
+  }
+
+  return std::make_tuple(P, L, U);
+}
 // gram-schmidt process
 // conditions: linearly independent cols
 template <typename T>

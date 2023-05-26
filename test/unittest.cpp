@@ -1,7 +1,9 @@
+#include "../include/matfunc.h"
+#include "../include/matrix.h"
+// #include "../include/matops.h" -- resolve compiler error
 #include "../include/helper.h"
-// #include "../include/matops.h" -- find out why the compiler complains when I
-// include this
 #include "../include/vecops.h"
+// #include "../include/meshlines.h"
 #include <gtest/gtest.h>
 
 #include <type_traits>
@@ -180,4 +182,64 @@ TEST(MatOps, Elementwise) {
 
   EXPECT_EQ(A, A);
   EXPECT_NE(A, B);
+}
+
+TEST(MatFunc, Transpose) {
+  Matrix<int> A{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int> B = transpose(A);
+
+  EXPECT_EQ(A, transpose(transpose(A)));
+  T(A);
+  EXPECT_EQ(A, B);
+}
+
+TEST(MatFunc, LUDecomposition) {
+  Matrix<double> A{{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  const Matrix<double> L{{1, 0, 0}, {1.5, 1, 0}, {2, 4. / 3., 1}};
+  const Matrix<double> U{{4, 3, 1}, {0, -1.5, -0.5}, {0, 0, -1. / 3.}};
+
+  const auto LUCrout = lu_crout(A);
+  const auto LUGaussian = lu_gaussian(A);
+
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = 0; j < cols; j++) {
+      ASSERT_DOUBLE_EQ(std::get<0>(LUCrout)[i][j], L[i][j]);
+      ASSERT_DOUBLE_EQ(std::get<1>(LUCrout)[i][j], U[i][j]);
+
+      ASSERT_DOUBLE_EQ(std::get<0>(LUGaussian)[i][j], L[i][j])
+          << std::get<0>(LUGaussian);
+      ASSERT_DOUBLE_EQ(std::get<1>(LUGaussian)[i][j], U[i][j])
+          << std::get<1>(LUGaussian);
+    }
+  }
+}
+
+#include <cmath>
+
+TEST(MatFunc, QRDecomposition) {
+  using std::sqrt;
+
+  Matrix<double> A{{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  const Matrix<double> Q{{2. / sqrt(29), 5. / sqrt(29), 0},
+                         {3. / sqrt(29), (-6. * sqrt(29)) / 145., 4. / 5.},
+                         {4. / sqrt(29), (-8. * sqrt(29)) / (145.), -3. / 5.}};
+
+  const Matrix<double> R{{2. * sqrt(29), 31. / sqrt(29), 9. / sqrt(29)},
+                         {0, 5. / sqrt(29), 11. / (5. * sqrt(29))},
+                         {0, 0, 1. / 5}};
+
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  const auto QRgm = qr_gm(A);
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = 0; j < cols; j++) {
+      ASSERT_DOUBLE_EQ(std::get<0>(QRgm)[i][j], Q[i][j]) << std::get<0>(QRgm);
+      ASSERT_DOUBLE_EQ(std::get<1>(QRgm)[i][j], R[i][j]) << std::get<1>(QRgm);
+    }
+  }
 }

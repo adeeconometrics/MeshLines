@@ -1,7 +1,7 @@
 #ifndef __MATOPS_H__
 #define __MATOPS_H__
 
-#include "../include/matfunc.h"
+#include "../include/matrix.h"
 #include "../include/vecops.h"
 
 #include <algorithm>
@@ -12,18 +12,16 @@
 #include <vector>
 
 // todo
-// - [ ] Mat [op] Vec
-// - [ ] Mat =[op] Vec
+// - [x] Mat [op] Vec
+// - [x] Mat =[op] Vec
 // - [ ] Mat [op] Scalar
 // - [ ] Mat =[op] Scalar
 
 namespace lin {
 
 using std::common_type_t;
-using std::transform, std::for_each;
+using std::transform;
 using std::vector;
-
-template <typename T> using Matrix = vector<vector<T>>;
 
 template <typename T, typename U = T>
 constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)

@@ -28,7 +28,7 @@ template <typename T> constexpr auto zeros(size_t t_size) -> vector<T> {
 
 template <typename T>
 constexpr auto lp_norm(const vector<T> &v, float p) -> float {
-  static_assert(is_arithmetic_v<T>,
+  static_assert(std::is_arithmetic_v<T>,
                 "template parameter must be of type arithmetic");
   if (p == 0.0) {
     return std::count_if(v.cbegin(), v.cend(),
@@ -53,7 +53,7 @@ constexpr auto lp_norm(const vector<T> &v, float p) -> float {
 };
 
 template <typename T> constexpr auto sum(std::vector<T> &v) -> T {
-  static_assert(is_arithmetic_v<T>,
+  static_assert(std::is_arithmetic_v<T>,
                 "template parameter must be of type arithmetic");
 
   T result{};
@@ -63,7 +63,7 @@ template <typename T> constexpr auto sum(std::vector<T> &v) -> T {
 }
 
 template <typename T> constexpr auto prod(std::vector<T> &v) -> T {
-  static_assert(is_arithmetic_v<T>,
+  static_assert(std::is_arithmetic_v<T>,
                 "template parameter must be of type arithmetic");
 
   T result{};
@@ -75,7 +75,7 @@ template <typename T> constexpr auto prod(std::vector<T> &v) -> T {
 template <typename T, typename U = T>
 constexpr auto dot(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
-  static_assert(is_arithmetic_v<T> && is_arithmetic_v<U>,
+  static_assert(std::is_arithmetic_v<T> && std::is_arithmetic_v<U>,
                 "template parameters must be of type arithmetic");
   return sum(rhs * lhs);
 }
