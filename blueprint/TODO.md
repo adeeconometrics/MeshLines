@@ -14,12 +14,12 @@
 ## Flow
 
 - [ ] Tier 1: Correctness
-  - [ ] Write correct functions
+  - [x] Write correct functions
   - [x] Write unit tests
   - [x] Write CI/CD workflow
 - [ ] Tier 2: Implement Predicates and Concepts
   - [ ] Use static metaprogramming to implement Matrix concepts
-  - [ ] Make custom operator overloading
+  - [x] Make custom operator overloading
 - [ ] Tier 3: Performance Optimization
   - [ ] Re-implement the source code with STL functions, and light-weight routines that allows the compiler to optimize
   - [ ] Perform profiling and performance comparison
