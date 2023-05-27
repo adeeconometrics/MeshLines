@@ -62,7 +62,86 @@ template <typename U> auto T(Matrix<U> &A) -> void {
     for (std::size_t j = i + 1; j < cols; j++)
       std::swap(A[i][j], A[j][i]);
 }
+/**
+ * @brief Returns a copy of upper triangular matrix
+ *
+ * @tparam T
+ * @param A
+ * @return Matrix<T>
+ */
+template <typename T> auto triu(const Matrix<T> &A) -> Matrix<T> {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
 
+  Matrix<T> res{rows, vector<T>(cols)};
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = i; j < cols; j++) {
+      if (j < rows && i < cols) {
+        res[i][j] = A[i][j];
+      }
+    }
+  }
+
+  return res;
+}
+/**
+ * @brief Modifies the matrix to mask upper triangular part
+ *
+ * @tparam T
+ * @param A
+ */
+template <typename T> auto mask_triu(Matrix<T> &A) -> void {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = i + 1; j < cols; j++) {
+      if (j < rows && i < cols) {
+        A[j][i] = 0;
+      }
+    }
+  }
+}
+/**
+ * @brief Returns the lower triangular part of the matrix
+ *
+ * @tparam T
+ * @param A
+ * @return Matrix<T>
+ */
+template <typename T> auto tril(const Matrix<T> &A) -> Matrix<T> {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  Matrix<T> res{rows, vector<T>(cols)};
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = i; j < cols; j++) {
+      if (j < rows && i < cols) {
+        res[j][i] = A[j][i];
+      }
+    }
+  }
+
+  return res;
+}
+/**
+ * @brief Modifies the matrix to mask the lower triangular part
+ *
+ * @tparam T
+ * @param A
+ */
+template <typename T> auto mask_tril(Matrix<T> &A) -> void {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
+
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = i + 1; j < cols; j++) {
+      A[i][j] = 0;
+    }
+  }
+}
 /**
  * @brief Crout's algorithm implementation of LU Decomposition
  *

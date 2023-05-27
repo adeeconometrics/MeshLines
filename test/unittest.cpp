@@ -243,3 +243,42 @@ TEST(MatFunc, QRDecomposition) {
     }
   }
 }
+
+TEST(MatFunc, UpperTriangular) {
+  Matrix<int> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<int> RM{{1, 2, 3, 4, 5},
+                 {6, 7, 8, 9, 10},
+                 {11, 12, 13, 14, 15},
+                 {16, 17, 18, 19, 20}};
+
+  const Matrix<int> UM{{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};
+  const Matrix<int> RUM{
+      {1, 2, 3, 4, 5}, {0, 7, 8, 9, 10}, {0, 0, 13, 14, 15}, {0, 0, 0, 19, 20}};
+
+  EXPECT_EQ(triu(M), UM) << "wrong triu";
+  mask_triu(M);
+  EXPECT_EQ(M, UM) << M;
+  mask_triu(RM);
+  EXPECT_EQ(RM, RUM);
+}
+
+TEST(MatFunc, LowerTringular) {
+  Matrix<int> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<int> RM{{1, 2, 3, 4, 5},
+                 {6, 7, 8, 9, 10},
+                 {11, 12, 13, 14, 15},
+                 {16, 17, 18, 19, 20}};
+
+  const Matrix<int> LM{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
+  const Matrix<int> RLM{{1, 0, 0, 0, 0},
+                        {6, 7, 0, 0, 0},
+                        {11, 12, 13, 0, 0},
+                        {16, 17, 18, 19, 0}};
+
+  EXPECT_EQ(tril(M), LM) << "wrong tril";
+  mask_tril(M);
+  EXPECT_EQ(M, LM) << M;
+  EXPECT_EQ(tril(RM), RLM) << "wrong tril";
+  mask_tril(RM);
+  EXPECT_EQ(RM, RLM) << RM;
+}
