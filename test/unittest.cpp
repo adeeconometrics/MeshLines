@@ -1,7 +1,7 @@
 #include "../include/matfunc.h"
 #include "../include/matrix.h"
 // #include "../include/matops.h" -- resolve compiler error
-#include "../include/helper.h"
+#include "../include/utils.h"
 #include "../include/vecops.h"
 // #include "../include/meshlines.h"
 #include <gtest/gtest.h>

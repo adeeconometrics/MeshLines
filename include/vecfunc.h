@@ -1,6 +1,17 @@
 #ifndef __VECFUNC_H__
 #define __VECFUNC_H__
 
+/**
+ * @file vecfunc.h
+ * @author ddamiana
+ * @brief Contains linalg functions for processing vectors
+ * @version 0.1
+ * @date 2023-05-27
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include "../include/vecops.h"
 
 #include <algorithm>

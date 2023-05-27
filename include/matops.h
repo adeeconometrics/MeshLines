@@ -1,6 +1,17 @@
 #ifndef __MATOPS_H__
 #define __MATOPS_H__
 
+/**
+ * @file matops.h
+ * @author ddamiana
+ * @brief Contains operator overload for Matrix, Vector, and Scalar types
+ * @version 0.1
+ * @date 2023-05-27
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #include "../include/matrix.h"
 #include "../include/vecops.h"
 

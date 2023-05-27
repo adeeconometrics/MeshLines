@@ -1,5 +1,16 @@
-#ifndef __HELPER_H__
-#define __HELPER_H__
+#ifndef __UTILS_H__
+#define __UTILS_H__
+
+/**
+ * @file utils.h
+ * @author ddamiana
+ * @brief Contains utility functions
+ * @version 0.1
+ * @date 2023-05-27
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include "../include/matrix.h"
 
@@ -60,4 +71,4 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   return os << "]\n";
 };
 
-#endif // __HELPER_H__
+#endif // __UTILS_H__

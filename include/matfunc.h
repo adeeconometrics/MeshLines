@@ -1,6 +1,17 @@
 #ifndef __MATFUNC_H__
 #define __MATFUNC_H__
 
+/**
+ * @file matfunc.h
+ * @author ddamiana
+ * @brief Contains linalg functions for processing matrices.
+ * @version 0.1
+ * @date 2023-05-27
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 // todo
 // make functions exclusive to integral type
 

@@ -1,8 +1,8 @@
 #ifndef __TEST_H__
 #define __TEST_H__
 
-#include "../include/helper.h"
 #include "../include/matfunc.h"
+#include "../include/utils.h"
 #include "../include/vecfunc.h"
 #include "../include/vecops.h"
 

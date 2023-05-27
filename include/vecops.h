@@ -2,8 +2,13 @@
 #define __VECOPS_H__
 
 /**
- * @brief the intention of this module is to write a convinient vector
- * implementation that is thinly wrapped in std::vector
+ * @file vecops.h
+ * @author ddamiana
+ * @brief Contains operator overload for Vector and Scalar types
+ * @version 0.1
+ * @date 2023-05-27
+ *
+ * @copyright Copyright (c) 2023
  *
  */
 
