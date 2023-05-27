@@ -1,6 +1,7 @@
 #include "../include/matfunc.h"
 #include "../include/matrix.h"
 // #include "../include/matops.h" -- resolve compiler error
+#include "../include/matpred.h"
 #include "../include/utils.h"
 #include "../include/vecops.h"
 // #include "../include/meshlines.h"
@@ -294,4 +295,28 @@ TEST(MatFunc, Det) {
   const double det_expected = det(M);
 
   EXPECT_DOUBLE_EQ(det_actual, det_expected);
+}
+
+TEST(MatPred, LowerTriangular) {
+  const Matrix<int> M1{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
+  const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};
+
+  EXPECT_TRUE(is_tril(M1));
+  EXPECT_FALSE(is_tril(M2));
+}
+
+TEST(MatPred, UpperTriangular) {
+  const Matrix<int> M1{{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};
+  const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};
+
+  EXPECT_TRUE(is_triu(M1));
+  EXPECT_FALSE(is_triu(M2));
+}
+
+TEST(MatPred, Diagonal) {
+  const Matrix<int> M1{{1, 0, 0}, {0, 5, 0}, {0, 0, 9}};
+  const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};
+
+  EXPECT_TRUE(is_diag(M1));
+  EXPECT_FALSE(is_diag(M2));
 }

@@ -30,18 +30,6 @@ using lin::Matrix;
 using std::tuple;
 using std::vector;
 
-template <typename T> auto zero_mat(size_t n) -> Matrix<T> {
-  return Matrix<T>{n, vector<T>(n, 0)};
-}
-
-template <typename T> auto eye_mat(size_t n) -> Matrix<T> {
-  Matrix<T> res = zero_mat<T>(n);
-
-  for (std::size_t i{}; i < n; i++) {
-    res[i][i] = 1;
-  }
-  return res;
-}
 /**
  * @brief transpose function that returns a new Matrix
  *
@@ -250,9 +238,9 @@ template <typename T>
 auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 
   const std::size_t n = A.size();
-  Matrix<T> L = zero_mat<T>(n);
-  Matrix<T> U = zero_mat<T>(n);
-  Matrix<T> P = eye_mat<T>(n);
+  Matrix<T> L = lin::zero_mat<T>(n);
+  Matrix<T> U = lin::zero_mat<T>(n);
+  Matrix<T> P = lin::id<T>(n);
 
   for (std::size_t k = 0; k < n; k++) {
     // Find pivot row and swap rows
@@ -476,6 +464,7 @@ constexpr auto det(
 
   return p1 * p0;
 }
+
 // template <typename T>
 // auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 
