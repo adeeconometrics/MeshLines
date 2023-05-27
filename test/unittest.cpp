@@ -282,3 +282,8 @@ TEST(MatFunc, LowerTringular) {
   mask_tril(RM);
   EXPECT_EQ(RM, RLM) << RM;
 }
+
+TEST(MatFunc, Trace) {
+  const Matrix<int> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  EXPECT_EQ(trace(M), 15);
+}

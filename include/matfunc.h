@@ -7,6 +7,7 @@
 #include "../include/matrix.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <numeric> // inner_product
 #include <tuple>
@@ -141,6 +142,25 @@ template <typename T> auto mask_tril(Matrix<T> &A) -> void {
       A[i][j] = 0;
     }
   }
+}
+/**
+ * @brief Returns the trace of the Matrix;
+ * this function requires a square matrix
+ *
+ * @tparam T
+ * @param M
+ * @return T
+ */
+template <typename T> auto trace(const Matrix<T> &M) -> T {
+  assert(M.size() == M[0].size());
+  T sum{};
+
+  const std::size_t length = M.size();
+
+  for (std::size_t i = 0; i < length; i++) {
+    sum += M[i][i];
+  }
+  return sum;
 }
 /**
  * @brief Crout's algorithm implementation of LU Decomposition
