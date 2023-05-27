@@ -229,7 +229,7 @@ TEST(MatFunc, QRDecomposition) {
 
   const Matrix<double> R{{2. * sqrt(29), 31. / sqrt(29), 9. / sqrt(29)},
                          {0, 5. / sqrt(29), 11. / (5. * sqrt(29))},
-                         {0, 0, 1. / 5}};
+                         {0, 0, -1. / 5}};
 
   const std::size_t rows = A.size();
   const std::size_t cols = A[0].size();
@@ -238,8 +238,8 @@ TEST(MatFunc, QRDecomposition) {
 
   for (std::size_t i = 0; i < rows; i++) {
     for (std::size_t j = 0; j < cols; j++) {
-      ASSERT_DOUBLE_EQ(std::get<0>(QRgm)[i][j], Q[i][j]) << std::get<0>(QRgm);
-      ASSERT_DOUBLE_EQ(std::get<1>(QRgm)[i][j], R[i][j]) << std::get<1>(QRgm);
+      EXPECT_DOUBLE_EQ(std::get<0>(QRgm)[i][j], Q[i][j]) << Q;
+      EXPECT_DOUBLE_EQ(std::get<1>(QRgm)[i][j], R[i][j]) << R;
     }
   }
 }
@@ -286,4 +286,12 @@ TEST(MatFunc, LowerTringular) {
 TEST(MatFunc, Trace) {
   const Matrix<int> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   EXPECT_EQ(trace(M), 15);
+}
+
+TEST(MatFunc, Det) {
+  const Matrix<double> M{{4, 3, 2}, {6, 3, 1}, {8, 4, 1}};
+  const double det_actual = 2.0;
+  const double det_expected = det(M);
+
+  EXPECT_DOUBLE_EQ(det_actual, det_expected);
 }

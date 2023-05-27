@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <functional>
 #include <numeric> // inner_product
 #include <tuple>
 #include <vector>
@@ -299,14 +300,7 @@ auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 template <typename T>
 auto qr_gm(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   Matrix<T> Q(A.size(), vector<T>(A.size(), 0));
-  Matrix<T> R(A.size(), vector<T>(A.size(), 0));
-
-  // Copy A to R
-  for (std::size_t i = 0; i < A.size(); ++i) {
-    for (std::size_t j = 0; j < A.size(); ++j) {
-      R[i][j] = A[i][j];
-    }
-  }
+  Matrix<T> R = A;
 
   // Compute Q and R using the Gram-Schmidt process
   for (std::size_t j = 0; j < A.size(); ++j) {
@@ -340,6 +334,7 @@ auto qr_gm(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
       }
     }
   }
+  mask_triu(R);
 
   return std::make_tuple(Q, R);
 }
@@ -463,6 +458,24 @@ template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
   return L;
 }
 
+template <typename T>
+constexpr auto det(
+    const Matrix<T> &M,
+    std::function<tuple<Matrix<T>, Matrix<T>>(const Matrix<T> &)> LUMethod =
+        [](const Matrix<T> &M) { return lu_gaussian(M); }) -> double {
+  assert(M.size() == M[0].size());
+
+  double p0{1}, p1{1};
+
+  auto LU = LUMethod(M);
+
+  for (std::size_t i = 0; i < M.size(); i++) {
+    p0 *= std::get<0>(LU)[i][i];
+    p1 *= std::get<1>(LU)[i][i];
+  }
+
+  return p1 * p0;
+}
 // template <typename T>
 // auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 
