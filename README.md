@@ -17,8 +17,8 @@ Matrix Operations:
 
 Algorithms for checking Matrix Properties
 
-- [ ] Determine Invertible Matrix
-- [ ] Determine Square Matrix
+- [x] Determine Invertible Matrix
+- [x] Determine Square Matrix
 - [x] Determine Upper Triangular Matrix
 - [x] Determine Lower Triangular Matrix
 - [x] Find Determinant of Matrix
