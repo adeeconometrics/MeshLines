@@ -19,12 +19,12 @@ Algorithms for checking Matrix Properties
 
 - [ ] Determine Invertible Matrix
 - [ ] Determine Square Matrix
-- [ ] Determine Upper Triangular Matrix
-- [ ] Determine Lower Triangular Matrix
-- [ ] Find Determinant of Matrix
-- [ ] Find Transpose of Matrix
+- [x] Determine Upper Triangular Matrix
+- [x] Determine Lower Triangular Matrix
+- [x] Find Determinant of Matrix
+- [x] Find Transpose of Matrix
 - [ ] Find Inverse of Matrix
-- [ ] Find Trace of Matrix
+- [x] Find Trace of Matrix
 
 Matrix Object Hierarchy
 

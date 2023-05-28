@@ -15,10 +15,10 @@ template <typename T> using Matrix = std::vector<std::vector<T>>;
  * @param n
  * @return Matrix<T>
  */
-template <typename T> constexpr auto zero_mat(size_t n) -> Matrix<T> {
+template <typename T> constexpr auto zero_mat(std::size_t n) -> Matrix<T> {
   static_assert(std::is_arithmetic_v<T>);
 
-  return Matrix<T>{n, vector<T>(n, 0)};
+  return Matrix<T>{n, std::vector<T>(n, 0)};
 }
 /**
  * @brief Returns a rectangular zero matrix
@@ -32,7 +32,7 @@ template <typename T>
 constexpr auto zero_mat(std::size_t n, std::size_t m) -> Matrix<T> {
   static_assert(std::is_arithmetic_v<T>);
 
-  return Matrix<T>(n, vector<T>(m, 0));
+  return Matrix<T>(n, std::vector<T>(m, 0));
 }
 
 /**
@@ -42,13 +42,36 @@ constexpr auto zero_mat(std::size_t n, std::size_t m) -> Matrix<T> {
  * @param n
  * @return Matrix<T>
  */
-template <typename T> constexpr auto id(size_t n) -> Matrix<T> {
+template <typename T> constexpr auto id(std::size_t n) -> Matrix<T> {
   static_assert(std::is_arithmetic_v<T>);
 
   Matrix<T> res = zero_mat<T>(n);
 
-  for (std::size_t i{}; i < n; i++) {
+  for (std::size_t i = 0; i < n; i++) {
     res[i][i] = 1;
+  }
+  return res;
+}
+
+// template <typename T> constexpr auto id(std::size_t n, std::size_t m) ->
+// Matrix<T> {
+//   static_assert(std::is_arithmetic_v<T>);
+
+//   Matrix<T> res = zero_mat(n,m);
+
+//   for(std::size_t i = 0; i < n; i++){
+//         res[i][i] = 0;
+//     }
+// }
+
+template <typename T>
+constexpr auto scalar_mat(std::size_t n, T t_value) -> Matrix<T> {
+  static_assert(std::is_arithmetic_v<T>);
+
+  Matrix<T> res = zero_mat<T>(n);
+
+  for (std::size_t i = 0; i < n; i++) {
+    res[i][i] = t_value;
   }
   return res;
 }

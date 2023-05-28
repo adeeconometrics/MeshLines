@@ -1,7 +1,10 @@
 #ifndef __MATPRED_H__
 #define __MATPRED_H__
 
+#include "../include/matfunc.h"
 #include "../include/matrix.h"
+
+#include <cmath>
 
 namespace lin {
 
@@ -51,6 +54,24 @@ constexpr auto is_diag(const Matrix<T> &M) noexcept -> bool {
     }
   }
   return true;
+}
+
+template <typename T>
+constexpr auto is_square(const Matrix<T> &M) noexcept -> bool {
+  const std::size_t size = M.size();
+  for (std::size_t i = 0; i < size; i++)
+    if (size != M[i].size())
+      return false;
+  return true;
+}
+
+template <typename T>
+constexpr auto is_invertible(const Matrix<T> &M) noexcept -> bool {
+  if (!is_square(M))
+    return false;
+  const double det = det(M);
+
+  return std::abs(det) > 0;
 }
 
 } // namespace lin
