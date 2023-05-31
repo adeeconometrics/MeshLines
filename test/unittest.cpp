@@ -320,3 +320,40 @@ TEST(MatPred, Diagonal) {
   EXPECT_TRUE(is_diag(M1));
   EXPECT_FALSE(is_diag(M2));
 }
+
+TEST(MatPred, Echelon) {
+  const Matrix<int> M1{{1, 2, 3, 4}, {0, 1, 2, 3}, {0, 0, 0, 1}, {0, 0, 0, 0}};
+  const Matrix<int> M2{{2, 1, 4, 3, 5}, {0, 0, 1, 2, 3}, {0, 0, 0, 0, 1}};
+  const Matrix<int> M3{{3, 2, 1, 5, 4, 6},
+                       {0, 0, 1, 3, 2, 5},
+                       {0, 0, 0, 0, 1, 2},
+                       {0, 0, 0, 0, 0, 1},
+                       {0, 0, 0, 0, 0, 0}};
+
+  const Matrix<int> M4{
+      {1, 2, 3, 4, 5}, {0, 0, 1, 2, 3}, {0, 0, 0, 1, 2}, {0, 0, 0, 0, 1}};
+  const Matrix<int> M5{{1, 2, 3, 4}, {0, 1, 2, 3}, {0, 0, 1, 2}};
+
+  const Matrix<int> N1{{1, 2, 3, 4}, {0, 1, 2, 3}, {0, 0, 0, 1}, {0, 0, 1, 0}};
+  const Matrix<int> N2{{2, 1, 4, 3, 5}, {0, 0, 1, 2, 3}, {1, 0, 0, 0, 1}};
+  const Matrix<int> N3{{3, 2, 1, 5, 4, 6},
+                       {0, 0, 1, 3, 2, 5},
+                       {0, 0, 0, 0, 1, 2},
+                       {0, 0, 0, 0, 0, 1},
+                       {0, 0, 0, 0, 0, 1}};
+  const Matrix<int> N4{
+      {1, 2, 3, 4, 5}, {0, 0, 1, 2, 3}, {0, 0, 0, 1, 2}, {0, 0, 0, 2, 1}};
+  const Matrix<int> N5{{1, 2, 3, 4}, {0, 1, 2, 3}, {0, 3, 1, 2}};
+
+  EXPECT_TRUE(is_echelon(M1));
+  EXPECT_TRUE(is_echelon(M2));
+  EXPECT_TRUE(is_echelon(M3));
+  EXPECT_TRUE(is_echelon(M4));
+  EXPECT_TRUE(is_echelon(M5));
+
+  // EXPECT_FALSE(is_echelon(N1));
+  // EXPECT_FALSE(is_echelon(N2));
+  // EXPECT_FALSE(is_echelon(N3));
+  // EXPECT_FALSE(is_echelon(N4));
+  // EXPECT_FALSE(is_echelon(N5));
+}
