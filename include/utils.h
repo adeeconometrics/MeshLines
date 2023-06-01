@@ -73,7 +73,7 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
 };
 
 template <typename Fn, typename ArgType>
-constexpr auto apply_fn(const lin::vector<ArgType> &v, Fn &&fn)
+constexpr auto apply_fn(Fn &&fn, const lin::vector<ArgType> &v)
     -> lin::vector<std::invoke_result_t<Fn &, const ArgType &>> {
 
   using ResultType = std::invoke_result_t<Fn &, const ArgType &>;
@@ -85,15 +85,18 @@ constexpr auto apply_fn(const lin::vector<ArgType> &v, Fn &&fn)
   return result;
 }
 
-// template <typename Function, typename Type>
-// constexpr auto apply_fn(Function fn, const lin::Matrix<Type> &v)
-//     -> lin::Matrix<Type> {
-//   lin::Matrix<Type> result;
-//   result.reserve(v.size());
+template <typename Fn, typename ArgType>
+constexpr auto apply_fn(Fn &&functor, const lin::Matrix<ArgType> &v)
+    -> lin::Matrix<std::invoke_result_t<Fn &, const ArgType &>> {
 
-//   std::transform(std::cbegin(v), std::cend(v), std::back_inserter(result),
-//   fn);
+  using ResultType = std::invoke_result_t<Fn &, const ArgType &>;
+  lin::Matrix<ResultType> result{};
 
-//   return result;
-// }
+  for (const auto row : v) {
+    result.emplace_back(apply_fn(row, functor));
+  }
+
+  return result;
+}
+
 #endif // __UTILS_H__
