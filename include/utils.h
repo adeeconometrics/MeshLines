@@ -13,17 +13,18 @@
  */
 
 #include "../include/matrix.h"
+#include "../include/vecops.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <type_traits>
 #include <vector>
 
-using lin::Matrix;
-
 template <typename T>
-auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
+auto operator<<(std::ostream &os, const lin::Matrix<T> &matrix)
+    -> std::ostream & {
   static_assert(std::is_arithmetic_v<T>,
                 "template parameter must be of type arithmetic");
 
@@ -71,4 +72,27 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   return os << "]\n";
 };
 
+// template <typename Type, template <typename> typename Function>
+// constexpr auto apply_fn(Function<Type> fn, const lin::vector<Type> &v)
+//     -> lin::vector<Type> {
+//   lin::vector<Type> result;
+//   result.reserve(v.size());
+
+//   std::transform(std::cbegin(v), std::cend(v), std::back_inserter(result),
+//   fn);
+
+//   return result;
+// }
+
+// template <typename Function, typename Type>
+// constexpr auto apply_fn(Function fn, const lin::Matrix<Type> &v)
+//     -> lin::Matrix<Type> {
+//   lin::Matrix<Type> result;
+//   result.reserve(v.size());
+
+//   std::transform(std::cbegin(v), std::cend(v), std::back_inserter(result),
+//   fn);
+
+//   return result;
+// }
 #endif // __UTILS_H__
