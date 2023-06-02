@@ -6,7 +6,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 
 namespace lin {
 
@@ -125,6 +124,12 @@ template <typename T>
 constexpr auto is_sym(const Matrix<T> &M) noexcept -> bool {
   // prove that M != T(M) where M is a rectangular mat
   return M == transpose(M);
+}
+
+template <typename T>
+constexpr auto is_antisym(const Matrix<T> &M) noexcept -> bool {
+  // prove that M != T(M) where M is a rectangular mat
+  return transpose(M) == (-M);
 }
 
 } // namespace lin

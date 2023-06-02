@@ -1,6 +1,9 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+#include "../include/vecops.h"
+
+#include <algorithm>
 #include <type_traits>
 #include <vector>
 
@@ -76,5 +79,15 @@ constexpr auto scalar_mat(std::size_t n, T t_value) -> Matrix<T> {
   return res;
 }
 
+template <typename T>
+constexpr auto operator-(const Matrix<T> &M) -> Matrix<T> {
+  Matrix<T> result;
+  result.reserve(M.size());
+
+  std::transform(std::cbegin(M), std::cend(M), std::back_inserter(result),
+                 [](const auto element) { return -element; });
+
+  return result;
+}
 } // namespace lin
 #endif // __MATRIX_H__

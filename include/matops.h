@@ -34,17 +34,6 @@ using std::common_type_t;
 using std::transform;
 using std::vector;
 
-template <typename T>
-constexpr auto operator-(const Matrix<T> &M) -> Matrix<T> {
-  Matrix<T> result;
-  result.reserve(M.size());
-
-  std::transform(std::cbegin(M), std::cend(M), std::back_inserter(result),
-                 [](const auto element) { return -element; });
-
-  return result;
-}
-
 template <typename T, typename U = T>
 constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)
     -> Matrix<common_type_t<T, U>> {

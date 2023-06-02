@@ -1,7 +1,7 @@
 #include "../include/matfunc.h"
-#include "../include/matrix.h"
-// #include "../include/matops.h" -- resolve compiler error
+// #include "../include/matops.h" //resolve compiler error
 #include "../include/matpred.h"
+#include "../include/matrix.h"
 #include "../include/utils.h"
 #include "../include/vecops.h"
 // #include "../include/meshlines.h"
@@ -404,4 +404,23 @@ TEST(MatPred, Symmetric) {
   EXPECT_FALSE(is_sym(N1));
   EXPECT_FALSE(is_sym(N2));
   EXPECT_FALSE(is_sym(N3));
+}
+
+TEST(MatPred, AntiSymmetric) {
+  const Matrix<int> M1{{0, 2, -7}, {-2, 0, 5}, {7, -5, 0}};
+  const Matrix<int> M2{
+      {0, -4, 6, -1}, {4, 0, -3, 8}, {-6, 3, 0, -2}, {1, -8, 2, 0}};
+  const Matrix<int> M3{{0, 5, -1, -7, 4},
+                       {-5, 0, -2, 9, -6},
+                       {1, 2, 0, -4, -3},
+                       {7, -9, 4, 0, 1},
+                       {-4, 6, 3, -1, 0}};
+
+  const Matrix<int> N1{{4, 1, 10}, {1, 6, 8}, {7, 8, 9}};
+
+  EXPECT_TRUE(is_antisym(M1));
+  EXPECT_TRUE(is_antisym(M2));
+  EXPECT_TRUE(is_antisym(M3));
+
+  EXPECT_FALSE(is_antisym(N1));
 }
