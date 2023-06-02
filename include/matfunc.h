@@ -445,7 +445,15 @@ template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
 
   return L;
 }
-
+/**
+ * @brief This function returns the determinant of a matrix.
+ * This also keeps the LUMethod open to the client.
+ *
+ * @tparam T
+ * @param M
+ * @param LUMethod
+ * @return double
+ */
 template <typename T>
 constexpr auto det(
     const Matrix<T> &M,
@@ -465,7 +473,16 @@ constexpr auto det(
   return p1 * p0;
 }
 
-// rref
+/**
+ * @brief Returns a reduced row echelon form of matrix M.
+ * Note that not all matrices have RREF. The implementation
+ * of this function does not currently handle checking for those
+ * exceptional cases.
+ *
+ * @tparam T
+ * @param M
+ * @return Matrix<T>
+ */
 template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
   Matrix<T> result = M;
 
@@ -477,7 +494,7 @@ template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
       break;
 
     auto it = std::find_if(
-        result.begin() + row, result.end(), [lead](const auto &row) {
+        std::begin(result) + row, std::end(result), [lead](const auto &row) {
           return std::abs(row[lead]) >= std::numeric_limits<T>::epsilon();
         });
 
@@ -489,7 +506,8 @@ template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
     std::swap(result[row], *it);
     T lv = result[row][lead];
 
-    std::transform(result[row].begin(), result[row].end(), result[row].begin(),
+    std::transform(std::cbegin(result[row]), std::cend(result[row]),
+                   std::begin(result[row]),
                    [lv](const auto &val) { return val / lv; });
 
     for (std::size_t i = 0; i < rows; ++i) {
