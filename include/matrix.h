@@ -79,6 +79,10 @@ constexpr auto scalar_mat(std::size_t n, T t_value) -> Matrix<T> {
   return res;
 }
 
+// col_vec
+
+// row_vec
+
 template <typename T>
 constexpr auto operator-(const Matrix<T> &M) -> Matrix<T> {
   Matrix<T> result;

@@ -465,6 +465,49 @@ constexpr auto det(
   return p1 * p0;
 }
 
+// rref
+template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
+  Matrix<T> result = M;
+
+  std::size_t lead = 0;
+  const std::size_t rows = M.size();
+
+  for (std::size_t row = 0; row < rows; ++row) {
+    if (lead >= M[row].size())
+      break;
+
+    auto it = std::find_if(
+        result.begin() + row, result.end(), [lead](const auto &row) {
+          return std::abs(row[lead]) >= std::numeric_limits<T>::epsilon();
+        });
+
+    if (it == result.end()) {
+      ++lead;
+      continue;
+    }
+
+    std::swap(result[row], *it);
+    T lv = result[row][lead];
+
+    std::transform(result[row].begin(), result[row].end(), result[row].begin(),
+                   [lv](const auto &val) { return val / lv; });
+
+    for (std::size_t i = 0; i < rows; ++i) {
+      if (i != row) {
+        T lv = result[i][lead];
+        std::transform(
+            result[row].begin(), result[row].end(), result[i].begin(),
+            result[i].begin(),
+            [lv](const auto &a, const auto &b) { return b - lv * a; });
+      }
+    }
+
+    ++lead;
+  }
+
+  return result;
+}
+
 // template <typename T>
 // auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 

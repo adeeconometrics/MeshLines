@@ -319,6 +319,46 @@ TEST(MatFunc, Det) {
   EXPECT_DOUBLE_EQ(det_actual, det_expected);
 }
 
+TEST(MatFunc, RREF) {
+  const Matrix<double> M1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
+  const Matrix<double> M2{
+      {3., 2., 6., 4.}, {2., 1., 5., 9.}, {6., 5., 7., 0.}, {4., 9., 0., 2.}};
+  const Matrix<double> M3{{1, 4, 7, 2, 9},
+                          {4, 6, 3, 5, 8},
+                          {7, 3, 2, 1, 6},
+                          {2, 5, 1, 9, 0},
+                          {9, 8, 6, 0, 4}};
+
+  const Matrix<double> M4{{11, 22, 34, 56}, {23, 44, 67, 78}, {12, 23, 46, 29}};
+
+  const Matrix<double> E1{{1., 0., -1.}, {0., 1., 2.}, {0., 0., 0.}};
+  const Matrix<double> E2{
+      {1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+  const Matrix<double> E3{{1, 0, 0, 0, 0},
+                          {0, 1, 0, 0, 0},
+                          {0, 0, 1, 0, 0},
+                          {0, 0, 0, 1, 0},
+                          {0, 0, 0, 0, 1}};
+
+  const Matrix<double> E4{{1.0, 0, 0, -35.1452282157676},
+                          {0, 1.0, 0, 21.8879668049793},
+                          {0, 0, 1.0, -1.14522821576763}};
+
+  EXPECT_EQ(rref(M1), E1);
+  EXPECT_EQ(rref(M2), E2);
+  EXPECT_EQ(rref(M3), E3);
+
+  const auto EM4 = rref(M4);
+  const std::size_t row_em4 = EM4.size();
+  const std::size_t col_em4 = EM4.size();
+
+  for (std::size_t i = 0; i < row_em4; i++) {
+    for (std::size_t j = 0; j < col_em4; j++) {
+      EXPECT_DOUBLE_EQ(EM4[i][j], E4[i][j]);
+    }
+  }
+}
+
 TEST(MatPred, LowerTriangular) {
   const Matrix<int> M1{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
   const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};
