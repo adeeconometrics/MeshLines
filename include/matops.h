@@ -37,10 +37,10 @@ using std::vector;
 template <typename T>
 constexpr auto operator-(const Matrix<T> &M) -> Matrix<T> {
   Matrix<T> result;
+  result.reserve(M.size());
 
-  for (const auto row : M) {
-    result.emplace_back(-row);
-  }
+  std::transform(std::cbegin(M), std::cend(M), std::back_inserter(result),
+                 [](const auto element) { return -element; });
 
   return result;
 }
