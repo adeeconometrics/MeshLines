@@ -99,4 +99,13 @@ constexpr auto apply_fn(Fn &&functor, const lin::Matrix<ArgType> &v)
   return result;
 }
 
+// template <typename Collection>
+// constexpr auto flatten(const Collection &col)
+//     -> lin::vector<typename Collection::value_type> {
+
+//   lin::vector<typename Collection::value_type> flattened;
+
+//   return flattened;
+// }
+
 #endif // __UTILS_H__

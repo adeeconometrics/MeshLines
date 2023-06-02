@@ -37,6 +37,17 @@ TEST(VecOps, FusedTypes) {
   static_assert(is_same<decltype(b), decltype(c_sdiv)>::value);
 }
 
+TEST(VecOps, UnaryNegative) {
+  const vector<int> v1{1, 2, 3, 4, -4, 0};
+  const vector<float> v2{1., 2., 3., -3., -5., 0.};
+
+  const vector<int> e1{-1, -2, -3, -4, 4, 0};
+  const vector<float> e2{-1., -2., -3., 3., 5., 0.};
+
+  EXPECT_EQ(-v1, e1);
+  EXPECT_EQ(-v2, e2);
+}
+
 TEST(VecOps, Elementwise) {
   const vector<int> a{1, 2, 3};
   const vector<int> b{4, 5, 6};
@@ -92,6 +103,17 @@ TEST(VecOps, Equality) {
 
   EXPECT_TRUE(a == a);
   EXPECT_TRUE(a != b);
+}
+
+TEST(MatOps, UnaryNegative) {
+  const Matrix<int> M1{{1, 2, 3}, {0, 0, 1}, {-1, 0, 2}};
+  const Matrix<float> M2{{1., 2., 3.}, {4., 5., 6.}, {-0, .5, .7}};
+
+  const Matrix<int> E1{{-1, -2, -3}, {0, 0, -1}, {1, 0, -2}};
+  const Matrix<float> E2{{-1., -2., -3.}, {-4., -5., -6.}, {0, -.5, -.7}};
+
+  EXPECT_EQ(-M1, E1);
+  EXPECT_EQ(-M2, E2);
 }
 
 TEST(MatOps, Equality) {
@@ -356,4 +378,30 @@ TEST(MatPred, Echelon) {
   // EXPECT_FALSE(is_echelon(N3));
   // EXPECT_FALSE(is_echelon(N4));
   // EXPECT_FALSE(is_echelon(N5));
+}
+
+TEST(MatPred, Symmetric) {
+  const Matrix<int> M1{{4, 1, 7}, {1, 6, 8}, {7, 8, 9}};
+  const Matrix<int> M2{{3, 2, 6, 4}, {2, 1, 5, 9}, {6, 5, 7, 0}, {4, 9, 0, 2}};
+  const Matrix<int> M3{{1, 4, 7, 2, 9},
+                       {4, 6, 3, 5, 8},
+                       {7, 3, 2, 1, 6},
+                       {2, 5, 1, 9, 0},
+                       {9, 8, 6, 0, 4}};
+
+  const Matrix<int> N1{{4, 1, 10}, {1, 6, 8}, {7, 8, 9}};
+  const Matrix<int> N2{{3, 2, 11, 4}, {2, 1, 5, 9}, {6, 5, 7, 0}, {4, 9, 0, 2}};
+  const Matrix<int> N3{{1, 4, 8, 2, 9},
+                       {4, 6, 3, 5, 8},
+                       {7, 3, 2, 1, 6},
+                       {2, 5, 1, 9, 0},
+                       {9, 8, 6, 0, 4}};
+
+  EXPECT_TRUE(is_sym(M1));
+  EXPECT_TRUE(is_sym(M2));
+  EXPECT_TRUE(is_sym(M3));
+
+  EXPECT_FALSE(is_sym(N1));
+  EXPECT_FALSE(is_sym(N2));
+  EXPECT_FALSE(is_sym(N3));
 }

@@ -34,6 +34,17 @@ using std::common_type_t;
 using std::transform;
 using std::vector;
 
+template <typename T>
+constexpr auto operator-(const Matrix<T> &M) -> Matrix<T> {
+  Matrix<T> result;
+
+  for (const auto row : M) {
+    result.emplace_back(-row);
+  }
+
+  return result;
+}
+
 template <typename T, typename U = T>
 constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)
     -> Matrix<common_type_t<T, U>> {

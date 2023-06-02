@@ -121,6 +121,12 @@ constexpr auto is_echelon(const Matrix<T> &M) noexcept -> bool {
   return true;
 }
 
+template <typename T>
+constexpr auto is_sym(const Matrix<T> &M) noexcept -> bool {
+  // prove that M != T(M) where M is a rectangular mat
+  return M == transpose(M);
+}
+
 } // namespace lin
 
 #endif // __MATPRED_H__

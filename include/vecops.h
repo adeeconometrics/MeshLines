@@ -31,6 +31,17 @@ namespace lin {
 using std::common_type_t;
 using std::vector;
 
+template <typename T>
+constexpr auto operator-(const vector<T> &v) -> vector<T> {
+  vector<T> result;
+  result.reserve(v.size());
+
+  std::transform(std::cbegin(v), std::cend(v), std::back_inserter(result),
+                 [](const auto element) { return -element; });
+
+  return result;
+}
+
 template <typename T, typename U = T>
 constexpr auto operator+(const vector<T> &lhs, const vector<U> &rhs)
     -> vector<common_type_t<T, U>> {
