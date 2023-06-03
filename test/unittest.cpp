@@ -359,6 +359,23 @@ TEST(MatFunc, RREF) {
   }
 }
 
+TEST(MatFunc, Minor) {
+  const Matrix<int> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+  const Matrix<int> M2{
+      {-1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+
+  const Matrix<int> E1{{1, 4}, {3, 0}};
+  const Matrix<int> E2{{-1, 2, 4}, {5, 6, 8}, {9, 10, 12}};
+  const Matrix<int> E3{{2, 4}, {10, 12}};
+
+  EXPECT_EQ(minor_submatrix(M1, 2, 2), E1);
+  EXPECT_EQ(minor_submatrix(M2, 3, 2), E2);
+  EXPECT_EQ(minor_submatrix(minor_submatrix(M2, 3, 2), 1), E3);
+
+  EXPECT_DOUBLE_EQ(minor(M1, 1, 1), 18.);
+  EXPECT_DOUBLE_EQ(minor(M2, 2, 2), 32.);
+}
+
 TEST(MatPred, LowerTriangular) {
   const Matrix<int> M1{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
   const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};

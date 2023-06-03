@@ -424,7 +424,7 @@ auto ldl(const Matrix<T> &A) -> tuple<Matrix<T>, vector<T>> {
 
 // cholesky decomposition (L*L^T): returns L
 // conditions: symmetric positive definite matrix
-template <typename T> auto cholesky(const Matrix<T> &A) -> Matrix<T> {
+template <typename T> constexpr auto cholesky(const Matrix<T> &A) -> Matrix<T> {
   const std::size_t size = A.size();
   Matrix<T> L(size, vector<T>(size, 0));
 
@@ -525,6 +525,58 @@ template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
 
   return result;
 }
+/**
+ * @brief Returns a Minor submatrix of $M$.
+ * Note that Matrixindexing is still zero-based.
+ *
+ * @tparam T
+ * @param M
+ * @param row
+ * @param col
+ * @return Matrix<T>
+ */
+template <typename T>
+constexpr auto minor_submatrix(const Matrix<T> &M, std::size_t row = 0,
+                               std::size_t col = 0) -> Matrix<T> {
+
+  const std::size_t m_row = M.size();
+  const std::size_t m_col = M[0].size();
+
+  Matrix<T> minor(m_row - 1, vector<T>(m_col - 1));
+
+  std::size_t t_row = 0;
+  for (std::size_t i = 0; i < m_row; ++i) {
+    if (i == row)
+      continue;
+
+    std::size_t t_col = 0;
+    for (std::size_t j = 0; j < m_col; ++j) {
+      if (j == col)
+        continue;
+
+      minor[t_row][t_col] = M[i][j];
+      t_col += 1;
+    }
+
+    t_row += 1;
+  }
+
+  return minor;
+}
+
+// minor
+template <typename T>
+constexpr auto minor(const Matrix<T> &M, std::size_t row = 0,
+                     std::size_t col = 0) -> double {
+
+  return det(minor_submatrix(M, row, col));
+}
+// cofactor
+// adj
+// rowspace
+// nullspace
+// colspace
+// rank
 
 // template <typename T>
 // auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {

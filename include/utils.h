@@ -108,4 +108,7 @@ constexpr auto apply_fn(Fn &&functor, const lin::Matrix<ArgType> &v)
 //   return flattened;
 // }
 
+// rows: (Mat) -> Mat
+// cols: (Mat) -> Mat
+
 #endif // __UTILS_H__
