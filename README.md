@@ -7,6 +7,8 @@ Matrix Decomposition:
 - [ ] Singular Value Decomposition
 - [x] QR Factorization
 - [x] LU Factorization
+- [x] LDL Decomposition
+- [x] PLU Decomposition
 - [ ] Eigenvalue Decomposition
 
 Matrix Operations:
@@ -14,6 +16,16 @@ Matrix Operations:
 - [x] Matrix-Matrix operations
 - [x] Matrix-Vector operations
 - [ ] Matrix-Scalar operations
+- [ ] Inverse
+- [ ] Colspace
+- [ ] Rowspace
+- [ ] Nullspace
+- [ ] Span
+- [x] Transpose
+- [x] Determinant
+- [x] Minor 
+- [x] Cofactor
+- [x] Adjugate
 
 Algorithms for checking Matrix Properties
 
@@ -21,21 +33,4 @@ Algorithms for checking Matrix Properties
 - [x] Determine Square Matrix
 - [x] Determine Upper Triangular Matrix
 - [x] Determine Lower Triangular Matrix
-- [x] Find Determinant of Matrix
-- [x] Find Transpose of Matrix
-- [ ] Find Inverse of Matrix
 - [x] Find Trace of Matrix
-
-Matrix Object Hierarchy
-
-```mermaid
-flowchart TD;
-BaseMatrix --> SquareMatrix --> DiagonalMatrix --> IdentityMatrix;
-DiagonalMatrix --> ScalarMatrix;
-
-BaseMatrix --> RectangularMatrix --> RowMatrix;
-RectangularMatrix --> ColumnMatrix;
-
-BaseMatrix --> SparseMatrix;
-BaseMatrix --> ZeroMatrix;
-```
