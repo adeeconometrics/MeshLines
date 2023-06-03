@@ -376,6 +376,8 @@ TEST(MatFunc, Minor) {
   EXPECT_DOUBLE_EQ(minor(M2, 2, 2), 32.);
 }
 
+TEST(MatFunc, Cofactor) {}
+
 TEST(MatPred, LowerTriangular) {
   const Matrix<int> M1{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
   const Matrix<int> M2{{1, 0, 0}, {4, 5, 1}, {7, 0, 0}};

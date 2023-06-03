@@ -563,16 +563,83 @@ constexpr auto minor_submatrix(const Matrix<T> &M, std::size_t row = 0,
 
   return minor;
 }
-
-// minor
+/**
+ * @brief Returns the minor determinant of matrix M.
+ *
+ * @tparam T
+ * @param M
+ * @param row
+ * @param col
+ * @return double
+ */
 template <typename T>
 constexpr auto minor(const Matrix<T> &M, std::size_t row = 0,
                      std::size_t col = 0) -> double {
 
   return det(minor_submatrix(M, row, col));
 }
-// cofactor
+/**
+ * @brief Returns a cofactor submatrix of $M$.
+ *
+ * @tparam T
+ * @param M
+ * @param row
+ * @param col
+ * @return Matrix<T>
+ */
+template <typename T>
+constexpr auto cofactor_submatrix(const Matrix<T> &M, std::size_t row = 0,
+                                  std::size_t col = 0) -> Matrix<T> {
+  const std::size_t m_row = M.size();
+  const std::size_t m_col = M[0].size();
+
+  Matrix<T> cofactor(m_row - 1, vector<T>(m_col - 1));
+
+  std::size_t t_row = 0;
+  for (std::size_t i = 0; i < m_row; ++i) {
+    if (i == row)
+      continue;
+
+    std::size_t t_col = 0;
+    for (std::size_t j = 0; j < m_col; ++j) {
+      if (j == col)
+        continue;
+
+      cofactor[t_row][t_col] = ((i + j) % 2 == 0) ? M[i][j] : -M[i][j];
+      t_col += 1;
+    }
+
+    t_row += 1;
+  }
+
+  return cofactor;
+}
+
+template <typename T>
+constexpr auto cofactor_matrix(const Matrix<T> &M, std::size_t row = 0,
+                               std::size_t col = 0) -> Matrix<T> {
+  const std::size_t m_row = M.size();
+  const std::size_t m_col = M[0].size();
+
+  assert(m_row == m_col);
+
+  Matrix<T> cofactor(m_row, vector<T>(m_col));
+
+  for (std::size_t i = 0; i < m_row; ++i) {
+    for (std::size_t j = 0; j < m_col; ++j) {
+      const auto minor_det = minor(M, i, j);
+      cofactor[i][j] = ((i + j) % 2 == 0) ? minor_det : -minor_det;
+    }
+  }
+
+  return cofactor;
+}
+
 // adj
+template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<T> {
+  return transpose(cofactor_matrix(M));
+}
+
 // rowspace
 // nullspace
 // colspace
