@@ -9,6 +9,11 @@
 
 #include <type_traits>
 
+// todo
+// [ ] Matrix Scalar
+// [ ] QR Factorization
+// [ ] Is Row Echelon predicate
+
 using namespace lin;
 
 TEST(VecOps, FusedTypes) {
@@ -359,14 +364,17 @@ TEST(MatFunc, RREF) {
   }
 }
 
+// Note that for now it works on double type; an error occurs when int is
+// casted to double and presumably this error is same for integral types
+// casted to floating point.
 TEST(MatFunc, Minor) {
-  const Matrix<int> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
-  const Matrix<int> M2{
+  const Matrix<double> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+  const Matrix<double> M2{
       {-1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
 
-  const Matrix<int> E1{{1, 4}, {3, 0}};
-  const Matrix<int> E2{{-1, 2, 4}, {5, 6, 8}, {9, 10, 12}};
-  const Matrix<int> E3{{2, 4}, {10, 12}};
+  const Matrix<double> E1{{1, 4}, {3, 0}};
+  const Matrix<double> E2{{-1, 2, 4}, {5, 6, 8}, {9, 10, 12}};
+  const Matrix<double> E3{{2, 4}, {10, 12}};
 
   EXPECT_EQ(minor_submatrix(M1, 2, 2), E1);
   EXPECT_EQ(minor_submatrix(M2, 3, 2), E2);
@@ -376,7 +384,37 @@ TEST(MatFunc, Minor) {
   EXPECT_DOUBLE_EQ(minor(M2, 2, 2), 32.);
 }
 
-TEST(MatFunc, Cofactor) {}
+TEST(MatFunc, Cofactor) {
+  // const Matrix<double> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+  const Matrix<double> M1{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<double> M2{
+      {-1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+
+  // const Matrix<double> E1{{-45, -38, 27}, {19, 18, -13}, {20, 16, -12}};
+  const Matrix<double> E1{{-3, 6, -3}, {6, -12, 6}, {-3, 6, -3}};
+  const Matrix<double> E2{
+      {0, 0, 0, 0}, {0, 8, -16, 8}, {0, -16, 32, -16}, {0, 8, -16, 8}};
+
+  const auto CM1 = cofactor_matrix(M1);
+  const auto CM2 = cofactor_matrix(M2);
+
+  // EXPECT_DOUBLE_EQ(minor(M1, 0, 0), -45.);
+
+  assert(E1.size() == CM1.size());
+  assert(E2.size() == CM2.size());
+
+  for (std::size_t i = 0; i < CM1.size(); i++) {
+    for (std::size_t j = 0; j < CM1[i].size(); j++) {
+      EXPECT_NEAR(CM1[i][j], E1[i][j], 1e-6);
+    }
+  }
+
+  for (std::size_t i = 0; i < CM2.size(); i++) {
+    for (std::size_t j = 0; j < CM2[i].size(); j++) {
+      EXPECT_NEAR(CM2[i][j], E2[i][j], 1e-6);
+    }
+  }
+}
 
 TEST(MatPred, LowerTriangular) {
   const Matrix<int> M1{{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};

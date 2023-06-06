@@ -472,7 +472,16 @@ constexpr auto det(
 
   return p1 * p0;
 }
-
+/**
+ * @brief Specialized implementation of determinant for 2x2 matrix
+ *
+ * @tparam T
+ * @param M
+ * @return double
+ */
+template <typename T> constexpr auto det_2(const Matrix<T> &M) -> double {
+  return M[0][0] * M[1][1] - M[0][1] * M[1][0];
+}
 /**
  * @brief Returns a reduced row echelon form of matrix M.
  * Note that not all matrices have RREF. The implementation
@@ -526,7 +535,7 @@ template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
   return result;
 }
 /**
- * @brief Returns a Minor submatrix of $M$.
+ * @brief Returns a Minor submatrix of M.
  * Note that Matrixindexing is still zero-based.
  *
  * @tparam T
@@ -578,6 +587,25 @@ constexpr auto minor(const Matrix<T> &M, std::size_t row = 0,
 
   return det(minor_submatrix(M, row, col));
 }
+
+template <typename T>
+constexpr auto minor_matrix(const Matrix<T> &M) -> Matrix<double> {
+  const std::size_t m_row = M.size();
+  const std::size_t m_col = M[0].size();
+
+  assert(m_row == m_col);
+
+  Matrix<double> minor_mat(m_row, vector<T>(m_col));
+
+  for (std::size_t i = 0; i < m_row; ++i) {
+    for (std::size_t j = 0; j < m_col; ++j) {
+      const auto minor_det = minor(M, i, j);
+      minor_mat[i][j] = minor_det;
+    }
+  }
+
+  return minor_mat;
+}
 /**
  * @brief Returns a cofactor submatrix of $M$.
  *
@@ -616,14 +644,13 @@ constexpr auto cofactor_submatrix(const Matrix<T> &M, std::size_t row = 0,
 }
 
 template <typename T>
-constexpr auto cofactor_matrix(const Matrix<T> &M, std::size_t row = 0,
-                               std::size_t col = 0) -> Matrix<T> {
+constexpr auto cofactor_matrix(const Matrix<T> &M) -> Matrix<double> {
   const std::size_t m_row = M.size();
   const std::size_t m_col = M[0].size();
 
   assert(m_row == m_col);
 
-  Matrix<T> cofactor(m_row, vector<T>(m_col));
+  Matrix<double> cofactor(m_row, vector<double>(m_col));
 
   for (std::size_t i = 0; i < m_row; ++i) {
     for (std::size_t j = 0; j < m_col; ++j) {
@@ -636,7 +663,7 @@ constexpr auto cofactor_matrix(const Matrix<T> &M, std::size_t row = 0,
 }
 
 // adj
-template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<T> {
+template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<double> {
   return transpose(cofactor_matrix(M));
 }
 
@@ -644,6 +671,8 @@ template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<T> {
 // nullspace
 // colspace
 // rank
+// span
+// basis
 
 // template <typename T>
 // auto svd(const Matrix<T>& A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
