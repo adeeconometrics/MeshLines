@@ -386,7 +386,7 @@ TEST(MatFunc, Minor) {
 // Note that the M1 that is commented out result in a nan value
 // more investigation is needed to resolve this error properly;
 // this seems to be a numerical error as opposed to algorithmic error
-TEST(MatFunc, Cofactor) {
+TEST(MatFunc, CofactorAndAdjugate) {
   // const Matrix<double> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
   const Matrix<double> M1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
   const Matrix<double> M2{{2., 3., 4.}, {1., 5., 6.}, {7., 8., 9.}};
@@ -427,6 +427,13 @@ TEST(MatFunc, Cofactor) {
   const auto CM5 = cofactor_matrix(M5);
   const auto CM6 = cofactor_matrix(M6);
 
+  const auto AD1 = adj(M1);
+  const auto AD2 = adj(M2);
+  const auto AD3 = adj(M3);
+  const auto AD4 = adj(M4);
+  const auto AD5 = adj(M5);
+  const auto AD6 = adj(M6);
+
   // EXPECT_DOUBLE_EQ(minor(M1, 0, 0), -45.);
 
   assert(E1.size() == CM1.size());
@@ -445,6 +452,10 @@ TEST(MatFunc, Cofactor) {
     }
   }
 
+  EXPECT_EQ(AD1, transpose(CM1));
+  EXPECT_EQ(AD2, transpose(CM2));
+  EXPECT_EQ(AD3, transpose(CM3));
+
   for (std::size_t i = 0; i < CM4.size(); i++) {
     for (std::size_t j = 0; j < CM4[i].size(); j++) {
       EXPECT_NEAR(CM4[i][j], E4[i][j], 1e-9);
@@ -452,6 +463,10 @@ TEST(MatFunc, Cofactor) {
       EXPECT_NEAR(CM6[i][j], E6[i][j], 1e-9);
     }
   }
+
+  EXPECT_EQ(AD4, transpose(CM4));
+  EXPECT_EQ(AD5, transpose(CM5));
+  EXPECT_EQ(AD6, transpose(CM6));
 }
 
 TEST(MatPred, LowerTriangular) {
