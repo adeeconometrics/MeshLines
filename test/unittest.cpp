@@ -383,35 +383,73 @@ TEST(MatFunc, Minor) {
   EXPECT_DOUBLE_EQ(minor(M1, 1, 1), 18.);
   EXPECT_DOUBLE_EQ(minor(M2, 2, 2), 32.);
 }
-
+// Note that the M1 that is commented out result in a nan value
+// more investigation is needed to resolve this error properly;
+// this seems to be a numerical error as opposed to algorithmic error
 TEST(MatFunc, Cofactor) {
   // const Matrix<double> M1{{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
-  const Matrix<double> M1{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-  const Matrix<double> M2{
-      {-1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+  const Matrix<double> M1{{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
+  const Matrix<double> M2{{2., 3., 4.}, {1., 5., 6.}, {7., 8., 9.}};
+  const Matrix<double> M3{{3., 2., 1.}, {6., 5., 4.}, {9., 8., 7.}};
+
+  const Matrix<double> M4{{-1., 2., 3., 4.},
+                          {5., 6., 7., 8.},
+                          {9., 10., 11., 12.},
+                          {13., 14., 15., 16.}};
+  const Matrix<double> M5{{2., 4., 6., 8.},
+                          {10., 12., 14., 16.},
+                          {18., 20., 22., 24.},
+                          {26., 28., 30., 32.}};
+  const Matrix<double> M6{{12., 11., 13., 15.},
+                          {23., 2., 4., 5.},
+                          {3., 5., 2., 6.},
+                          {16., 34., 56., 11.}};
 
   // const Matrix<double> E1{{-45, -38, 27}, {19, 18, -13}, {20, 16, -12}};
-  const Matrix<double> E1{{-3, 6, -3}, {6, -12, 6}, {-3, 6, -3}};
-  const Matrix<double> E2{
-      {0, 0, 0, 0}, {0, 8, -16, 8}, {0, -16, 32, -16}, {0, 8, -16, 8}};
+  const Matrix<double> E1{{-3., 6., -3.}, {6., -12., 6.}, {-3., 6., -3.}};
+  const Matrix<double> E2{{-3., 33., -27.}, {5., -10., 5.}, {-2., -8., 7.}};
+  const Matrix<double> E3{{3., -6., 3.}, {-6., 12., -6.}, {3., -6., 3.}};
+
+  const Matrix<double> E4{{0., 0., 0., 0.},
+                          {0., 8., -16., 8.},
+                          {0., -16., 32., -16.},
+                          {0., 8., -16., 8.}};
+  const Matrix<double> E5 = zero_mat<double>(4);
+  const Matrix<double> E6{{1028., 6290., -3191., -4692.},
+                          {-1663., -909., 765., 1334.},
+                          {-1032., -13279., 7571., 4002.},
+                          {-83., -921., -126., 851.}};
 
   const auto CM1 = cofactor_matrix(M1);
   const auto CM2 = cofactor_matrix(M2);
+  const auto CM3 = cofactor_matrix(M3);
+  const auto CM4 = cofactor_matrix(M4);
+  const auto CM5 = cofactor_matrix(M5);
+  const auto CM6 = cofactor_matrix(M6);
 
   // EXPECT_DOUBLE_EQ(minor(M1, 0, 0), -45.);
 
   assert(E1.size() == CM1.size());
   assert(E2.size() == CM2.size());
+  assert(E3.size() == CM3.size());
+
+  assert(E4.size() == CM4.size());
+  assert(E5.size() == CM5.size());
+  assert(E6.size() == CM6.size());
 
   for (std::size_t i = 0; i < CM1.size(); i++) {
     for (std::size_t j = 0; j < CM1[i].size(); j++) {
       EXPECT_NEAR(CM1[i][j], E1[i][j], 1e-9);
+      EXPECT_NEAR(CM2[i][j], E2[i][j], 1e-9);
+      EXPECT_NEAR(CM3[i][j], E3[i][j], 1e-9);
     }
   }
 
-  for (std::size_t i = 0; i < CM2.size(); i++) {
-    for (std::size_t j = 0; j < CM2[i].size(); j++) {
-      EXPECT_NEAR(CM2[i][j], E2[i][j], 1e-9);
+  for (std::size_t i = 0; i < CM4.size(); i++) {
+    for (std::size_t j = 0; j < CM4[i].size(); j++) {
+      EXPECT_NEAR(CM4[i][j], E4[i][j], 1e-9);
+      EXPECT_NEAR(CM5[i][j], E5[i][j], 1e-9);
+      EXPECT_NEAR(CM6[i][j], E6[i][j], 1e-9);
     }
   }
 }
