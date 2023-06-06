@@ -405,13 +405,13 @@ TEST(MatFunc, Cofactor) {
 
   for (std::size_t i = 0; i < CM1.size(); i++) {
     for (std::size_t j = 0; j < CM1[i].size(); j++) {
-      EXPECT_NEAR(CM1[i][j], E1[i][j], 1e-6);
+      EXPECT_NEAR(CM1[i][j], E1[i][j], 1e-9);
     }
   }
 
   for (std::size_t i = 0; i < CM2.size(); i++) {
     for (std::size_t j = 0; j < CM2[i].size(); j++) {
-      EXPECT_NEAR(CM2[i][j], E2[i][j], 1e-6);
+      EXPECT_NEAR(CM2[i][j], E2[i][j], 1e-9);
     }
   }
 }

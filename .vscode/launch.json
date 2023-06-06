@@ -8,11 +8,10 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/MeshLines",
+            "program": "${workspaceRoot}/build/bin/unittest",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
-            "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
@@ -26,7 +25,8 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ]
+            ],
+            // "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }
