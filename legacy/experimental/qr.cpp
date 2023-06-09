@@ -1,339 +1,206 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring> // for memset
+#include <cmath>
 #include <iostream>
-#include <limits>
+#include <numeric>
+#include <tuple>
 #include <vector>
-#include <memory>
 
-#include <math.h>
+using std::cout;
+using std::tuple;
+using std::vector;
 
-class Vector;
+#include <iomanip>
+#include <string>
+#include <type_traits>
 
-class Matrix {
-private: 
-    std::unique_ptr<double[]> data; 
-public:
-  Matrix() : m(0), n(0), data(nullptr) {}
+template <typename T> using Matrix = vector<vector<T>>;
 
-  // constructor with memory allocation, initialized to zero
-  Matrix(int m_, int n_) : Matrix() {
-    m = m_;
-    n = n_;
-    allocate(m_, n_);
+template <typename T>
+auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
+  static_assert(std::is_arithmetic_v<T>,
+                "template parameter must be of type arithmetic");
+
+  if (matrix.empty()) {
+    os << "[]" << std::endl;
+    return os;
   }
 
-  // copy constructor
-  Matrix(const Matrix &mat) : Matrix(mat.m, mat.n) {
-
-    for (int i = 0; i < m; i++)
-      for (int j = 0; j < n; j++)
-        (*this)(i, j) = mat(i, j);
-  }
-
-  // constructor from array
-  template <int rows, int cols>
-  Matrix(double (&a)[rows][cols]) : Matrix(rows, cols) {
-
-    for (int i = 0; i < m; i++)
-      for (int j = 0; j < n; j++)
-        (*this)(i, j) = a[i][j];
-  }
-
-  // destructor
-  ~Matrix()  = default; 
-
-  // access data operators
-  double &operator()(int i, int j) { return data[i + m * j]; }
-  double operator()(int i, int j) const { return data[i + m * j]; }
-
-  // operator assignment
-  Matrix &operator=(const Matrix &source) {
-    if (this != &source) {
-      if ((m * n) != (source.m * source.n)) { // storage cannot be reused
-        allocate(source.m, source.n);         // re-allocate storage
-      }
-      // storage can be used, copy data
-      std::copy(source.data.get(), source.data.get() + source.m * source.n, data.get());
-    }
-    return *this;
-  }
-
-  // compute minor
-  void compute_minor(const Matrix &mat, int d) {
-
-    allocate(mat.m, mat.n);
-
-    for (int i = 0; i < d; i++)
-      (*this)(i, i) = 1.0;
-    for (int i = d; i < mat.m; i++)
-      for (int j = d; j < mat.n; j++)
-        (*this)(i, j) = mat(i, j);
-  }
-
-  // Matrix multiplication
-  // c = a * b
-  // c will be re-allocated here
-  void mult(const Matrix &a, const Matrix &b) {
-
-    if (a.n != b.m) {
-      std::cerr << "Matrix multiplication not possible, sizes don't match !\n";
-      return;
-    }
-
-    // reallocate ourself if necessary i.e. current Matrix has not valid sizes
-    if (a.m != m or b.n != n)
-      allocate(a.m, b.n);
-
-    // memset(data, 0, m * n * sizeof(double));
-    data = std::make_unique<double[]>(m*n);
-
-    for (int i = 0; i < a.m; i++)
-      for (int j = 0; j < b.n; j++)
-        for (int k = 0; k < a.n; k++)
-          (*this)(i, j) += a(i, k) * b(k, j);
-  }
-
-  void transpose() {
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < i; j++) {
-        double t = (*this)(i, j);
-        (*this)(i, j) = (*this)(j, i);
-        (*this)(j, i) = t;
+  std::size_t max_width = 0;
+  for (const auto &row : matrix) {
+    for (const auto &element : row) {
+      std::size_t width = std::to_string(element).size();
+      if (width > max_width) {
+        max_width = width;
       }
     }
   }
 
-  // take c-th column of m, put in v
-  void extract_column(Vector &v, int c);
-
-  // memory allocation
-  void allocate(int m_, int n_) {
-    // new sizes
-    m = m_;
-    n = n_;
-
-    data = std::make_unique<double[]>(m_ * n_);
-    // new double[m_ * n_];
-    // memset(data, 0, m_ * n_ * sizeof(double));
-
-  } // allocate
-
-  int m, n;
-}; // struct Matrix
-
-// column vector
-class Vector {
-
-private:
-    std::unique_ptr<double[]> data;
-  int size;
-
-public:
-  Vector() : size(0), data(nullptr) {}
-
-  // constructor with memory allocation, initialized to zero
-  Vector(int size_) : Vector() {
-    size = size_;
-    allocate(size_);
-  }
-
-  // destructor
-  ~Vector() = default;
-  // access data operators
-  double &operator()(int i) { return data[i]; }
-  double operator()(int i) const { return data[i]; }
-
-  // operator assignment
-  Vector &operator=(const Vector &source) {
-
-    // self-assignment check
-    if (this != &source) {
-      if (size != (source.size)) { // storage cannot be reused
-        allocate(source.size);     // re-allocate storage
+  os << "[";
+  for (std::size_t i = 0; i < matrix.size(); ++i) {
+    if (i != 0) {
+      os << " ";
+    }
+    os << "[";
+    for (std::size_t j = 0; j < matrix[i].size(); ++j) {
+      os << std::setw(max_width) << matrix[i][j];
+      if (j != matrix[i].size() - 1) {
+        os << ", ";
       }
-      // storage can be used, copy data
-      std::copy(source.data, source.data + source.size, data);
     }
-    return *this;
-  }
-
-  // memory allocation
-  void allocate(int size_) {
-
-    // new sizes
-    size = size_;
-
-    data = std::mape_ptr<double[]>(size_);
-  } // allocate
-
-
-  //   ||x||
-  double norm() {
-    double sum = 0;
-    for (int i = 0; i < size; i++)
-      sum += (*this)(i) * (*this)(i);
-    return sqrt(sum);
-  }
-
-  // divide data by factor
-  void rescale(double factor) {
-    for (int i = 0; i < size; i++)
-      (*this)(i) /= factor;
-  }
-
-  void rescale_unit() {
-    double factor = norm();
-    rescale(factor);
-  }
-
-}; // class Vector
-
-// c = a + b * s
-void vmadd(const Vector &a, const Vector &b, double s, Vector &c) {
-  if (c.size != a.size or c.size != b.size) {
-    std::cerr << "[vmadd]: vector sizes don't match\n";
-    return;
-  }
-
-  for (int i = 0; i < c.size; i++)
-    c(i) = a(i) + s * b(i);
-}
-
-// mat = I - 2*v*v^T
-// !!! m is allocated here !!!
-void compute_householder_factor(Matrix &mat, const Vector &v) {
-
-  int n = v.size;
-  mat.allocate(n, n);
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < n; j++)
-      mat(i, j) = -2 * v(i) * v(j);
-  for (int i = 0; i < n; i++)
-    mat(i, i) += 1;
-}
-
-// take c-th column of a matrix, put results in Vector v
-void Matrix::extract_column(Vector &v, int c) {
-  if (m != v.size) {
-    std::cerr
-        << "[Matrix::extract_column]: Matrix and Vector sizes don't match\n";
-    return;
-  }
-
-  for (int i = 0; i < m; i++)
-    v(i) = (*this)(i, c);
-}
-
-void matrix_show(const Matrix &m, const std::string &str = "") {
-  std::cout << str << "\n";
-  for (int i = 0; i < m.m; i++) {
-    for (int j = 0; j < m.n; j++) {
-      printf(" %8.3f", m(i, j));
+    os << "]";
+    if (i != matrix.size() - 1) {
+      os << '\n';
     }
-    printf("\n");
   }
-  printf("\n");
+  return os << "]\n";
 }
 
-// L2-norm ||A-B||^2
-double matrix_compare(const Matrix &A, const Matrix &B) {
-  // matrices must have same size
-  if (A.m != B.m or A.n != B.n)
-    return std::numeric_limits<double>::max();
+template <typename T> auto mask_triu(Matrix<T> &A) -> void {
+  const std::size_t rows = A.size();
+  const std::size_t cols = A[0].size();
 
-  double res = 0;
-  for (int i = 0; i < A.m; i++) {
-    for (int j = 0; j < A.n; j++) {
-      res += (A(i, j) - B(i, j)) * (A(i, j) - B(i, j));
+  for (std::size_t i = 0; i < rows; i++) {
+    for (std::size_t j = i + 1; j < cols; j++) {
+      if (j < rows && i < cols) {
+        A[j][i] = 0;
+      }
+    }
+  }
+}
+
+template <typename T>
+auto qr_householder(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
+  const std::size_t m = A.size();
+  const std::size_t n = A[0].size();
+
+  // Initialize Q and R
+  Matrix<T> Q(m, std::vector<T>(m));
+  Matrix<T> R(A);
+
+  // Compute Householder reflections and apply them to R
+  for (std::size_t k = 0; k < n; k++) {
+    std::vector<T> x(m - k);
+    for (std::size_t i = k; i < m; i++) {
+      x[i - k] = R[i][k];
+    }
+
+    T norm_x =
+        std::sqrt(std::inner_product(x.begin(), x.end(), x.begin(), 0.0));
+
+    std::vector<T> v(m - k);
+    v[0] = x[0] < 0 ? x[0] - norm_x : x[0] + norm_x;
+    for (std::size_t i = 1; i < m - k; i++) {
+      v[i] = x[i];
+    }
+
+    T norm_v =
+        std::sqrt(std::inner_product(v.begin(), v.end(), v.begin(), 0.0));
+
+    Matrix<T> H(m - k, std::vector<T>(m - k));
+    for (std::size_t i = 0; i < m - k; i++) {
+      for (std::size_t j = 0; j < m - k; j++) {
+        if (i == j) {
+          H[i][j] = 1 - 2 * v[i] * v[j] / (norm_v * norm_v);
+        } else {
+          H[i][j] = -2 * v[i] * v[j] / (norm_v * norm_v);
+        }
+      }
+    }
+
+    // Update R with H
+    for (std::size_t i = k; i < m; i++) {
+      for (std::size_t j = k; j < n; j++) {
+        T sum = 0;
+        for (std::size_t h = 0; h < m - k; h++) {
+          sum += H[i - k][h] * R[h + k][j];
+        }
+        R[i][j] = sum;
+      }
+    }
+
+    // Update Q with H
+    for (std::size_t i = 0; i < m; i++) {
+      for (std::size_t j = k; j < m; j++) {
+        T sum = 0;
+        for (std::size_t h = 0; h < m - k; h++) {
+          sum += Q[i][h + k] * H[h][j - k];
+        }
+        Q[i][j] = sum;
+      }
     }
   }
 
-  res /= A.m * A.n;
-  return res;
+  return std::make_tuple(Q, R);
 }
 
-void householder(Matrix &mat, Matrix &R, Matrix &Q) {
+template <typename T>
+auto qr_gm(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
+  const std::size_t _size = A.size();
 
-  int m = mat.m;
-  int n = mat.n;
+  Matrix<T> Q(_size, vector<T>(_size, 0));
+  Matrix<T> R = A;
 
-  // array of factor Q1, Q2, ... Qm
-  std::vector<Matrix> qv(m);
-
-  // temp array
-  Matrix z(mat);
-  Matrix z1;
-
-  for (int k = 0; k < n && k < m - 1; k++) {
-
-    Vector e(m), x(m);
-    double a;
-
-    // compute minor
-    z1.compute_minor(z, k);
-
-    // extract k-th column into x
-    z1.extract_column(x, k);
-
-    a = x.norm();
-    if (mat(k, k) > 0)
-      a = -a;
-
-    for (int i = 0; i < e.size; i++)
-      e(i) = (i == k) ? 1 : 0;
-
-    // e = x + a*e
-    vmadd(x, e, a, e);
-
-    // e = e / ||e||
-    e.rescale_unit();
-
-    // qv[k] = I - 2 *e*e^T
-    compute_householder_factor(qv[k], e);
-
-    // z = qv[k] * z1
-    z.mult(qv[k], z1);
+  // Compute Q and R using the Gram-Schmidt process
+  for (std::size_t j = 0; j < _size; ++j) {
+    // Compute the jth column of Q
+    for (std::size_t i = 0; i < _size; ++i) {
+      Q[i][j] = R[i][j];
+    }
+    for (std::size_t k = 0; k < j; ++k) {
+      T dot_product = 0;
+      for (std::size_t i = 0; i < _size; ++i) {
+        dot_product += Q[i][k] * R[i][j];
+      }
+      for (std::size_t i = 0; i < _size; ++i) {
+        Q[i][j] -= dot_product * Q[i][k];
+      }
+    }
+    // Normalize the jth column of Q
+    T norm = 0;
+    for (std::size_t i = 0; i < _size; ++i) {
+      norm += Q[i][j] * Q[i][j];
+    }
+    norm = std::sqrt(norm);
+    for (std::size_t i = 0; i < _size; ++i) {
+      Q[i][j] /= norm;
+    }
+    // Compute the jth row of R
+    for (std::size_t i = j; i < _size; ++i) {
+      R[j][i] = 0;
+      for (std::size_t k = 0; k < _size; ++k) {
+        R[j][i] += Q[k][j] * A[k][i];
+      }
+    }
   }
 
-  Q = qv[0];
-
-  // after this loop, we will obtain Q (up to a transpose operation)
-  for (int i = 1; i < n && i < m - 1; i++) {
-
-    z1.mult(qv[i], Q);
-    Q = z1;
-  }
-
-  R.mult(Q, mat);
-  Q.transpose();
+  mask_triu(R);
+  return std::make_tuple(Q, R);
 }
 
-double in[][3] = {
-    {12, -51, 4}, {6, 167, -68}, {-4, 24, -41}, {-1, 1, 0}, {2, 0, 3},
+auto main() -> int {
+  using std::sqrt;
+
+  Matrix<double> A{{4, 3, 1}, {6, 3, 1}, {8, 4, 1}};
+  const Matrix<double> Q{{2. / sqrt(29), 5. / sqrt(29), 0},
+                         {3. / sqrt(29), (-6. * sqrt(29)) / 145., 4. / 5.},
+                         {4. / sqrt(29), (-8. * sqrt(29)) / (145.), -3. / 5.}};
+
+  const Matrix<double> R{{2. * sqrt(29), 31. / sqrt(29), 9. / sqrt(29)},
+                         {0, 5. / sqrt(29), 11. / (5. * sqrt(29))},
+                         {0, 0, 1. / 5}};
+
+  // const std::size_t rows = _size;
+  // const std::size_t cols = A[0].size();
+
+  const auto QRgm = qr_gm(A);
+  const auto QRHouseholder = qr_householder(A);
+
+  cout << Q << "\n\n";
+  cout << std::get<0>(QRgm) << "\n\n";
+  cout << std::get<0>(QRHouseholder) << "\n\n\n";
+  cout << "-------------------------------------------------\n";
+  cout << R << "\n\n";
+  cout << std::get<1>(QRgm) << "\n\n";
+  cout << std::get<1>(QRHouseholder) << "\n\n";
+
+  return 0;
 };
-
-int main() {
-  Matrix A(in);
-  Matrix Q, R;
-
-  matrix_show(A, "A");
-
-  // compute QR decompostion
-  householder(A, R, Q);
-
-  matrix_show(Q, "Q");
-  matrix_show(R, "R");
-
-  // compare Q*R to the original matrix A
-  Matrix A_check;
-  A_check.mult(Q, R);
-
-  // compute L2 norm ||A-A_check||^2
-  double l2 = matrix_compare(A, A_check);
-
-  // display Q*R
-  matrix_show(A_check, l2 < 1e-12 ? "A == Q * R ? yes" : "A == Q * R ? no");
-
-  return EXIT_SUCCESS;
-}
