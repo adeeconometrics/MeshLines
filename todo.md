@@ -4,16 +4,17 @@ This contains experiments of the module that is to be implemented in the main fi
 
 Matrix factorization
 
-- [ ] LU Decomposition
+- [x] LU Decomposition
   - [x] Crout's algorithm
-  - [ ] Gaussian Elimination
+  - [x] Gaussian Elimination
 - [ ] LDU Decomposition
 - [ ] LUP Decomposition
-- [ ] LL Decomposition
+- [x] LL Decomposition (Cholesky)
 - [ ] Block LU Decomposition
-- [ ] QR Decomposition : inaccurate result (check property of QR and restore the A matrix)
+- [x] QR Decomposition
   - [x] Gram Schmidt\*
-  - [x] Hoseholder Reflections\*
+  - [x] Hoseholder Reflections
+    - [ ] This fails during testing
 - [x] Cholesky Decomposition
 
 Helper functions
@@ -31,3 +32,8 @@ Project management matters
 - [ ] Documentation in Sphynx
 - [x] CMake build configuration
 - [x] Set up gtest
+
+---
+
+- [ ] Implement relationship using association to `std::vector`
+- [ ] Make a base class and implement type-specific rules for other Matrix Types

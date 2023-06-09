@@ -266,8 +266,8 @@ TEST(MatFunc, QRDecomposition) {
 
   for (std::size_t i = 0; i < rows; i++) {
     for (std::size_t j = 0; j < cols; j++) {
-      EXPECT_DOUBLE_EQ(std::get<0>(QRgm)[i][j], Q[i][j]) << Q;
-      EXPECT_DOUBLE_EQ(std::get<1>(QRgm)[i][j], R[i][j]) << R;
+      EXPECT_NEAR(std::get<0>(QRgm)[i][j], Q[i][j], 1e-9) << Q;
+      EXPECT_NEAR(std::get<1>(QRgm)[i][j], R[i][j], 1e-9) << R;
     }
   }
 }

@@ -661,16 +661,29 @@ constexpr auto cofactor_matrix(const Matrix<T> &M) -> Matrix<double> {
 
   return cofactor;
 }
-
-// adj
+/**
+ * @brief Returns the adjugate matrix
+ *
+ * @tparam T
+ * @param M
+ * @return Matrix<double>
+ */
 template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<double> {
   return transpose(cofactor_matrix(M));
 }
 
+// template <typename T> constexpr auto inv(const Matrix<T> &M) ->
+// Matrix<double> {
+//   return 1 / (det(A)) * transpose(cofactor_matrix(M));
+// }
+
 // rowspace
 // nullspace
 // colspace
+
 // rank
+template <typename T> constexpr auto rank(const Matrix<T> &M) -> int {}
+
 // span
 // basis
 

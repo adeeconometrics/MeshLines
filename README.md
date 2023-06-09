@@ -15,17 +15,17 @@ Matrix Operations:
 
 - [x] Matrix-Matrix operations
 - [x] Matrix-Vector operations
+- [x] Transpose
+- [x] Determinant
+- [x] Minor
+- [x] Cofactor
+- [x] Adjugate
 - [ ] Matrix-Scalar operations
 - [ ] Inverse
 - [ ] Colspace
 - [ ] Rowspace
 - [ ] Nullspace
 - [ ] Span
-- [x] Transpose
-- [x] Determinant
-- [x] Minor 
-- [x] Cofactor
-- [x] Adjugate
 
 Algorithms for checking Matrix Properties
 
