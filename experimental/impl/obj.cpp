@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <initializer_list>
 #include <iostream>
 #include <utility>
@@ -47,87 +48,120 @@ constexpr auto all_same_size(initializer_list<initializer_list<T>> t_list)
                      [m](const auto i) { return i.size() == m; });
 }
 
-template <typename T> using iterator = typename vector<vector<T>>::iterator;
-template <typename T>
-using const_iterator = typename vector<vector<T>>::const_iterator;
+template <typename T> struct Matrix {
+public:
+  using value_type = T;
+  using reference_type = T &;
+  using pointer_type = T *;
 
-template <typename T> struct BaseMatrix {
+  using iterator = typename vector<vector<T>>::iterator;
+  using const_iterator = typename vector<vector<T>>::const_iterator;
 
 public:
-  BaseMatrix() = delete;
-  BaseMatrix(const BaseMatrix<T> &) = default;
-  BaseMatrix(BaseMatrix<T> &&) = default;
+  Matrix() : m_row(0), m_col(0) {}
+  Matrix(const Matrix<T> &) = default;
+  Matrix(Matrix<T> &&) = default;
 
-  BaseMatrix(std::size_t m, std::size_t n) : m_row(m), m_col(n) {}
-  virtual ~BaseMatrix() = default;
+  Matrix(std::size_t m, std::size_t n)
+      : m_row(m), m_col(n), m_matrix(m_row, vector<T>(m_col)) {}
+
+  Matrix(std::size_t m, std::size_t n, const vector<vector<T>> &t_matrix)
+      : m_row(m), m_col(n), m_matrix(t_matrix) {}
+
+  Matrix(initializer_list<initializer_list<T>> t_list)
+      : m_row(t_list.size()), m_col((t_list.begin())->size()),
+        m_matrix(vector<vector<T>>(t_list.begin(), t_list.end())) {}
+
+  virtual ~Matrix() = default;
+
+  auto operator=(const Matrix<T> &) -> Matrix<T> & = default;
+  auto operator=(Matrix<T> &&) -> Matrix<T> & = default;
 
   auto dims() const noexcept -> pair<std::size_t, std::size_t> {
     return {m_row, m_col};
   }
 
-  virtual auto at(std::size_t t_row, std::size_t t_col) noexcept -> T & = 0;
-  virtual auto at(std::size_t t_row, std::size_t t_col) const noexcept
-      -> const T & = 0;
+  auto at(std::size_t t_row, std::size_t t_col) noexcept -> T & {
+    return m_matrix[t_row][t_col];
+  }
+  auto at(std::size_t t_row, std::size_t t_col) const noexcept -> const T & {
+    return m_matrix[t_row][t_col];
+  }
 
-  virtual auto begin() noexcept -> iterator<T> = 0;
-  virtual auto end() noexcept -> iterator<T> = 0;
-  virtual auto cbegin() const noexcept -> const_iterator<T> = 0;
-  virtual auto cend() const noexcept -> const_iterator<T> = 0;
+  auto begin() noexcept -> iterator { return std::begin(m_matrix); }
+
+  auto end() noexcept -> iterator { return std::end(m_matrix); }
+
+  auto cbegin() const noexcept -> const_iterator {
+    return std::cbegin(m_matrix);
+  }
+
+  auto cend() const noexcept -> const_iterator { return std::cend(m_matrix); }
 
 private:
   std::size_t m_row;
   std::size_t m_col;
+
+  vector<vector<T>> m_matrix;
 };
 
-template <typename T> struct SquareMatrix : public BaseMatrix<T> {
-  SquareMatrix(std::size_t m)
-      : BaseMatrix<T>(m, m), m_matrix(m, vector<T>(m)) {}
+template <typename T> struct SquareMatrix : public Matrix<T> {
+  SquareMatrix(std::size_t m) : Matrix<T>(m, m) {}
 
   SquareMatrix(initializer_list<initializer_list<T>> t_list)
-      : BaseMatrix<T>(t_list.size(), t_list.size()),
-        m_matrix(vector<vector<T>>(t_list.begin(), t_list.end())) {
+      : Matrix<T>(t_list) {
     assert(all_same_size(t_list));
   }
-
-  auto at(std::size_t t_row, std::size_t t_col) noexcept -> T & override {
-    return m_matrix[t_row][t_col];
-  }
-
-  auto at(std::size_t t_row, std::size_t t_col) const noexcept
-      -> const T & override {
-    return m_matrix[t_row][t_col];
-  }
-
-  auto begin() noexcept -> iterator<T> override { return m_matrix.begin(); }
-
-  auto end() noexcept -> iterator<T> override { return m_matrix.end(); }
-
-  auto cbegin() const noexcept -> const_iterator<T> override {
-    return m_matrix.cbegin();
-  }
-  auto cend() const noexcept -> const_iterator<T> override {
-    return m_matrix.cend();
-  }
-
-private:
-  vector<vector<T>> m_matrix;
 };
 
 // template <typename T> struct DiagonalMatrix : public SquareMatrix<T> {
 // public:
-//   DiagonalMatrix(std::size_t m, const initializer_list<T> &v)
-//       : SquareMatrix<T>(m) {
+//   DiagonalMatrix(std::size_t m, initializer_list<T> v) : SquareMatrix<T>(m) {
 //     assert(v.size() == m);
 //   }
 // };
 
-// template <typename T> struct RectangularMatrix : public BaseMatrix<T> {
-//   RectangularMatrix(std::size_t m, std::size_t n) : BaseMatrix<T>(m, n) {}
-// };
+template <typename T> struct RectMatrix : public Matrix<T> {
+  RectMatrix(std::size_t m, std::size_t n) : Matrix<T>(m, n) {}
+  RectMatrix(initializer_list<initializer_list<T>> t_list)
+      : Matrix<T>(t_list) {}
+};
+
+template <typename T>
+constexpr auto operator+(const vector<T> &lhs, const vector<T> &rhs)
+    -> vector<T> {
+  assert(lhs.size() == rhs.size());
+
+  vector<T> result;
+  result.reserve(lhs.size());
+
+  std::transform(std::cbegin(lhs), std::cend(lhs), std::cbegin(rhs),
+                 std::back_inserter(result), std::plus<T>());
+  return result;
+}
+
+template <typename T>
+constexpr auto operator+(const Matrix<T> &lhs, const Matrix<T> &rhs)
+    -> Matrix<T> {
+
+  assert(lhs.dims() == rhs.dims());
+  const std::size_t row = lhs.dims().first;
+  const std::size_t col = lhs.dims().second;
+
+  vector<vector<T>> result;
+
+  std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), std::begin(result),
+                 [](const vector<T> &_lhsv, const vector<T> &_rhsv) {
+                   return _lhsv + _rhsv;
+                 });
+  return {row, col, result};
+}
 
 auto main() -> int {
   SquareMatrix<int> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-  for (auto row : M) {
+  auto B = M + M;
+  cout << "something\n";
+  for (auto row : B) {
     for (auto i : row)
       cout << i << " ";
     cout << '\n';
