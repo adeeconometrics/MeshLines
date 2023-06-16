@@ -65,6 +65,9 @@ public:
   Matrix(std::size_t m, std::size_t n)
       : m_row(m), m_col(n), m_matrix(m_row, vector<T>(m_col)) {}
 
+  Matrix(const vector<vector<T>> &t_matrix)
+      : m_row(m_matrix.size()), m_col(m_matrix[0].size()), m_matrix(t_matrix) {}
+
   Matrix(std::size_t m, std::size_t n, const vector<vector<T>> &t_matrix)
       : m_row(m), m_col(n), m_matrix(t_matrix) {}
 
@@ -161,11 +164,11 @@ auto main() -> int {
   SquareMatrix<int> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   auto B = M + M;
   cout << "something\n";
-  for (auto row : B) {
-    for (auto i : row)
-      cout << i << " ";
-    cout << '\n';
-  }
+  // for (auto row : B) {
+  //   for (auto i : row)
+  //     cout << i << " ";
+  //   cout << '\n';
+  // }
 
   return 0;
 }
