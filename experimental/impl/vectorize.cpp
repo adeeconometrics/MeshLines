@@ -7,17 +7,14 @@ using std::vector;
 
 template <typename T> using Matrix = vector<vector<T>>;
 
-template <typename T>
-auto eval(const std::function<Matrix<T>(const Matrix<T> &)> &func,
-          const Matrix<T> &matrix) -> Matrix<T> {
-  return func(matrix);
-}
-
 template <typename T, typename... Args>
 auto eval(const std::function<Matrix<T>(const Matrix<T> &)> &func,
-          const Matrix<T> &matrix, Args... args) -> Matrix<T> {
-  Matrix<T> result = func(matrix);
-  return eval(func, result, args...);
+          const Matrix<T> &matrix, Args &&... args) -> Matrix<T> {
+  if constexpr (sizeof...(Args) == 0) {
+    return func(matrix);
+  } else {
+    return eval(func, func(matrix), std::forward<Args>(args)...);
+  }
 }
 
 // template <typename T, typename U = T>
@@ -59,5 +56,6 @@ auto main() -> int {
     }
     std::cout << std::endl;
   }
+
   return 0;
 }
