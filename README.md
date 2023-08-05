@@ -1,5 +1,9 @@
 ﻿# LinearAlgebra
 
+<p align="center">
+  <img src="img/MeshLinesLogo.png" alt="Image">
+</p>
+
 This repository is a work in progress. It will contain a set of algorithms for solving some problems in Linear Algebra.
 
 Matrix Decomposition:
