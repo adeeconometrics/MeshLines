@@ -45,3 +45,5 @@ Algorithms for checking Matrix Properties
 - [x] Determine Upper Triangular Matrix
 - [x] Determine Lower Triangular Matrix
 - [x] Find Trace of Matrix
+
+sample
