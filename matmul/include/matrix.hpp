@@ -1,6 +1,7 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+#include <algorithm>
 #include <array>
 #include <type_traits>
 #include <vector>
@@ -92,4 +93,18 @@ auto transpose(const Matrix<T, M, N> &M) -> void {
 
   return;
 }
+
+template <typename T, std::size_t M, std::size_t N>
+constexpr auto operator==(const Matrix<T, M, N> &lhs,
+                          const Matrix<T, M, N> &rhs) -> bool {
+  return std::equal(std::cbegin(lhs.data()), std::cend(lhs.data()),
+                    std::cbegin(rhs.data());
+}
+
+template <typename T, std::size_t M, std::size_t N>
+constexpr auto operator!=(const Matrix<T, M, N> &lhs,
+                          const Matrix<T, M, N> &rhs) -> bool {
+  return !(lhs == rhs);
+}
+
 #endif // __MATRIX_H__
