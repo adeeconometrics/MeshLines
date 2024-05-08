@@ -70,4 +70,26 @@ private:
   std::size_t m_row;
   std::size_t m_col;
 };
+
+// implement transform function to Matrix (in-place transform and
+// copy-transform)
+template <typename T, std::size_t M, std::size_t N>
+auto transpose(const Matrix<T, M, N> &M) -> Matrix<T, M, N> {
+  Matrix<T, M, N> TA = A;
+
+  for (std::size_t i = 0; i < M; i++)
+    for (std::size_t j = 0; j < N; j++)
+      TA(j, i) = A(i, j);
+
+  return TA;
+}
+
+template <typename T, std::size_t M, std::size_t N>
+auto transpose(const Matrix<T, M, N> &M) -> void {
+  for (std::size_t i = 0; i < M; i++)
+    for (std::size_t j = 0; j < N; j++)
+      std::swap(A(j, i), A(i, j));
+
+  return;
+}
 #endif // __MATRIX_H__

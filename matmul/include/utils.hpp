@@ -51,6 +51,7 @@ auto rand_vector(std::reference_wrapper<std::mt19937> prng) -> std::vector<T> {
   std::generate_n(std::back_inserter(result), N * M, prng);
   return result;
 }
+
 template <typename T>
 auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   for (auto i : v)
