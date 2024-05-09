@@ -44,6 +44,11 @@ auto rand_array(std::reference_wrapper<std::mt19937> prng)
 }
 
 template <typename T, std::size_t N, std::size_t M>
+auto rand_matrix(std::reference_wrapper<std::mt19937> prng) -> Matrix<T, N, M> {
+  return Matrix<T, N, M>(rand_array<T, N, M>(prng));
+}
+
+template <typename T, std::size_t N, std::size_t M>
 auto rand_vector(std::reference_wrapper<std::mt19937> prng) -> std::vector<T> {
 
   std::vector<T> result;

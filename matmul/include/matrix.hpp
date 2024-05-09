@@ -75,21 +75,21 @@ private:
 // implement transform function to Matrix (in-place transform and
 // copy-transform)
 template <typename T, std::size_t M, std::size_t N>
-auto transpose(const Matrix<T, M, N> &M) -> Matrix<T, M, N> {
-  Matrix<T, M, N> TA = A;
+auto transpose(const Matrix<T, M, N> &t_matrix) -> Matrix<T, M, N> {
+  Matrix<T, M, N> TA = t_matrix;
 
   for (std::size_t i = 0; i < M; i++)
     for (std::size_t j = 0; j < N; j++)
-      TA(j, i) = A(i, j);
+      TA(j, i) = t_matrix(i, j);
 
   return TA;
 }
 
 template <typename T, std::size_t M, std::size_t N>
-auto transpose(const Matrix<T, M, N> &M) -> void {
+auto transpose(const Matrix<T, M, N> &t_matrix) -> void {
   for (std::size_t i = 0; i < M; i++)
     for (std::size_t j = 0; j < N; j++)
-      std::swap(A(j, i), A(i, j));
+      std::swap(t_matrix(j, i), t_matrix(i, j));
 
   return;
 }
@@ -98,7 +98,7 @@ template <typename T, std::size_t M, std::size_t N>
 constexpr auto operator==(const Matrix<T, M, N> &lhs,
                           const Matrix<T, M, N> &rhs) -> bool {
   return std::equal(std::cbegin(lhs.data()), std::cend(lhs.data()),
-                    std::cbegin(rhs.data());
+                    std::cbegin(rhs.data()));
 }
 
 template <typename T, std::size_t M, std::size_t N>
