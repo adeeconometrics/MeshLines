@@ -11,11 +11,11 @@ class Matrix {
 public:
   Matrix() : m_row(Rows), m_col(Cols) {}
 
-  explicit Matrix(const T &value) : m_row(Rows), m_col(Cols) {
-    m_data.fill(value);
+  Matrix(const T &value) : m_row(Rows), m_col(Cols) { m_data.fill(value); }
+  Matrix(const std::array<T, Rows * Cols> &t_data)
+      : m_data(t_data), m_row(Rows), m_col(Cols) {
+    // static_assert()
   }
-  explicit Matrix(const std::array<T, Rows * Cols> &t_data)
-      : m_data(t_data), m_row(Rows), m_col(Cols) {}
 
   auto operator()(std::size_t row, std::size_t col) -> T & {
     return m_data[row * Cols + col];
@@ -39,16 +39,15 @@ private:
 
 #define STACK_FRAME 256 * 256
 template <typename T, std::size_t Rows, std::size_t Cols>
-class Matrix<T, Rows, Cols, std::enable_if_t<(Rows * Cols) >= (STACK_FRAME)>> {
+class Matrix<T, Rows, Cols, std::enable_if_t<Rows * Cols >= STACK_FRAME>> {
 
 public:
   Matrix() : m_row(Rows), m_col(Cols) { m_data.reserve(Rows * Cols); }
-  constexpr explicit Matrix(std::size_t t_rows, std::size_t t_cols) {
+  constexpr Matrix(std::size_t t_rows, std::size_t t_cols) {
     m_data.resize(t_rows * t_cols, 0);
   }
 
-  explicit Matrix(const std::vector<T> &t_data, std::size_t t_rows,
-                  std::size_t t_cols)
+  Matrix(const std::vector<T> &t_data, std::size_t t_rows, std::size_t t_cols)
       : m_data(t_data), Matrix(t_rows, t_cols) {}
 
   operator std::vector<T>() const { return m_data; }

@@ -7,14 +7,15 @@
 #include <functional>
 #include <iostream>
 #include <random>
+#include <string>
 #include <vector>
 
 class Timer {
 public:
-  explicit Timer()
-      : start_time(std::chrono::high_resolution_clock::now()), m_iterations(1) {
-  }
+  explicit Timer() : start_time(std::chrono::high_resolution_clock::now()) {}
   explicit Timer(std::size_t t_iterations) : m_iterations(t_iterations) {}
+  explicit Timer(std::size_t t_iterations, std::string t_name)
+      : m_iterations(t_iterations), m_name(t_name) {}
 
   ~Timer() {
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -22,7 +23,8 @@ public:
                               end_time - start_time)
                               .count();
     auto mean_duration = total_duration / m_iterations;
-    std::cout << "Mean elapsed time: " << mean_duration << " ns" << std::endl;
+    std::cout << m_name << "'s mean elapsed time took: " << mean_duration
+              << " ns" << std::endl;
   }
 
   auto start() -> void {
@@ -31,7 +33,8 @@ public:
 
 private:
   std::chrono::high_resolution_clock::time_point start_time;
-  std::size_t m_iterations{};
+  std::size_t m_iterations{1};
+  std::string m_name{"No Name"};
 };
 
 template <typename T, std::size_t N, std::size_t M>
@@ -41,11 +44,6 @@ auto rand_array(std::reference_wrapper<std::mt19937> prng)
   std::array<T, N * M> result;
   std::generate_n(std::begin(result), N * M, prng);
   return result;
-}
-
-template <typename T, std::size_t N, std::size_t M>
-auto rand_matrix(std::reference_wrapper<std::mt19937> prng) -> Matrix<T, N, M> {
-  return Matrix<T, N, M>(rand_array<T, N, M>(prng));
 }
 
 template <typename T, std::size_t N, std::size_t M>
