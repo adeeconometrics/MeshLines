@@ -23,8 +23,8 @@ public:
                               end_time - start_time)
                               .count();
     auto mean_duration = total_duration / m_iterations;
-    std::cout << m_name << "'s mean elapsed time took: " << mean_duration
-              << " ns" << std::endl;
+    std::cout << "mean elapsed time took: " << mean_duration << " ns for "
+              << m_name << std::endl;
   }
 
   auto start() -> void {

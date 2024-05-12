@@ -6,6 +6,7 @@
 #include "../include/utils.hpp"
 
 #include <algorithm>
+#include <memory>
 #include <type_traits>
 
 /**
@@ -31,7 +32,8 @@ auto iterative(const Matrix<T, M, N> &t_lhs,
   return result;
 }
 
-template <typename T, std::size_t M, std::size_t N>
+template <typename T, std::size_t M, std::size_t N,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 auto loop_reorder(const Matrix<T, M, N> &t_lhs,
                   const Matrix<T, M, N> &t_rhs) -> Matrix<T, M, N> {
   Matrix<T, M, N> result;
@@ -42,6 +44,33 @@ auto loop_reorder(const Matrix<T, M, N> &t_lhs,
       }
     }
   }
+  return result;
+}
+
+template <typename T, std::size_t N, std::size_t M,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto gemm(const Matrix<T, N, M> &t_lhs,
+          const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
+  Matrix<T, N, M> result;
+  const std::size_t block_size = 16;
+  // Loop over the blocks
+  for (std::size_t i = 0; i < N; i += block_size) {
+    for (std::size_t j = 0; j < N; j += block_size) {
+      for (std::size_t k = 0; k < N; k += block_size) {
+        // Multiply the blocks
+        for (std::size_t ii = i; ii < std::min(i + block_size, N); ++ii) {
+          for (std::size_t jj = j; jj < std::min(j + block_size, N); ++jj) {
+            T sum{};
+            for (std::size_t kk = k; kk < std::min(k + block_size, N); ++kk) {
+              sum += t_lhs(ii, kk) * t_rhs(kk, jj);
+            }
+            result(ii, jj) += sum;
+          }
+        }
+      }
+    }
+  }
+
   return result;
 }
 

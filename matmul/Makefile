@@ -4,7 +4,7 @@ BUILD_DIR := build
 CXX := g++
 
 # Compiler flags
-CXXFLAGS := -Wall -Wextra -pedantic -std=c++17
+CXXFLAGS := -O3 -Wall -Wextra -pedantic -std=c++17
 
 # Source files
 SRCS := $(wildcard src/*.cxx)
