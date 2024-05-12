@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <thread>
 #include <type_traits>
 
 /**
@@ -71,6 +72,38 @@ auto gemm(const Matrix<T, N, M> &t_lhs,
     }
   }
 
+  return result;
+}
+
+template <typename T, std::size_t N, std::size_t M,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto threaded_gemm(const Matrix<T, N, M> &t_lhs,
+                   const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
+  Matrix<T, N, M> result;
+  const std::size_t block_size = 16;
+  const std::size_t num_threads = std::thread::hardware_concurrency();
+  std::vector<std::thread> threads;
+  for (std::size_t i = 0; i < num_threads; ++i) {
+    threads.emplace_back([i, num_threads, block_size, &t_lhs, &t_rhs,
+                          &result]() {
+      for (std::size_t ii = i; ii < N; ii += num_threads) {
+        for (std::size_t j = 0; j < N; j += block_size) {
+          for (std::size_t k = 0; k < N; k += block_size) {
+            for (std::size_t jj = j; jj < std::min(j + block_size, N); ++jj) {
+              T sum{};
+              for (std::size_t kk = k; kk < std::min(k + block_size, N); ++kk) {
+                sum += t_lhs(ii, kk) * t_rhs(kk, jj);
+              }
+              result(ii, jj) += sum;
+            }
+          }
+        }
+      }
+    });
+  }
+  for (auto &thread : threads) {
+    thread.join();
+  }
   return result;
 }
 

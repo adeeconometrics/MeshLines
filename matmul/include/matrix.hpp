@@ -48,7 +48,7 @@ public:
   }
 
   Matrix(const std::vector<T> &t_data, std::size_t t_rows, std::size_t t_cols)
-      : m_data(t_data), Matrix(t_rows, t_cols) {}
+      : m_data(t_data), m_row(t_rows), m_col(t_cols) {}
 
   operator std::vector<T>() const { return m_data; }
 

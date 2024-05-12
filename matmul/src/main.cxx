@@ -26,11 +26,13 @@ auto bench(
 auto test_matmul() -> void {
 
   std::mt19937 prng(42);
-  constexpr std::size_t Rows = 255;
-  constexpr std::size_t Cols = 255;
+  constexpr std::size_t Rows = 2048;
+  constexpr std::size_t Cols = 2048;
 
-  Matrix<float, Rows, Cols> lhs_matrix{rand_array<float, Rows, Cols>(prng)};
-  Matrix<float, Rows, Cols> rhs_matrix{rand_array<float, Rows, Cols>(prng)};
+  Matrix<float, Rows, Cols> lhs_matrix{rand_vector<float, Rows, Cols>(prng),
+                                       Rows, Cols};
+  Matrix<float, Rows, Cols> rhs_matrix{rand_vector<float, Rows, Cols>(prng),
+                                       Rows, Cols};
 
   auto iter_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
@@ -47,6 +49,13 @@ auto test_matmul() -> void {
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm<float, Rows, Cols>);
   auto blocked = bench(blocked_func, lhs_matrix, rhs_matrix, "blocked", 2);
+
+  auto threaded_gemm_func = std::function<Matrix<float, Rows, Cols>(
+      const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
+      threaded_gemm<float, Rows, Cols>);
+  auto threaded_gemm =
+      bench(threaded_gemm_func, lhs_matrix, rhs_matrix, "threaded_gemm", 2);
+
   assert(iter_mat == blocked);
 
   // for (std::size_t i = 0; i < Rows; ++i) {
