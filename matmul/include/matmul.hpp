@@ -137,9 +137,21 @@ auto async_gemm(const Matrix<T, N, M> &t_lhs,
 
 #ifdef __ARM_NEON
 #include <arm_neon.h>
-
+/**
+ * @brief Warning: brittle code, this implementation is not generalizable to all
+ * cases. It is only floating-point specific. Future efforts to generalize this
+ * implementation are welcome.
+ *
+ * @tparam T internal types of the Matrix
+ * @tparam N number of rows
+ * @tparam M number of columns
+ * @tparam std::enable_if_t<std::is_floating_point_v<T>>
+ * @param t_lhs Matrix<T, N, M>
+ * @param t_rhs Matrix<T, N, M>
+ * @return Matrix<T, N, M>
+ */
 template <typename T, std::size_t N, std::size_t M,
-          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+          typename = typename std::enable_if_t<std::is_floating_point_v<T>>>
 auto gemm_neon(const Matrix<T, N, M> &t_lhs,
                const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
   Matrix<T, N, M> result;
@@ -169,9 +181,21 @@ auto gemm_neon(const Matrix<T, N, M> &t_lhs,
   }
   return result;
 }
-
+/**
+ * @brief Warning: brittle code, this implementation is not generalizable to all
+ * cases. It is only floating-point specific. Future efforts to generalize this
+ * implementation are welcome.
+ *
+ * @tparam T internal types of the Matrix
+ * @tparam N number of rows
+ * @tparam M number of columns
+ * @tparam std::enable_if_t<std::is_floating_point_v<T>>
+ * @param t_lhs Matrix<T, N, M>
+ * @param t_rhs Matrix<T, N, M>
+ * @return Matrix<T, N, M>
+ */
 template <typename T, std::size_t N, std::size_t M,
-          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+          typename = typename std::enable_if_t<std::is_floating_point_v<T>>>
 auto matmul_neon(const Matrix<T, N, M> &t_lhs,
                  const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
 

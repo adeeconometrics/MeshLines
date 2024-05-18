@@ -56,13 +56,13 @@ auto test_matmul() -> void {
   auto threaded_gemm =
       bench(threaded_gemm_func, lhs_matrix, rhs_matrix, "threaded_gemm");
 
+#ifdef __ARM_NEON
   auto async_gemm_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm_neon<float, Rows, Cols>);
   auto async_gemm =
       bench(async_gemm_func, lhs_matrix, rhs_matrix, "async_gemm", 2);
 
-#ifdef __ARM_NEON
   auto neon_gemm_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm_neon<float, Rows, Cols>);
@@ -70,8 +70,10 @@ auto test_matmul() -> void {
 #endif
   assert(iter_mat == loop_reorder_mat);
   assert(iter_mat == blocked);
+#ifdef __ARM_NEON
   assert(iter_mat == threaded_gemm);
   assert(iter_mat == async_gemm);
+#endif
   std::cout << "All tests passed" << std::endl;
 }
 
