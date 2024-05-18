@@ -62,11 +62,17 @@ auto test_matmul() -> void {
   auto async_gemm =
       bench(async_gemm_func, lhs_matrix, rhs_matrix, "async_gemm", 2);
 
+#ifdef __ARM_NEON
   auto neon_gemm_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm_neon<float, Rows, Cols>);
   auto neon_gemm = bench(neon_gemm_func, lhs_matrix, rhs_matrix, "neon", 2);
+#endif
+  assert(iter_mat == loop_reorder_mat);
   assert(iter_mat == blocked);
+  assert(iter_mat == threaded_gemm);
+  assert(iter_mat == async_gemm);
+  std::cout << "All tests passed" << std::endl;
 }
 
 auto main() -> int {
