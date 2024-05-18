@@ -3,12 +3,14 @@ def gflops(n: int, time: int) -> float:
 
 
 if __name__ == '__main__':
-    n = 2048
+    n = 1024
     bench: dict = {
-        'iterative': 634_936_604,
-        'blocked': 19_087_074_146,
-        'threaded_blocked': 11_113_214_750,
-        'async_blocked': 10_820_800_292,
+        'iterative': 84_804_104,
+        'loop_reorder': 77_021_354,
+        'blocked': 1_201_245_771,
+        'threaded_gemm': 464_923_229,
+        'neon': 478_612_646,
+        'neon_threaded': 646_018_875,
     }
     print(f'GFLOPS for {n}x{n} matrix multiplication')
     for name, time in bench.items():

@@ -19,12 +19,16 @@ public:
 
   ~Timer() {
     auto end_time = std::chrono::high_resolution_clock::now();
-    auto total_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                              end_time - start_time)
-                              .count();
-    auto mean_duration = total_duration / m_iterations;
-    std::cout << "mean elapsed time took: " << mean_duration << " ns for "
-              << m_name << std::endl;
+    const auto total_duration =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(end_time -
+                                                             start_time)
+            .count();
+    const auto mean_duration = total_duration / m_iterations;
+    const float gflops =
+        (2 * 1024 * 1024 * 1024 / mean_duration / 1'000'000'000);
+    std::cout << "mean elapsed time took: " << mean_duration << " or " << gflops
+              << "GFlops"
+              << " ns for " << m_name << std::endl;
   }
 
   auto start() -> void {

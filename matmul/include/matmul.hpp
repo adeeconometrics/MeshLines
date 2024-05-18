@@ -134,4 +134,66 @@ auto async_gemm(const Matrix<T, N, M> &t_lhs,
   return result;
 }
 
+#ifdef __ARM_NEON
+#include <arm_neon.h>
+
+template <typename T, std::size_t N, std::size_t M,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto gemm_neon(const Matrix<T, N, M> &t_lhs,
+               const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
+  Matrix<T, N, M> result;
+  constexpr std::size_t block_size = (16 * 1024) / sizeof(T);
+
+  // use NEON to accelerate the matrix multiplication
+  for (std::size_t i = 0; i < N; i += block_size) {
+    for (std::size_t j = 0; j < N; j += block_size) {
+      for (std::size_t k = 0; k < N; k += block_size) {
+        for (std::size_t ii = i; ii < std::min(i + block_size, N); ++ii) {
+          for (std::size_t jj = j; jj < std::min(j + block_size, N); ++jj) {
+            T sum{};
+            for (std::size_t kk = k; kk < std::min(k + block_size, N);
+                 kk += 4) {
+              float32x4_t lhs_vec = vld1q_f32(&t_lhs(ii, kk));
+              float32x4_t rhs_vec = vld1q_f32(&t_rhs(kk, jj));
+              float32x4_t result_vec = vmulq_f32(lhs_vec, rhs_vec);
+              float32x2_t sum_vec =
+                  vadd_f32(vget_low_f32(result_vec), vget_high_f32(result_vec));
+              sum += vget_lane_f32(sum_vec, 0) + vget_lane_f32(sum_vec, 1);
+            }
+            result(ii, jj) += sum;
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+template <typename T, std::size_t N, std::size_t M,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto matmul_neon(const Matrix<T, N, M> &t_lhs,
+                 const Matrix<T, N, M> &t_rhs) -> Matrix<T, N, M> {
+
+  Matrix<T, N, M> result;
+  for (std::size_t i = 0; i < N; ++i) {
+    for (std::size_t j = 0; j < M; ++j) {
+      float32x4_t sum_vec = vdupq_n_f32(0.0f);
+      std::size_t k = 0;
+      for (; k + 3 < M; k += 4) {
+        float32x4_t lhs_vec = vld1q_f32(&t_lhs(i, k));
+        float32x4_t rhs_vec = vld1q_f32(&t_rhs(k, j));
+        sum_vec = vmlaq_f32(sum_vec, lhs_vec, rhs_vec);
+      }
+      float sum = vaddvq_f32(sum_vec); // Sum the elements of sum_vec
+      for (; k < M; ++k) {             // Handle remaining elements
+        sum += t_lhs(i, k) * t_rhs(k, j);
+      }
+      result(i, j) = sum;
+    }
+  }
+  return result;
+}
+
+#endif
+
 #endif // __MATMUL_H__
