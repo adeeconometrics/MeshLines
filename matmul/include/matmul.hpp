@@ -1,7 +1,6 @@
 #ifndef __MATMUL_H__
 #define __MATMUL_H__
 
-#include "../include/matmul.hpp"
 #include "../include/matrix.hpp"
 
 #include <algorithm>
