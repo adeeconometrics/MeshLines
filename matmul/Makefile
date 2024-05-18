@@ -4,7 +4,7 @@ BUILD_DIR := build
 CXX := g++
 
 # Compiler flags
-CXXFLAGS := -O0 -Wall -Wextra -pedantic -std=c++17 -pthread -mfpu=neon
+CXXFLAGS := -O3 -Wall -Wextra -pedantic -Xclang -std=c++17 -pthread -mfpu=neon -ffast-math
 
 # Source files
 SRCS := $(wildcard src/*.cxx)

@@ -23,12 +23,10 @@ public:
         std::chrono::duration_cast<std::chrono::nanoseconds>(end_time -
                                                              start_time)
             .count();
-    const auto mean_duration = total_duration / m_iterations;
-    const float gflops =
-        (2 * 1024 * 1024 * 1024 / mean_duration / 1'000'000'000);
-    std::cout << "mean elapsed time took: " << mean_duration << " or " << gflops
-              << "GFlops"
-              << " ns for " << m_name << std::endl;
+    const double mean_duration = total_duration / m_iterations;
+    const double gflops = (2147483648 / mean_duration);
+    std::cout << "mean elapsed time took: " << mean_duration << " ns for "
+              << m_name << " or " << gflops << "GFlops" << std::endl;
   }
 
   auto start() -> void {

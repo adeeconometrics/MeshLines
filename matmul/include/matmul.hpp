@@ -3,11 +3,9 @@
 
 #include "../include/matmul.hpp"
 #include "../include/matrix.hpp"
-#include "../include/utils.hpp"
 
 #include <algorithm>
 #include <future>
-#include <memory>
 #include <thread>
 #include <type_traits>
 
@@ -24,6 +22,7 @@ auto iterative(const Matrix<T, M, N> &t_lhs,
   Matrix<T, M, N> result;
 
   for (std::size_t i = 0; i < M; ++i) {
+#pragma clang loop vectorize(enable)
     for (std::size_t j = 0; j < N; ++j) {
       T sum = 0;
       for (std::size_t k = 0; k < N; ++k) {
@@ -43,6 +42,7 @@ auto loop_reorder(const Matrix<T, M, N> &t_lhs,
 
   for (std::size_t i = 0; i < M; ++i) {
     for (std::size_t j = 0; j < N; ++j) {
+#pragma clang loop vectorize(enable)
       for (std::size_t k = 0; k < N; ++k) {
         result(i, k) += t_lhs(i, j) * t_rhs(j, k);
       }
@@ -61,6 +61,7 @@ auto gemm(const Matrix<T, N, M> &t_lhs,
   // Loop over the blocks
   for (std::size_t i = 0; i < N; i += block_size) {
     for (std::size_t j = 0; j < N; j += block_size) {
+#pragma clang loop vectorize(enable)
       for (std::size_t k = 0; k < N; k += block_size) {
         // Multiply the blocks
         for (std::size_t ii = i; ii < std::min(i + block_size, N); ++ii) {

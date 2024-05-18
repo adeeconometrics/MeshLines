@@ -45,7 +45,6 @@ auto test_matmul() -> void {
   auto loop_reorder_mat =
       bench(loop_reorder_func, lhs_matrix, rhs_matrix, "loop_reorder");
 
-  // auto blocked = block_multiply<float, Rows, Cols>(lhs_matrix, rhs_matrix);
   auto blocked_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm<float, Rows, Cols>);
@@ -60,7 +59,8 @@ auto test_matmul() -> void {
   auto async_gemm_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
       gemm_neon<float, Rows, Cols>);
-  auto async_gemm = bench(async_gemm_func, lhs_matrix, rhs_matrix, "neon", 2);
+  auto async_gemm =
+      bench(async_gemm_func, lhs_matrix, rhs_matrix, "async_gemm", 2);
 
   auto neon_gemm_func = std::function<Matrix<float, Rows, Cols>(
       const Matrix<float, Rows, Cols> &, const Matrix<float, Rows, Cols> &)>(
