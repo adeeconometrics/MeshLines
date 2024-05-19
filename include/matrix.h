@@ -18,9 +18,9 @@ template <typename T> using Matrix = std::vector<std::vector<T>>;
  * @param n
  * @return Matrix<T>
  */
-template <typename T> constexpr auto zero_mat(std::size_t n) -> Matrix<T> {
-  static_assert(std::is_arithmetic_v<T>);
-
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+constexpr auto zero_mat(std::size_t n) -> Matrix<T> {
   return Matrix<T>{n, std::vector<T>(n, 0)};
 }
 /**
@@ -31,10 +31,9 @@ template <typename T> constexpr auto zero_mat(std::size_t n) -> Matrix<T> {
  * @param m
  * @return Matrix<T>
  */
-template <typename T>
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 constexpr auto zero_mat(std::size_t n, std::size_t m) -> Matrix<T> {
-  static_assert(std::is_arithmetic_v<T>);
-
   return Matrix<T>(n, std::vector<T>(m, 0));
 }
 
@@ -45,8 +44,9 @@ constexpr auto zero_mat(std::size_t n, std::size_t m) -> Matrix<T> {
  * @param n
  * @return Matrix<T>
  */
-template <typename T> constexpr auto id(std::size_t n) -> Matrix<T> {
-  static_assert(std::is_arithmetic_v<T>);
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+constexpr auto id(std::size_t n) -> Matrix<T> {
 
   Matrix<T> res = zero_mat<T>(n);
 
@@ -67,9 +67,9 @@ template <typename T> constexpr auto id(std::size_t n) -> Matrix<T> {
 //     }
 // }
 
-template <typename T>
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 constexpr auto scalar_mat(std::size_t n, T t_value) -> Matrix<T> {
-  static_assert(std::is_arithmetic_v<T>);
 
   Matrix<T> res = zero_mat<T>(n);
 

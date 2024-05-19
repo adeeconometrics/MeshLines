@@ -84,11 +84,11 @@ constexpr auto prod(std::vector<T> &v) -> T {
   return result;
 }
 
-template <typename T, typename U = T>
+template <typename T, typename U = T,
+          typename = typename std::enable_if_t<
+              std::conjunction_v<std::is_arithmetic<T>, std::is_arithmetic<U>>>>
 constexpr auto dot(const vector<T> &lhs,
                    const vector<U> &rhs) -> vector<common_type_t<T, U>> {
-  static_assert(std::is_arithmetic_v<T> && std::is_arithmetic_v<U>,
-                "template parameters must be of type arithmetic");
   return sum(rhs * lhs);
 }
 
