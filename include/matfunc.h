@@ -37,15 +37,13 @@ using std::vector;
  * @param A
  * @return Matrix<T>
  */
-template <typename T> auto transpose(const Matrix<T> &A) -> Matrix<T> {
-  Matrix<T> TA = A;
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto transpose(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> TA = A;
 
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
-
-  for (std::size_t i = 0; i < rows; i++)
-    for (std::size_t j = 0; j < cols; j++)
-      TA[j][i] = A[i][j];
+  for (std::size_t i = 0; i < Rows; i++)
+    for (std::size_t j = 0; j < Cols; j++)
+      TA(j, i) = A(i, j);
 
   return TA;
 }
@@ -55,13 +53,11 @@ template <typename T> auto transpose(const Matrix<T> &A) -> Matrix<T> {
  * @tparam U arithmetic type
  * @param A Matrix
  */
-template <typename U> auto T(Matrix<U> &A) -> void {
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
-
-  for (std::size_t i = 0; i < rows; i++)
-    for (std::size_t j = i + 1; j < cols; j++)
-      std::swap(A[i][j], A[j][i]);
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto T(Matrix<T, Rows, Cols> &A) -> void {
+  for (std::size_t i = 0; i < Rows; i++)
+    for (std::size_t j = i + 1; j < Cols; j++)
+      std::swap(A(i, j), A(j, i));
 }
 /**
  * @brief Returns a copy of upper triangular matrix
@@ -70,17 +66,15 @@ template <typename U> auto T(Matrix<U> &A) -> void {
  * @param A
  * @return Matrix<T>
  */
-template <typename T> auto triu(const Matrix<T> &A) -> Matrix<T> {
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto triu(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
 
-  Matrix<T> res{rows, vector<T>(cols)};
+  Matrix<T, Rows, Cols> res = A;
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i; j < cols; j++) {
-      if (j < rows && i < cols) {
-        res[i][j] = A[i][j];
-      }
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      if (j < Rows && i < Cols)
+        res(j, i) = 0;
     }
   }
 
@@ -92,14 +86,13 @@ template <typename T> auto triu(const Matrix<T> &A) -> Matrix<T> {
  * @tparam T
  * @param A
  */
-template <typename T> auto mask_triu(Matrix<T> &A) -> void {
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto mask_triu(Matrix<T, Rows, Cols> &A) -> void {
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i + 1; j < cols; j++) {
-      if (j < rows && i < cols) {
-        A[j][i] = 0;
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      if (j < Rows && i < Cols) {
+        A(j, i) = 0;
       }
     }
   }
@@ -111,17 +104,14 @@ template <typename T> auto mask_triu(Matrix<T> &A) -> void {
  * @param A
  * @return Matrix<T>
  */
-template <typename T> auto tril(const Matrix<T> &A) -> Matrix<T> {
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto tril(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
 
-  Matrix<T> res{rows, vector<T>(cols)};
+  Matrix<T, Rows, Cols> res = A;
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i; j < cols; j++) {
-      if (j < rows && i < cols) {
-        res[j][i] = A[j][i];
-      }
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      res(i, j) = 0;
     }
   }
 
@@ -133,13 +123,12 @@ template <typename T> auto tril(const Matrix<T> &A) -> Matrix<T> {
  * @tparam T
  * @param A
  */
-template <typename T> auto mask_tril(Matrix<T> &A) -> void {
-  const std::size_t rows = A.size();
-  const std::size_t cols = A[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto mask_tril(Matrix<T, Rows, Cols> &A) -> void {
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i + 1; j < cols; j++) {
-      A[i][j] = 0;
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      A(i, j) = 0;
     }
   }
 }
@@ -151,13 +140,12 @@ template <typename T> auto mask_tril(Matrix<T> &A) -> void {
  * @param M
  * @return T
  */
-template <typename T> auto trace(const Matrix<T> &M) -> T {
-  assert(M.size() == M[0].size());
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto trace(const Matrix<T, Rows, Cols> &M) -> T {
+  static_assert(Rows == Cols, "Matrix must be square");
   T sum{};
 
-  const std::size_t length = M.size();
-
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < Rows; i++) {
     sum += M[i][i];
   }
   return sum;
@@ -169,12 +157,13 @@ template <typename T> auto trace(const Matrix<T> &M) -> T {
  * @param A
  * @return tuple<Matrix<T>, Matrix<T>>
  */
-template <typename T>
-auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto lu_crout(const Matrix<T, Rows, Cols> &A)
+    -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
 
   const std::size_t _size = A.size();
-  Matrix<T> U(A);
-  Matrix<T> L(_size, vector<T>(_size, 0));
+  Matrix<T, Rows, Cols> U(A);
+  Matrix<T, Rows, Cols> L(_size, vector<T>(_size, 0));
 
   // Initialize L to the identity matrix
   for (std::size_t i = 0; i < L.size(); ++i) {
@@ -203,7 +192,7 @@ auto lu_crout(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
  * @param A
  * @return tuple<Matrix<T>, Matrix<T>>
  */
-template <typename T>
+template <typename T, std::size_t Rows, std::size_t Cols>
 auto lu_gaussian(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   const std::size_t _size = A.size();
   Matrix<T> U(_size, vector<T>(_size, 0));
@@ -234,7 +223,7 @@ auto lu_gaussian(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   return std::make_tuple(L, U);
 }
 
-template <typename T>
+template <typename T, std::size_t Rows, std::size_t Cols>
 auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 
   const std::size_t n = A.size();
