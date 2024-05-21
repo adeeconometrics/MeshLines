@@ -14,10 +14,9 @@ using std::vector;
 
 template <typename T> using Matrix = vector<vector<T>>;
 
-template <typename T>
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 auto operator<<(std::ostream &os, const Matrix<T> &matrix) -> std::ostream & {
-  static_assert(std::is_arithmetic_v<T>,
-                "template parameter must be of type arithmetic");
 
   if (matrix.empty()) {
     os << "[]" << std::endl;

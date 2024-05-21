@@ -9,15 +9,12 @@
 
 namespace lin {
 
-template <typename T>
-constexpr auto is_tril(const Matrix<T> &M) noexcept -> bool {
-  const std::size_t rows = M.size();
-  const std::size_t cols = M[0].size();
-
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i + 1; j < cols; j++) {
-      if (j < rows && i < cols) {
-        if (M[i][j] != 0)
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_tril(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      if (j < Rows && i < Cols) {
+        if (M(i, j) != 0)
           return false;
       }
     }
@@ -25,15 +22,13 @@ constexpr auto is_tril(const Matrix<T> &M) noexcept -> bool {
   return true;
 }
 
-template <typename T>
-constexpr auto is_triu(const Matrix<T> &M) noexcept -> bool {
-  const std::size_t rows = M.size();
-  const std::size_t cols = M[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_triu(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i + 1; j < cols; j++) {
-      if (j < rows && i < cols) {
-        if (M[j][i] != 0)
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      if (j < Rows && i < Cols) {
+        if (M(j, i) != 0)
           return false;
       }
     }
@@ -41,15 +36,13 @@ constexpr auto is_triu(const Matrix<T> &M) noexcept -> bool {
   return true;
 }
 
-template <typename T>
-constexpr auto is_diag(const Matrix<T> &M) noexcept -> bool {
-  const std::size_t rows = M.size();
-  const std::size_t cols = M[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_diag(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
 
-  for (std::size_t i = 0; i < rows; i++) {
-    for (std::size_t j = i + 1; j < cols; j++) {
-      if (j < rows && i < cols) {
-        if (M[j][i] != 0 || M[i][j] != 0)
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = i + 1; j < Cols; j++) {
+      if (j < Rows && i < Cols) {
+        if (M(j, i) != 0 || M(i, j) != 0)
           return false;
       }
     }
@@ -57,17 +50,13 @@ constexpr auto is_diag(const Matrix<T> &M) noexcept -> bool {
   return true;
 }
 
-template <typename T>
-constexpr auto is_square(const Matrix<T> &M) noexcept -> bool {
-  const std::size_t size = M.size();
-  for (std::size_t i = 0; i < size; i++)
-    if (size != M[i].size())
-      return false;
-  return true;
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_square(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
+  return Rows == Cols;
 }
 
-template <typename T>
-constexpr auto is_invertible(const Matrix<T> &M) noexcept -> bool {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_invertible(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
   if (!is_square(M))
     return false;
   const double det = det(M);
@@ -89,45 +78,44 @@ constexpr auto is_invertible(const Matrix<T> &M) noexcept -> bool {
  * @return true
  * @return false
  */
-template <typename T>
-constexpr auto is_echelon(const Matrix<T> &M) noexcept -> bool {
-  if (M.empty())
-    return true;
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_echelon(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
+  // if (M.empty())
+  //   return true;
 
-  const std::size_t rows = M.size();
-  std::size_t pivot_col = 0;
+  // std::size_t pivot_col = 0;
 
-  for (std::size_t row = 0; row < rows; row++) {
-    if (pivot_col >= M[row].size()) {
-      break;
-    }
-    // Find the first non-zero element in the row
-    auto non_zero_pos =
-        std::find_if(M[row].begin() + pivot_col, M[row].end(),
-                     [](const T &element) { return element != T{0}; });
+  // for (std::size_t row = 0; row < Rows; row++) {
+  //   if (pivot_col >= Cols) {
+  //     break;
+  //   }
+  //   // Find the first non-zero element in the row
+  //   auto non_zero_pos =
+  //       std::find_if(M[row].begin() + pivot_col, M[row].end(),
+  //                    [](const T &element) { return element != T{0}; });
 
-    // Check if all elements after the first non-zero element are zero
-    if (non_zero_pos != M[row].cend() &&
-        std::all_of(non_zero_pos + 1, M[row].cend(),
-                    [](const T &element) { return element != T{0}; })) {
+  //   // Check if all elements after the first non-zero element are zero
+  //   if (non_zero_pos != M[row].cend() &&
+  //       std::all_of(non_zero_pos + 1, M[row].cend(),
+  //                   [](const T &element) { return element != T{0}; })) {
 
-      pivot_col = std::distance(M[row].cbegin(), non_zero_pos) + 1;
-    } else {
-      return false;
-    }
-  }
+  //     pivot_col = std::distance(M[row].cbegin(), non_zero_pos) + 1;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   return true;
 }
 
-template <typename T>
-constexpr auto is_sym(const Matrix<T> &M) noexcept -> bool {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_sym(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
   // prove that M != T(M) where M is a rectangular mat
   return M == transpose(M);
 }
 
-template <typename T>
-constexpr auto is_antisym(const Matrix<T> &M) noexcept -> bool {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_antisym(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
   // prove that M != T(M) where M is a rectangular mat
   return transpose(M) == (-M);
 }

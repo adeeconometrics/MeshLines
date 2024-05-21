@@ -146,12 +146,13 @@ auto trace(const Matrix<T, Rows, Cols> &M) -> T {
   T sum{};
 
   for (std::size_t i = 0; i < Rows; i++) {
-    sum += M[i][i];
+    sum += M(i, i);
   }
   return sum;
 }
 /**
- * @brief Crout's algorithm implementation of LU Decomposition
+ * @brief Crout's algorithm implementation of LU Decomposition; see if this can
+ * work with rectangular matrices.
  *
  * @tparam T
  * @param A
@@ -161,22 +162,18 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 auto lu_crout(const Matrix<T, Rows, Cols> &A)
     -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
 
-  const std::size_t _size = A.size();
-  Matrix<T, Rows, Cols> U(A);
-  Matrix<T, Rows, Cols> L(_size, vector<T>(_size, 0));
+  static_assert(Rows == Cols, "Matrix must be square");
 
-  // Initialize L to the identity matrix
-  for (std::size_t i = 0; i < L.size(); ++i) {
-    L[i][i] = 1;
-  }
+  Matrix<T, Rows, Cols> U(A);
+  Matrix<T, Rows, Cols> L = lin::id<T, Rows>();
 
   // Perform LU decomposition
-  for (std::size_t j = 0; j < _size; ++j) {
-    for (std::size_t i = j + 1; i < _size; ++i) {
-      T factor = U[i][j] / U[j][j];
-      L[i][j] = factor;
-      for (std::size_t k = j; k < _size; ++k) {
-        U[i][k] -= factor * U[j][k];
+  for (std::size_t j = 0; j < Rows; ++j) {
+    for (std::size_t i = j + 1; i < Rows; ++i) {
+      T factor = U(i, j) / U(j, j);
+      L(i, j) = factor;
+      for (std::size_t k = j; k < Rows; ++k) {
+        U(i, k) -= factor * U(j, k);
       }
     }
   }
@@ -186,36 +183,40 @@ auto lu_crout(const Matrix<T, Rows, Cols> &A)
 /**
  * @brief LU Decomposition using Gaussian Elimination -- ideal for sparse
  * matrix and more numerically stable than Crout's algorithm.
- * This implementation is also more efficient when the matrix is large.
+ * This implementation is also more efficient when the matrix is large. See if
+ * it can work with rectangular matrices.
  *
  * @tparam T
  * @param A
  * @return tuple<Matrix<T>, Matrix<T>>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
-auto lu_gaussian(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
-  const std::size_t _size = A.size();
-  Matrix<T> U(_size, vector<T>(_size, 0));
-  Matrix<T> L(_size, vector<T>(_size, 0));
+auto lu_gaussian(const Matrix<T, Rows, Cols> &A)
+    -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
 
-  for (std::size_t i = 0; i < _size; i++) {
-    for (std::size_t upper_iter = i; upper_iter < _size; upper_iter++) {
+  static_assert(Rows == Cols, "Matrix must be square");
+
+  Matrix<T, Rows, Cols> U;
+  Matrix<T, Rows, Cols> L;
+
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t upper_iter = i; upper_iter < Rows; upper_iter++) {
       T sum = 0;
       for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
-        sum += L[i][inner_iter] * U[inner_iter][upper_iter];
+        sum += L(i, inner_iter) * U(inner_iter, upper_iter);
       }
-      U[i][upper_iter] = A[i][upper_iter] - sum;
+      U(i, upper_iter) = A(i, upper_iter) - sum;
     }
 
-    for (std::size_t lower_iter = 0; lower_iter < _size; lower_iter++) {
+    for (std::size_t lower_iter = 0; lower_iter < Rows; lower_iter++) {
       if (i == lower_iter) {
-        L[i][i] = 1;
+        L(i, i) = 1;
       } else {
         T sum = 0;
         for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
-          sum += L[lower_iter][inner_iter] * U[inner_iter][i];
+          sum += L(lower_iter, inner_iter) * U(inner_iter, i);
         }
-        L[lower_iter][i] = (A[lower_iter][i] - sum) / U[i][i];
+        L(lower_iter, i) = (A(lower_iter, i) - sum) / U(i, i);
       }
     }
   }
@@ -224,48 +225,51 @@ auto lu_gaussian(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
+auto plu(Matrix<T, Rows, Cols> A)
+    -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>,
+             Matrix<T, Rows, Cols>> {
 
-  const std::size_t n = A.size();
-  Matrix<T> L = lin::zero_mat<T>(n);
-  Matrix<T> U = lin::zero_mat<T>(n);
-  Matrix<T> P = lin::id<T>(n);
+  static_assert(Rows == Cols, "Matrix must be square");
 
-  for (std::size_t k = 0; k < n; k++) {
+  Matrix<T, Rows, Cols> L = lin::zero_mat<T, Rows, Cols>();
+  Matrix<T, Rows, Cols> U = lin::zero_mat<T, Rows, Cols>();
+  Matrix<T, Rows, Cols> P = lin::id<T, Rows>();
+
+  for (std::size_t k = 0; k < Rows; k++) {
     // Find pivot row and swap rows
     std::size_t p = k;
-    for (std::size_t i = k + 1; i < n; i++) {
-      if (std::abs(A[i][k]) > std::abs(A[p][k])) {
+    for (std::size_t i = k + 1; i < Rows; i++) {
+      if (std::abs(A(i, k)) > std::abs(A(p, k))) {
         p = i;
       }
     }
     if (p != k) {
-      std::swap(A[k], A[p]);
-      std::swap(P[k], P[p]);
+      std::swap(A(k), A(p));
+      std::swap(P(k), P(p));
     }
 
     // Perform elimination
-    for (std::size_t i = k + 1; i < n; i++) {
-      T factor = A[i][k] / A[k][k];
-      A[i][k] = factor;
-      for (std::size_t j = k + 1; j < n; j++) {
-        A[i][j] -= A[k][j] * factor;
+    for (std::size_t i = k + 1; i < Rows; i++) {
+      T factor = A(i, k) / A(k, k);
+      A(i, k) = factor;
+      for (std::size_t j = k + 1; j < Rows; j++) {
+        A(i, j) -= A(k, j) * factor;
       }
     }
   }
 
   // Extract L and U from A
-  for (std::size_t i = 0; i < n; i++) {
-    for (std::size_t j = 0; j < n; j++) {
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = 0; j < Rows; j++) {
       if (i > j) {
-        L[i][j] = A[i][j];
-        U[i][j] = 0;
+        L(i, j) = A(i, j);
+        U(i, j) = 0;
       } else if (i == j) {
-        L[i][j] = 1;
-        U[i][j] = A[i][j];
+        L(i, j) = 1;
+        U(i, j) = A(i, j);
       } else {
-        L[i][j] = 0;
-        U[i][j] = A[i][j];
+        L(i, j) = 0;
+        U(i, j) = A(i, j);
       }
     }
   }
@@ -274,40 +278,44 @@ auto plu(Matrix<T> A) -> tuple<Matrix<T>, Matrix<T>, Matrix<T>> {
 }
 // gram-schmidt process
 // conditions: linearly independent cols
-template <typename T>
-auto qr_gm(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
-  Matrix<T> Q(A.size(), vector<T>(A.size(), 0));
-  Matrix<T> R = A;
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto qr_gm(const Matrix<T, Rows, Cols> &A)
+    -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
+
+  static_assert(Rows == Cols, "Matrix must be square");
+
+  Matrix<T, Rows, Cols> Q{};
+  Matrix<T, Rows, Cols> R = A;
 
   // Compute Q and R using the Gram-Schmidt process
-  for (std::size_t j = 0; j < A.size(); ++j) {
+  for (std::size_t j = 0; j < Rows; ++j) {
     // Compute the jth column of Q
-    for (std::size_t i = 0; i < A.size(); ++i) {
-      Q[i][j] = R[i][j];
+    for (std::size_t i = 0; i < Rows; ++i) {
+      Q(i, j) = R(i, j);
     }
     for (std::size_t k = 0; k < j; ++k) {
       T dot_product = 0;
-      for (std::size_t i = 0; i < A.size(); ++i) {
-        dot_product += Q[i][k] * R[i][j];
+      for (std::size_t i = 0; i < Rows; ++i) {
+        dot_product += Q(i, k) * R(i, j);
       }
-      for (std::size_t i = 0; i < A.size(); ++i) {
-        Q[i][j] -= dot_product * Q[i][k];
+      for (std::size_t i = 0; i < Rows; ++i) {
+        Q(i, j) -= dot_product * Q(i, k);
       }
     }
     // Normalize the jth column of Q
     T norm = 0;
-    for (std::size_t i = 0; i < A.size(); ++i) {
-      norm += Q[i][j] * Q[i][j];
+    for (std::size_t i = 0; i < Rows; ++i) {
+      norm += Q(i, j) * Q(i, j);
     }
     norm = std::sqrt(norm);
-    for (std::size_t i = 0; i < A.size(); ++i) {
-      Q[i][j] /= norm;
+    for (std::size_t i = 0; i < Rows; ++i) {
+      Q(i, j) /= norm;
     }
     // Compute the jth row of R
-    for (std::size_t i = j; i < A.size(); ++i) {
-      R[j][i] = 0;
-      for (std::size_t k = 0; k < A.size(); ++k) {
-        R[j][i] += Q[k][j] * A[k][i];
+    for (std::size_t i = j; i < Rows; ++i) {
+      R(j, i) = 0;
+      for (std::size_t k = 0; k < Rows; ++k) {
+        R(j, i) += Q(k, j) * A(k, i);
       }
     }
   }
@@ -316,64 +324,65 @@ auto qr_gm(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
   return std::make_tuple(Q, R);
 }
 
-template <typename T>
-auto qr_householder(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
-  const std::size_t m = A.size();
-  const std::size_t n = A[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto qr_householder(const Matrix<T, Rows, Cols> &A)
+    -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
+
+  static_assert(Rows == Cols, "Matrix is assumed to be square");
 
   // Initialize Q and R
-  Matrix<T> Q(m, std::vector<T>(m));
-  Matrix<T> R(A);
+  Matrix<T, Rows, Cols> Q = lin::zero_mat<T, Rows, Cols>();
+  Matrix<T, Rows, Cols> R(A);
 
   // Compute Householder reflections and apply them to R
-  for (std::size_t k = 0; k < n; k++) {
-    std::vector<T> x(m - k);
-    for (std::size_t i = k; i < m; i++) {
-      x[i - k] = R[i][k];
+  for (std::size_t k = 0; k < Cols; k++) {
+    std::vector<T> x(Rows - k);
+    for (std::size_t i = k; i < Rows; i++) {
+      x[i - k] = R(i, k);
     }
 
     T norm_x =
         std::sqrt(std::inner_product(x.begin(), x.end(), x.begin(), 0.0));
 
-    std::vector<T> v(m - k);
+    std::vector<T> v(Rows - k);
     v[0] = x[0] < 0 ? x[0] - norm_x : x[0] + norm_x;
-    for (std::size_t i = 1; i < m - k; i++) {
+    for (std::size_t i = 1; i < Rows - k; i++) {
       v[i] = x[i];
     }
 
     T norm_v =
         std::sqrt(std::inner_product(v.begin(), v.end(), v.begin(), 0.0));
 
-    Matrix<T> H(m - k, std::vector<T>(m - k));
-    for (std::size_t i = 0; i < m - k; i++) {
-      for (std::size_t j = 0; j < m - k; j++) {
+    Matrix<T, Rows - k, Rows - k> H{};
+    for (std::size_t i = 0; i < Rows - k; i++) {
+      for (std::size_t j = 0; j < Rows - k; j++) {
         if (i == j) {
-          H[i][j] = 1 - 2 * v[i] * v[j] / (norm_v * norm_v);
+          H(i, j) = 1 - 2 * v[i] * v[j] / (norm_v * norm_v);
         } else {
-          H[i][j] = -2 * v[i] * v[j] / (norm_v * norm_v);
+          H(i, j) = -2 * v[i] * v[j] / (norm_v * norm_v);
         }
       }
     }
 
     // Update R with H
-    for (std::size_t i = k; i < m; i++) {
-      for (std::size_t j = k; j < n; j++) {
+    for (std::size_t i = k; i < Rows; i++) {
+      for (std::size_t j = k; j < Cols; j++) {
         T sum = 0;
-        for (std::size_t h = 0; h < m - k; h++) {
-          sum += H[i - k][h] * R[h + k][j];
+        for (std::size_t h = 0; h < Rows - k; h++) {
+          sum += H(i - k, h) * R(h + k, j);
         }
-        R[i][j] = sum;
+        R(i, j) = sum;
       }
     }
 
     // Update Q with H
-    for (std::size_t i = 0; i < m; i++) {
-      for (std::size_t j = k; j < m; j++) {
+    for (std::size_t i = 0; i < Rows; i++) {
+      for (std::size_t j = k; j < Rows; j++) {
         T sum = 0;
-        for (std::size_t h = 0; h < m - k; h++) {
-          sum += Q[i][h + k] * H[h][j - k];
+        for (std::size_t h = 0; h < Rows - k; h++) {
+          sum += Q(i, h + k) * H(h, j - k);
         }
-        Q[i][j] = sum;
+        Q(i, j) = sum;
       }
     }
   }
@@ -382,29 +391,31 @@ auto qr_householder(const Matrix<T> &A) -> tuple<Matrix<T>, Matrix<T>> {
 }
 
 // ldl factorization
-// conditions: square, hermitian positive definite matrix
-// type COMPLEX
-template <typename T>
-auto ldl(const Matrix<T> &A) -> tuple<Matrix<T>, vector<T>> {
-  const std::size_t size = A.size();
+// conditions: square, hermitian positive definite matrix. Check for rectangular
+// matrix implementation. type COMPLEX
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto ldl(const Matrix<T, Rows, Cols> &A)
+    -> tuple<Matrix<T, Rows, Cols>, vector<T>> {
 
-  Matrix<T> L{size, vector<T>(size, 0)};
-  vector<T> D{size, 0};
+  static_assert(Rows == Cols, "Matrix assumed to be square");
 
-  for (std::size_t j = 0; j < size; ++j) {
+  Matrix<T, Rows, Cols> L = lin::zero_mat<T, Rows, Cols>();
+  vector<T> D{Rows, 0};
+
+  for (std::size_t j = 0; j < Rows; ++j) {
     T sum = 0;
     for (std::size_t k = 0; k < j; ++k) {
-      sum += L[j][k] * L[j][k] * D[k];
+      sum += L(j, k) * L(j, k) * D[k];
     }
-    D[j] = A[j][j] - sum;
-    L[j][j] = 1;
+    D[j] = A(j, j) - sum;
+    L(j, j) = 1;
 
-    for (std::size_t i = j + 1; i < size; ++i) {
+    for (std::size_t i = j + 1; i < Rows; ++i) {
       sum = 0;
       for (std::size_t k = 0; k < j; ++k) {
-        sum += L[i][k] * L[j][k] * D[k];
+        sum += L(i, k) * L(j, k) * D[k];
       }
-      L[i][j] = (A[i][j] - sum) / D[j];
+      L(i, j) = (A(i, j) - sum) / D[j];
     }
   }
 
@@ -413,21 +424,24 @@ auto ldl(const Matrix<T> &A) -> tuple<Matrix<T>, vector<T>> {
 
 // cholesky decomposition (L*L^T): returns L
 // conditions: symmetric positive definite matrix
-template <typename T> constexpr auto cholesky(const Matrix<T> &A) -> Matrix<T> {
-  const std::size_t size = A.size();
-  Matrix<T> L(size, vector<T>(size, 0));
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+cholesky(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
+
+  static_assert(Rows == Cols, "Matrix is assumed to be square");
+  Matrix<T, Rows, Cols> L = lin::zero_mat<T, Rows, Cols>();
 
   // perform cholesky decomposition
-  for (std::size_t i = 0; i < size; i++) {
+  for (std::size_t i = 0; i < Rows; i++) {
     for (std::size_t j = 0; j <= i; j++) {
       T sum = 0;
       for (std::size_t k = 0; k < j; k++) {
-        sum += L[i][k] * L[j][k];
+        sum += L(i, k) * L(j, k);
       }
       if (i == j) {
-        L[i][i] = std::sqrt(A[i][i] - sum);
+        L(i, i) = std::sqrt(A(i, i) - sum);
       } else {
-        L[i][j] = (A[i][j] - sum) / L[j][j];
+        L(i, j) = (A(i, j) - sum) / L(j, j);
       }
     }
   }
@@ -443,20 +457,24 @@ template <typename T> constexpr auto cholesky(const Matrix<T> &A) -> Matrix<T> {
  * @param LUMethod
  * @return double
  */
-template <typename T>
+template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto det(
-    const Matrix<T> &M,
-    std::function<tuple<Matrix<T>, Matrix<T>>(const Matrix<T> &)> LUMethod =
-        [](const Matrix<T> &M) { return lu_gaussian(M); }) -> double {
-  assert(M.size() == M[0].size());
+    const Matrix<T, Rows, Cols> &M,
+    std::function<tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>>(
+        const Matrix<T, Rows, Cols> &)>
+        LUMethod = [](const Matrix<T, Rows, Cols> &M) {
+          return lu_gaussian(M);
+        }) -> double {
+
+  static_assert(Rows == Cols, "Matrix must be square");
 
   double p0{1}, p1{1};
 
   auto LU = LUMethod(M);
 
-  for (std::size_t i = 0; i < M.size(); i++) {
-    p0 *= std::get<0>(LU)[i][i];
-    p1 *= std::get<1>(LU)[i][i];
+  for (std::size_t i = 0; i < Rows; i++) {
+    p0 *= std::get<0>(LU)(i, i);
+    p1 *= std::get<1>(LU)(i, i);
   }
 
   return p1 * p0;
@@ -468,8 +486,9 @@ constexpr auto det(
  * @param M
  * @return double
  */
-template <typename T> constexpr auto det_2(const Matrix<T> &M) -> double {
-  return M[0][0] * M[1][1] - M[0][1] * M[1][0];
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto det_2(const Matrix<T, Rows, Cols> &M) -> double {
+  return M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0);
 }
 /**
  * @brief Returns a reduced row echelon form of matrix M.
@@ -481,48 +500,49 @@ template <typename T> constexpr auto det_2(const Matrix<T> &M) -> double {
  * @param M
  * @return Matrix<T>
  */
-template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
-  Matrix<T> result = M;
+// template <typename T, std::size_t Rows, std::size_t Cols>
+// constexpr auto rref(const Matrix<T, Rows, Cols> &M) -> Matrix<T, Rows, Cols>
+// {
+//   Matrix<T, Rows, Cols> result = M;
 
-  std::size_t lead = 0;
-  const std::size_t rows = M.size();
+//   std::size_t lead = 0;
 
-  for (std::size_t row = 0; row < rows; ++row) {
-    if (lead >= M[row].size())
-      break;
+//   for (std::size_t row = 0; row < Rows; ++row) {
+//     if (lead >= M[row].size())
+//       break;
 
-    auto it = std::find_if(
-        std::begin(result) + row, std::end(result), [lead](const auto &row) {
-          return std::abs(row[lead]) >= std::numeric_limits<T>::epsilon();
-        });
+//     auto it = std::find_if(
+//         std::begin(result) + row, std::end(result), [lead](const auto &row) {
+//           return std::abs(row[lead]) >= std::numeric_limits<T>::epsilon();
+//         });
 
-    if (it == result.end()) {
-      ++lead;
-      continue;
-    }
+//     if (it == result.end()) {
+//       ++lead;
+//       continue;
+//     }
 
-    std::swap(result[row], *it);
-    T lv = result[row][lead];
+//     std::swap(result[row], *it);
+//     T lv = result[row][lead];
 
-    std::transform(std::cbegin(result[row]), std::cend(result[row]),
-                   std::begin(result[row]),
-                   [lv](const auto &val) { return val / lv; });
+//     std::transform(std::cbegin(result[row]), std::cend(result[row]),
+//                    std::begin(result[row]),
+//                    [lv](const auto &val) { return val / lv; });
 
-    for (std::size_t i = 0; i < rows; ++i) {
-      if (i != row) {
-        T lv = result[i][lead];
-        std::transform(
-            result[row].begin(), result[row].end(), result[i].begin(),
-            result[i].begin(),
-            [lv](const auto &a, const auto &b) { return b - lv * a; });
-      }
-    }
+//     for (std::size_t i = 0; i < Rows; ++i) {
+//       if (i != row) {
+//         T lv = result[i][lead];
+//         std::transform(
+//             result[row].begin(), result[row].end(), result[i].begin(),
+//             result[i].begin(),
+//             [lv](const auto &a, const auto &b) { return b - lv * a; });
+//       }
+//     }
 
-    ++lead;
-  }
+//     ++lead;
+//   }
 
-  return result;
-}
+//   return result;
+// }
 /**
  * @brief Returns a Minor submatrix of M.
  * Note that Matrixindexing is still zero-based.
@@ -533,26 +553,24 @@ template <typename T> constexpr auto rref(const Matrix<T> &M) -> Matrix<T> {
  * @param col
  * @return Matrix<T>
  */
-template <typename T>
-constexpr auto minor_submatrix(const Matrix<T> &M, std::size_t row = 0,
-                               std::size_t col = 0) -> Matrix<T> {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+minor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
+                std::size_t col = 0) -> Matrix<T, Rows - 1, Cols - 1> {
 
-  const std::size_t m_row = M.size();
-  const std::size_t m_col = M[0].size();
-
-  Matrix<T> minor(m_row - 1, vector<T>(m_col - 1));
+  Matrix<T, Rows - 1, Cols - 1> minor{};
 
   std::size_t t_row = 0;
-  for (std::size_t i = 0; i < m_row; ++i) {
+  for (std::size_t i = 0; i < Rows; ++i) {
     if (i == row)
       continue;
 
     std::size_t t_col = 0;
-    for (std::size_t j = 0; j < m_col; ++j) {
+    for (std::size_t j = 0; j < Cols; ++j) {
       if (j == col)
         continue;
 
-      minor[t_row][t_col] = M[i][j];
+      minor(t_row, t_col) = M(i, j);
       t_col += 1;
     }
 
@@ -570,26 +588,25 @@ constexpr auto minor_submatrix(const Matrix<T> &M, std::size_t row = 0,
  * @param col
  * @return double
  */
-template <typename T>
-constexpr auto minor(const Matrix<T> &M, std::size_t row = 0,
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto minor(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
                      std::size_t col = 0) -> double {
 
   return det(minor_submatrix(M, row, col));
 }
 
-template <typename T>
-constexpr auto minor_matrix(const Matrix<T> &M) -> Matrix<double> {
-  const std::size_t m_row = M.size();
-  const std::size_t m_col = M[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+minor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
 
-  assert(m_row == m_col);
+  static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<double> minor_mat(m_row, vector<T>(m_col));
+  Matrix<double, Rows, Cols> minor_mat(Rows, vector<T>(Cols));
 
-  for (std::size_t i = 0; i < m_row; ++i) {
-    for (std::size_t j = 0; j < m_col; ++j) {
+  for (std::size_t i = 0; i < Rows; ++i) {
+    for (std::size_t j = 0; j < Cols; ++j) {
       const auto minor_det = minor(M, i, j);
-      minor_mat[i][j] = minor_det;
+      minor_mat(i, j) = minor_det;
     }
   }
 
@@ -604,25 +621,24 @@ constexpr auto minor_matrix(const Matrix<T> &M) -> Matrix<double> {
  * @param col
  * @return Matrix<T>
  */
-template <typename T>
-constexpr auto cofactor_submatrix(const Matrix<T> &M, std::size_t row = 0,
-                                  std::size_t col = 0) -> Matrix<T> {
-  const std::size_t m_row = M.size();
-  const std::size_t m_col = M[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+cofactor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
+                   std::size_t col = 0) -> Matrix<T, Rows, Cols> {
 
-  Matrix<T> cofactor(m_row - 1, vector<T>(m_col - 1));
+  Matrix<T, Rows - 1, Cols - 1> cofactor{};
 
   std::size_t t_row = 0;
-  for (std::size_t i = 0; i < m_row; ++i) {
+  for (std::size_t i = 0; i < Rows; ++i) {
     if (i == row)
       continue;
 
     std::size_t t_col = 0;
-    for (std::size_t j = 0; j < m_col; ++j) {
+    for (std::size_t j = 0; j < Cols; ++j) {
       if (j == col)
         continue;
 
-      cofactor[t_row][t_col] = ((i + j) % 2 == 0) ? M[i][j] : -M[i][j];
+      cofactor(t_row, t_col) = ((i + j) % 2 == 0) ? M(i, j) : -M(i, j);
       t_col += 1;
     }
 
@@ -632,19 +648,18 @@ constexpr auto cofactor_submatrix(const Matrix<T> &M, std::size_t row = 0,
   return cofactor;
 }
 
-template <typename T>
-constexpr auto cofactor_matrix(const Matrix<T> &M) -> Matrix<double> {
-  const std::size_t m_row = M.size();
-  const std::size_t m_col = M[0].size();
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+cofactor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
 
-  assert(m_row == m_col);
+  static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<double> cofactor(m_row, vector<double>(m_col));
+  Matrix<double, Rows, Cols> cofactor{};
 
-  for (std::size_t i = 0; i < m_row; ++i) {
-    for (std::size_t j = 0; j < m_col; ++j) {
+  for (std::size_t i = 0; i < Rows; ++i) {
+    for (std::size_t j = 0; j < Cols; ++j) {
       const auto minor_det = minor(M, i, j);
-      cofactor[i][j] = ((i + j) % 2 == 0) ? minor_det : -minor_det;
+      cofactor(i, j) = ((i + j) % 2 == 0) ? minor_det : -minor_det;
     }
   }
 
@@ -657,7 +672,9 @@ constexpr auto cofactor_matrix(const Matrix<T> &M) -> Matrix<double> {
  * @param M
  * @return Matrix<double>
  */
-template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<double> {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+adj(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
   return transpose(cofactor_matrix(M));
 }
 
@@ -671,7 +688,8 @@ template <typename T> constexpr auto adj(const Matrix<T> &M) -> Matrix<double> {
 // colspace
 
 // rank
-template <typename T> constexpr auto rank(const Matrix<T> &M) -> int {}
+// template <typename T, std::size_t Rows, std::size_t Cols>
+// constexpr auto rank(const Matrix<T, Rows, Cols> &M) -> int {}
 
 // span
 // basis

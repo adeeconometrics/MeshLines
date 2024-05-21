@@ -14,14 +14,32 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Set compiler flags for debug and release versions
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -Wextra -pedantic")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
+    set(CMAKE_CXX_COMPILER "/usr/local/opt/llvm/bin/clang++")
+
+    # Set compiler flags for macOS
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic -Xclang")
+    set(CMAKE_CXX_FLAGS_RELEASE " -O3 -Wall -Wextra -pedantic -Xclang")
+else()
+    # Set compiler flags for other systems
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -Wextra -pedantic -ffast-math -march=native -ftree-vectorize")
+endif()
 
 # Add source and include directories
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB_RECURSE INC_FILES include/*.hpp)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+
+
+foreach(file ${INC_FILES})
+    list(APPEND SOURCE_FILES
+        ${PROJECT_INCLUDE_DIR}/${file}
+    )
+endforeach()
 
 # Fetch GTest library
 set(CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/googletest)
@@ -48,7 +66,7 @@ include(GoogleTest)
 gtest_discover_tests(unittest)
 
 # Specify the packaging information
-set(CPACK_PACKAGE_NAME "my_project")
+set(CPACK_PACKAGE_NAME "meshlines")
 set(CPACK_PACKAGE_VERSION "1.0.0")
 set(CPACK_GENERATOR "ZIP")
 include(CPack)

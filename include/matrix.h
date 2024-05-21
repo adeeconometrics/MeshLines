@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <initializer_list>
+#include <tuple>
 #include <type_traits>
 #include <vector>
 
@@ -13,17 +14,17 @@ namespace lin {
 
 template <typename T, std::size_t Rows, std::size_t Cols> class Matrix {
 public:
+  using value_type = T;
   using iterator = typename std::vector<T>::iterator;
   using const_iterator = typename std::vector<T>::const_iterator;
 
 public:
   Matrix() { m_data.reserve(Rows * Cols); }
 
-  explicit Matrix(const std::vector<T> &t_vec, std::size_t t_rows,
-                  std::size_t t_cols)
+  Matrix(const std::vector<T> &t_vec, std::size_t t_rows, std::size_t t_cols)
       : m_data(t_vec) {
-    static_assert(t_vec.size() == t_rows * t_cols, "Size mismatch");
-    static_assert(t_vec.size() == Rows * Cols, "Size mismatch");
+    assert(t_vec.size() == t_rows * t_cols); // Size mismatch
+    assert(t_vec.size() == Rows * Cols);     // Size mismatch
   }
 
   Matrix(std::initializer_list<std::initializer_list<T>> t_list) {
@@ -37,12 +38,12 @@ public:
         throw std::invalid_argument("Invalid row size in initializer list");
       }
 
-      std::copy(row_list.cbegin(), row_list.cend(), data_iter);
+      std::copy(row_list.begin(), row_list.end(), data_iter);
       data_iter += Cols;
     }
   }
 
-  constexpr auto operator()(std::size_t i, std::size_t j) -> T {
+  constexpr auto operator()(std::size_t i, std::size_t j) -> T & {
     return m_data[i * Cols + j];
   }
 
@@ -58,6 +59,17 @@ public:
   constexpr auto cend() const noexcept -> const_iterator {
     return m_data.cend();
   }
+
+  auto rows() const noexcept -> std::size_t { return Rows; }
+  auto cols() const noexcept -> std::size_t { return Cols; }
+  auto dims() const noexcept -> std::tuple<std::size_t, std::size_t> {
+    return {Rows, Cols};
+  }
+
+  auto empty() const noexcept -> bool { return m_data.empty(); }
+
+  // auto push_back(T t_value) -> void { m_data.push_back(t_value); }
+  // auto emplace_back(T t_value) -> void { m_data.emplace_back(t_value); }
 
 private:
   std::vector<T> m_data;
@@ -101,7 +113,7 @@ constexpr auto scalar_id(T t_value) -> Matrix<T, Rows, Cols> {
 
   Matrix<T, Rows, Cols> res = zero_mat<T, Rows, Cols>();
 
-  for (std::size_t i = 0; i < N; i++) {
+  for (std::size_t i = 0; i < Rows; i++) {
     res(i, i) = t_value;
   }
   return res;
@@ -130,10 +142,12 @@ template <typename T, std::size_t Rows, std::size_t Cols,
 constexpr auto
 operator-(const Matrix<T, Rows, Cols> &M) -> Matrix<T, Rows, Cols> {
   Matrix<T, Rows, Cols> result;
-  result.reserve(M.size());
 
-  std::transform(std::cbegin(M), std::cend(M), std::back_inserter(result),
-                 [](const auto element) { return -element; });
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = 0; j < Cols; j++) {
+      result(i, j) = -M(i, j);
+    }
+  }
 
   return result;
 }

@@ -4,7 +4,8 @@
 /**
  * @file matops.h
  * @author ddamiana
- * @brief Contains operator overload for Matrix, Vector, and Scalar types
+ * @brief Contains operator overload for Matrix, Vector, and Scalar types. Note:
+ * These methods will soon be deprecated in favor of using Expression Templates.
  * @version 0.1
  * @date 2023-05-27
  *
@@ -34,203 +35,203 @@ using std::common_type_t;
 using std::transform;
 using std::vector;
 
-template <typename T, typename U = T>
-constexpr auto operator+(const Matrix<T> &lhs, const Matrix<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-  Matrix<common_type_t<T, U>> result(lhs.size(), std::vector<T>(lhs[0].size()));
-
-  assert(lhs.size() == rhs.size());
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs,
+                         const Matrix<U, Rows, Cols> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+  Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const vector<T> &a, const vector<U> &b) { return a + b; });
+                 [](const T &a, const U &b) { return a + b; });
 
   return result;
 }
 
-template <typename T, typename U = T>
-constexpr auto operator-(const Matrix<T> &lhs, const Matrix<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-  Matrix<common_type_t<T, U>> result(lhs.size(), std::vector<T>(lhs[0].size()));
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator-(const Matrix<T, Rows, Cols> &lhs,
+                         const Matrix<U, Rows, Cols> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+  Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const vector<T> &a, const vector<U> &b) { return a - b; });
+                 [](const T &a, const U &b) { return a - b; });
 
   return result;
 }
 
-template <typename T, typename U = T>
-constexpr auto operator*(const Matrix<T> &lhs, const Matrix<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-  Matrix<common_type_t<T, U>> result(lhs.size(), std::vector<T>(lhs[0].size()));
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator*(const Matrix<T, Rows, Cols> &lhs,
+                         const Matrix<U, Rows, Cols> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+  Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const vector<T> &a, const vector<U> &b) { return a * b; });
+                 [](const T &a, const U &b) { return a * b; });
 
   return result;
 }
 
-template <typename T, typename U = T>
-constexpr auto operator/(const Matrix<T> &lhs, const Matrix<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-  Matrix<common_type_t<T, U>> result(lhs.size(), std::vector<T>(lhs[0].size()));
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator/(const Matrix<T, Rows, Cols> &lhs,
+                         const Matrix<U, Rows, Cols> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+  Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
   std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const vector<T> &a, const vector<U> &b) { return a / b; });
+                 [](const T &a, const U &b) { return a / b; });
 
   return result;
 }
 
-template <typename T>
-constexpr auto operator+=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+operator+=(Matrix<T, Rows, Cols> &lhs,
+           const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
+  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+                 [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator-=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+operator-=(Matrix<T, Rows, Cols> &lhs,
+           const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
+  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+                 [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator*=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+operator*=(Matrix<T, Rows, Cols> &lhs,
+           const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
+  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+                 [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator/=(Matrix<T> &lhs, const Matrix<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto
+operator/=(Matrix<T, Rows, Cols> &lhs,
+           const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
+  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
+                 [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
   return lhs;
 }
 
-template <typename T, typename U = T>
-constexpr auto operator+(const Matrix<T> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
+// template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+// constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs, const vector<U>
+// &rhs)
+//     -> Matrix<common_type_t<T, U>, Rows, Cols> {
 
-  assert(lhs[0].size() == rhs.size());
-  assert(lhs.size() > 0 && rhs.size() > 0);
+//   assert(Cols == rhs.size());
+
+//   using result_type = common_type_t<T, U>;
+
+//   Matrix<result_type, Rows, Cols> result{};
+
+//   for (std::size_t i{}; i < Rows; i++) {
+//     for (std::size_t j{}; j < Cols; j++) {
+//       result(i, j) = lhs(i, j) + rhs[j];
+//     }
+//   }
+
+//   return result;
+// }
+
+// template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+// constexpr auto operator-(const Matrix<T, Rows, Cols> &lhs, const vector<U>
+// &rhs)
+//     -> Matrix<common_type_t<T, U>, Rows, Cols> {
+
+//   assert(Cols == rhs.size());
+
+//   using result_type = common_type_t<T, U>;
+
+//   Matrix<result_type, Rows, Cols> result{};
+
+//   for (std::size_t i{}; i < Rows; i++) {
+//     for (std::size_t j{}; j < Cols; j++) {
+//       result(i, j) = lhs(i, j) - rhs[j];
+//     }
+//   }
+
+//   return result;
+// }
+
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator*(const Matrix<T, Rows, Cols> &lhs, const vector<U> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+
+  assert(Cols == rhs.size());
 
   using result_type = common_type_t<T, U>;
 
-  Matrix<result_type> result{};
+  Matrix<result_type, Rows, Cols> result{};
 
-  transform(lhs.cbegin(), lhs.cend(), result.begin(),
-            [&](const vector<T> &row) -> vector<result_type> {
-              assert(row.size() == rhs.size());
-              vector<result_type> row_result(row.size());
-              transform(row.cbegin(), row.cend(), row_result.begin(),
-                        std::plus<result_type>());
-              return row_result;
-            });
-
-  return result;
-}
-
-template <typename T, typename U = T>
-constexpr auto operator-(const Matrix<T> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-
-  assert(lhs[0].size() == rhs.size());
-  assert(lhs.size() > 0 && rhs.size() > 0);
-
-  using result_type = common_type_t<T, U>;
-
-  Matrix<result_type> result{};
-
-  transform(lhs.cbegin(), lhs.cend(), result.begin(),
-            [&](const vector<T> &row) -> vector<result_type> {
-              assert(row.size() == rhs.size());
-              vector<result_type> row_result(row.size());
-              transform(row.cbegin(), row.cend(), row_result.begin(),
-                        std::minus<result_type>());
-              return row_result;
-            });
-
-  return result;
-}
-
-template <typename T, typename U = T>
-constexpr auto operator*(const Matrix<T> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
-
-  assert(lhs[0].size() == rhs.size());
-  assert(lhs.size() > 0 && rhs.size() > 0);
-
-  using result_type = common_type_t<T, U>;
-
-  Matrix<result_type> result{};
-
-  transform(lhs.cbegin(), lhs.cend(), result.begin(),
-            [&](const vector<T> &row) -> vector<result_type> {
-              assert(row.size() == rhs.size());
-              vector<result_type> row_result(row.size());
-              transform(row.cbegin(), row.cend(), row_result.begin(),
-                        std::multiplies<result_type>());
-              return row_result;
-            });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = lhs(i, j) * rhs[j];
+    }
+  }
 
   return result;
 }
 // MAKE TYPES FUSE WITH FLOATING POINT
-template <typename T, typename U = T>
-constexpr auto operator/(const Matrix<T> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>> {
+template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator/(const Matrix<T, Rows, Cols> &lhs, const vector<U> &rhs)
+    -> Matrix<common_type_t<T, U>, Rows, Cols> {
 
-  assert(lhs[0].size() == rhs.size());
-  assert(lhs.size() > 0 && rhs.size() > 0);
+  assert(Cols == rhs.size());
 
   // using result_type = common_type_t<T, U, double>;
   using result_type = common_type_t<T, U>;
 
-  Matrix<result_type> result{};
+  Matrix<result_type, Rows, Cols> result{};
 
-  transform(lhs.cbegin(), lhs.cend(), result.begin(),
-            [&](const vector<T> &row) -> vector<result_type> {
-              assert(row.size() == rhs.size());
-              vector<result_type> row_result(row.size());
-              transform(row.cbegin(), row.cend(), row_result.begin(),
-                        std::divides<result_type>());
-              return row_result;
-            });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = lhs(i, j) / rhs[j];
+    }
+  }
 
   return result;
 }
 
-template <typename T>
-constexpr auto operator+=(Matrix<T> &lhs, const vector<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator+=(Matrix<T, Rows, Cols> &lhs,
+                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
             [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator-=(Matrix<T> &lhs, const vector<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator-=(Matrix<T, Rows, Cols> &lhs,
+                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
             [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator*=(Matrix<T> &lhs, const vector<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator*=(Matrix<T, Rows, Cols> &lhs,
+                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
             [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
   return lhs;
 }
 
-template <typename T>
-constexpr auto operator/=(Matrix<T> &lhs, const vector<T> &rhs) -> Matrix<T> & {
-  transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), lhs.begin(),
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator/=(Matrix<T, Rows, Cols> &lhs,
+                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
+  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
             [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
   return lhs;
 }
 
-// template <typename T>
-// constexpr auto operator+(const Matrix<T> &lhs, int rhs)
+// template <typename T, std::size_t Rows, std::size_t Cols>
+// constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs, int rhs)
 //     -> Matrix<common_type_t<T, int>> {
 
 //   // static_assert(std::is_arithmetic_v<U>);
@@ -242,13 +243,15 @@ constexpr auto operator/=(Matrix<T> &lhs, const vector<T> &rhs) -> Matrix<T> & {
 //   return res;
 // }
 
-template <typename T>
-constexpr auto operator==(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator==(const Matrix<T, Rows, Cols> &lhs,
+                          const Matrix<T, Rows, Cols> &rhs) -> bool {
   return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
 }
 
-template <typename T>
-constexpr auto operator!=(const Matrix<T> &lhs, const Matrix<T> &rhs) -> bool {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator!=(const Matrix<T, Rows, Cols> &lhs,
+                          const Matrix<T, Rows, Cols> &rhs) -> bool {
   return !(lhs == rhs);
 }
 
