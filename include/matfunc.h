@@ -48,13 +48,14 @@ auto transpose(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
   return TA;
 }
 /**
- * @brief In-place transpose
+ * @brief
+ *
  *
  * @tparam U arithmetic type
  * @param A Matrix
  */
-template <typename T, std::size_t Rows, std::size_t Cols>
-auto T(Matrix<T, Rows, Cols> &A) -> void {
+template <typename Type, std::size_t Rows, std::size_t Cols>
+auto T(Matrix<Type, Rows, Cols> &A) -> void {
   for (std::size_t i = 0; i < Rows; i++)
     for (std::size_t j = i + 1; j < Cols; j++)
       std::swap(A(i, j), A(j, i));
@@ -353,7 +354,8 @@ auto qr_householder(const Matrix<T, Rows, Cols> &A)
     T norm_v =
         std::sqrt(std::inner_product(v.begin(), v.end(), v.begin(), 0.0));
 
-    Matrix<T, Rows - k, Rows - k> H{};
+    // std::size_t RowSize = Rows - k;
+    Matrix<T, Rows, Rows> H{};
     for (std::size_t i = 0; i < Rows - k; i++) {
       for (std::size_t j = 0; j < Rows - k; j++) {
         if (i == j) {
@@ -425,8 +427,8 @@ auto ldl(const Matrix<T, Rows, Cols> &A)
 // cholesky decomposition (L*L^T): returns L
 // conditions: symmetric positive definite matrix
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-cholesky(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
+constexpr auto cholesky(const Matrix<T, Rows, Cols> &A)
+    -> Matrix<T, Rows, Cols> {
 
   static_assert(Rows == Cols, "Matrix is assumed to be square");
   Matrix<T, Rows, Cols> L = lin::zero_mat<T, Rows, Cols>();
@@ -554,9 +556,9 @@ constexpr auto det_2(const Matrix<T, Rows, Cols> &M) -> double {
  * @return Matrix<T>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-minor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
-                std::size_t col = 0) -> Matrix<T, Rows - 1, Cols - 1> {
+constexpr auto minor_submatrix(const Matrix<T, Rows, Cols> &M,
+                               std::size_t row = 0, std::size_t col = 0)
+    -> Matrix<T, Rows - 1, Cols - 1> {
 
   Matrix<T, Rows - 1, Cols - 1> minor{};
 
@@ -596,8 +598,8 @@ constexpr auto minor(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-minor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
+constexpr auto minor_matrix(const Matrix<T, Rows, Cols> &M)
+    -> Matrix<double, Rows, Cols> {
 
   static_assert(Rows == Cols, "Matrix must be square");
 
@@ -622,9 +624,9 @@ minor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
  * @return Matrix<T>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-cofactor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
-                   std::size_t col = 0) -> Matrix<T, Rows, Cols> {
+constexpr auto cofactor_submatrix(const Matrix<T, Rows, Cols> &M,
+                                  std::size_t row = 0, std::size_t col = 0)
+    -> Matrix<T, Rows, Cols> {
 
   Matrix<T, Rows - 1, Cols - 1> cofactor{};
 
@@ -649,8 +651,8 @@ cofactor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-cofactor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
+constexpr auto cofactor_matrix(const Matrix<T, Rows, Cols> &M)
+    -> Matrix<double, Rows, Cols> {
 
   static_assert(Rows == Cols, "Matrix must be square");
 
@@ -673,8 +675,8 @@ cofactor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
  * @return Matrix<double>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto
-adj(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
+constexpr auto adj(const Matrix<T, Rows, Cols> &M)
+    -> Matrix<double, Rows, Cols> {
   return transpose(cofactor_matrix(M));
 }
 
