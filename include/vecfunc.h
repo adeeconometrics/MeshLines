@@ -15,6 +15,7 @@
 #include "../include/vecops.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <type_traits>
 
@@ -64,50 +65,74 @@ constexpr auto lp_norm(const vector<T> &v, float p) -> float {
   return std::pow(result, 1 / p);
 };
 
-template <typename T,
-          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
-constexpr auto sum(std::vector<T> &v) -> T {
+template <typename T> constexpr auto sum(const std::vector<T> &v) -> T {
 
   T result{};
-  std::for_each(v.cbegin(), v.cend(),
-                [&result](const auto i) -> void { result += i; });
+  for (const auto &i : v) {
+    result += i;
+  }
   return result;
 }
 
 template <typename T,
           typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
-constexpr auto prod(std::vector<T> &v) -> T {
+constexpr auto prod(const std::vector<T> &v) -> T {
 
-  T result{};
-  std::for_each(v.cbegin(), v.cend(),
-                [&result](const auto i) -> void { result *= i; });
+  T result{1};
+  for (const auto &i : v) {
+    result *= i;
+  }
   return result;
 }
 
-template <typename T, typename U = T,
-          typename = typename std::enable_if_t<
-              std::conjunction_v<std::is_arithmetic<T>, std::is_arithmetic<U>>>>
-constexpr auto dot(const vector<T> &lhs,
-                   const vector<U> &rhs) -> vector<common_type_t<T, U>> {
+template <typename T>
+constexpr auto dot(const vector<T> &lhs, const vector<T> &rhs) -> T {
   return sum(rhs * lhs);
 }
-
-template <typename T, typename U = T>
-constexpr auto get_angle(const vector<T> &lhs,
-                         const vector<U> &rhs) -> common_type_t<T, U> {
+/**
+ * @brief Get the angle between two vectors. Both vectors must be of the same
+ * size.
+ *
+ * @tparam T
+ * @param lhs
+ * @param rhs
+ * @return T
+ */
+template <typename T>
+constexpr auto get_angle(const vector<T> &lhs, const vector<T> &rhs) -> T {
+  assert(lhs.size() == rhs.size() && "Vectors must be of the same size");
   return std::acos(dot(lhs, rhs) / (dist(lhs) * dist(rhs)));
 }
 /**
- * @brief
+ * @brief Returns the normalized vector.
  *
- * @tparam T
- * @param v
- * @return vector<std::common_type<T, double>>
+ * @tparam T type of the vector
+ * @tparam std::enable_if_t<std::is_arithmetic_v<T>>
+ * @param v vector to normalize
+ * @return auto
  */
-template <typename T>
-constexpr auto
-normalize(const vector<T> &v) -> vector<std::common_type<T, double>> {
+template <typename T,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto normalize(const vector<T> &v) {
   return v / dist(v);
 }
+/**
+ * @brief Implementation of the cross product. Note: current implementation only
+ * works with 3d vectors.
+ *
+ * @tparam T The type of the vector
+ * @tparam U The type of the vector
+ * @param lhs The left hand side vector
+ * @param rhs The right hand side vector
+ * @return vector<common_type_t<T, U>> The cross product of the two vectors
+ */
+template <typename T, typename U = T>
+auto cross(const vector<T> &lhs,
+           const vector<U> &rhs) -> vector<common_type_t<T, U>> {
+  assert(lhs.size() == 3 && rhs.size() == 3);
+  return {lhs[1] * rhs[2] - lhs[2] * rhs[1], lhs[2] * rhs[0] - lhs[0] * rhs[2],
+          lhs[0] * rhs[1] - lhs[1] * rhs[0]};
+}
+
 } // namespace lin
 #endif // __VECFUNC_H__

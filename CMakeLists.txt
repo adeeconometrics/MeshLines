@@ -15,7 +15,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Set compiler flags for debug and release versions
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
-    set(CMAKE_CXX_COMPILER "/usr/local/opt/llvm/bin/clang++")
+    # Set the target architecture to arm64
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+    message("macOS detected " ${CMAKE_OSX_ARCHITECTURES})
 
     # Set compiler flags for macOS
     set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic -Xclang")
@@ -33,7 +35,6 @@ file(GLOB_RECURSE INC_FILES include/*.hpp)
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-
 
 foreach(file ${INC_FILES})
     list(APPEND SOURCE_FILES

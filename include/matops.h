@@ -15,6 +15,7 @@
 
 #include "../include/matrix.h"
 #include "../include/vecops.h"
+#include "matfunc.h"
 
 #include <algorithm>
 #include <cassert>
@@ -22,13 +23,6 @@
 #include <functional>
 #include <type_traits>
 #include <vector>
-
-// todo
-// - [x] Mat [op] Vec
-// - [x] Mat =[op] Vec
-// - [ ] Mat [op] Scalar
-// - [ ] Mat =[op] Scalar
-
 namespace lin {
 
 using std::common_type_t;
@@ -41,8 +35,11 @@ constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs,
     -> Matrix<common_type_t<T, U>, Rows, Cols> {
   Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
-  std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const T &a, const U &b) { return a + b; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = lhs(i, j) + rhs(i, j);
+    }
+  }
 
   return result;
 }
@@ -53,8 +50,11 @@ constexpr auto operator-(const Matrix<T, Rows, Cols> &lhs,
     -> Matrix<common_type_t<T, U>, Rows, Cols> {
   Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
-  std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const T &a, const U &b) { return a - b; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = lhs(i, j) - rhs(i, j);
+    }
+  }
 
   return result;
 }
@@ -65,20 +65,42 @@ constexpr auto operator*(const Matrix<T, Rows, Cols> &lhs,
     -> Matrix<common_type_t<T, U>, Rows, Cols> {
   Matrix<common_type_t<T, U>, Rows, Cols> result{};
 
-  std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const T &a, const U &b) { return a * b; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = lhs(i, j) * rhs(i, j);
+    }
+  }
 
   return result;
 }
-
+/**
+ * @brief Returns the division of two matrices. Will likely return a matrix of
+ * doubles for arithmetic types. NOTE: Implementation will be modified in the
+ * future.
+ *
+ * @tparam T The type of the matrix
+ * @tparam U The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param lhs The left hand side matrix
+ * @param rhs The right hand side matrix
+ * @return Matrix<common_type_t<T, U, double>, Rows, Cols> The division of the
+ * two matrices.
+ */
 template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
 constexpr auto operator/(const Matrix<T, Rows, Cols> &lhs,
                          const Matrix<U, Rows, Cols> &rhs)
-    -> Matrix<common_type_t<T, U>, Rows, Cols> {
-  Matrix<common_type_t<T, U>, Rows, Cols> result{};
+    -> Matrix<common_type_t<T, U, double>, Rows, Cols> {
 
-  std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
-                 [](const T &a, const U &b) { return a / b; });
+  using result_type = common_type_t<T, U, double>;
+  Matrix<result_type, Rows, Cols> result{};
+
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = static_cast<result_type>(lhs(i, j)) /
+                     static_cast<result_type>(rhs(i, j));
+    }
+  }
 
   return result;
 }
@@ -87,8 +109,13 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 operator+=(Matrix<T, Rows, Cols> &lhs,
            const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
-  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-                 [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
+
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      lhs(i, j) += rhs(i, j);
+    }
+  }
+
   return lhs;
 }
 
@@ -96,8 +123,11 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 operator-=(Matrix<T, Rows, Cols> &lhs,
            const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
-  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-                 [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      lhs(i, j) -= rhs(i, j);
+    }
+  }
   return lhs;
 }
 
@@ -105,8 +135,11 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 operator*=(Matrix<T, Rows, Cols> &lhs,
            const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
-  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-                 [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      lhs(i, j) *= rhs(i, j);
+    }
+  }
   return lhs;
 }
 
@@ -114,84 +147,64 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 operator/=(Matrix<T, Rows, Cols> &lhs,
            const Matrix<T, Rows, Cols> &rhs) -> Matrix<T, Rows, Cols> & {
-  std::transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-                 [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      lhs(i, j) /= rhs(i, j);
+    }
+  }
   return lhs;
 }
-
-// template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
-// constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs, const vector<U>
-// &rhs)
-//     -> Matrix<common_type_t<T, U>, Rows, Cols> {
-
-//   assert(Cols == rhs.size());
-
-//   using result_type = common_type_t<T, U>;
-
-//   Matrix<result_type, Rows, Cols> result{};
-
-//   for (std::size_t i{}; i < Rows; i++) {
-//     for (std::size_t j{}; j < Cols; j++) {
-//       result(i, j) = lhs(i, j) + rhs[j];
-//     }
-//   }
-
-//   return result;
-// }
-
-// template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
-// constexpr auto operator-(const Matrix<T, Rows, Cols> &lhs, const vector<U>
-// &rhs)
-//     -> Matrix<common_type_t<T, U>, Rows, Cols> {
-
-//   assert(Cols == rhs.size());
-
-//   using result_type = common_type_t<T, U>;
-
-//   Matrix<result_type, Rows, Cols> result{};
-
-//   for (std::size_t i{}; i < Rows; i++) {
-//     for (std::size_t j{}; j < Cols; j++) {
-//       result(i, j) = lhs(i, j) - rhs[j];
-//     }
-//   }
-
-//   return result;
-// }
-
-template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator*(const Matrix<T, Rows, Cols> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+/**
+ * @brief This implementation is inspired from Numpy's broadcasting feature and
+ * is not a standard linear algebra operation. See:
+ * https://numpy.org/doc/stable/user/basics.broadcasting.html.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param lhs The left hand side matrix
+ * @param rhs The right hand side scalar
+ * @return Matrix<T, Rows, Cols>
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs,
+                         const vector<T> &rhs) -> Matrix<T, Rows, Cols> {
 
   assert(Cols == rhs.size());
 
-  using result_type = common_type_t<T, U>;
-
-  Matrix<result_type, Rows, Cols> result{};
+  Matrix<T, Rows, Cols> result{};
 
   for (std::size_t i{}; i < Rows; i++) {
     for (std::size_t j{}; j < Cols; j++) {
-      result(i, j) = lhs(i, j) * rhs[j];
+      result(i, j) = lhs(i, j) + rhs[j];
     }
   }
 
   return result;
 }
-// MAKE TYPES FUSE WITH FLOATING POINT
-template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator/(const Matrix<T, Rows, Cols> &lhs, const vector<U> &rhs)
-    -> Matrix<common_type_t<T, U>, Rows, Cols> {
+/**
+ * @brief This implementation is inspired from Numpy's broadcasting feature and
+ * is not a standard linear algebra operation. See:
+ * https://numpy.org/doc/stable/user/basics.broadcasting.html.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param lhs The left hand side matrix
+ * @param rhs The right hand side scalar
+ * @return Matrix<T, Rows, Cols>
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator-(const Matrix<T, Rows, Cols> &lhs,
+                         const vector<T> &rhs) -> Matrix<T, Rows, Cols> {
 
   assert(Cols == rhs.size());
 
-  // using result_type = common_type_t<T, U, double>;
-  using result_type = common_type_t<T, U>;
-
-  Matrix<result_type, Rows, Cols> result{};
+  Matrix<T, Rows, Cols> result{};
 
   for (std::size_t i{}; i < Rows; i++) {
     for (std::size_t j{}; j < Cols; j++) {
-      result(i, j) = lhs(i, j) / rhs[j];
+      result(i, j) = lhs(i, j) - rhs[j];
     }
   }
 
@@ -199,54 +212,182 @@ constexpr auto operator/(const Matrix<T, Rows, Cols> &lhs, const vector<U> &rhs)
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator+=(Matrix<T, Rows, Cols> &lhs,
-                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs += _rhs; });
-  return lhs;
+constexpr auto operator*(const Matrix<T, Rows, Cols> &lhs,
+                         const vector<T> &rhs) -> vector<T> {
+
+  assert(Cols == rhs.size());
+
+  vector<T> result;
+  result.reserve(Cols);
+
+  for (std::size_t i{}; i < Rows; i++) {
+    T sum{};
+    for (std::size_t j{}; j < Cols; j++) {
+      sum += lhs(i, j) * rhs[j];
+    }
+    result.emplace_back(sum);
+  }
+
+  return result;
+}
+
+/**
+ * @brief This implementation is inspired from Numpy's broadcasting feature and
+ * is not a standard linear algebra operation. This is modified for inplace
+ * operations. See: https://numpy.org/doc/stable/user/basics.broadcasting.html.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param t_mat The left hand side matrix
+ * @param t_vec The right hand side scalar
+ * @return Matrix<T, Rows, Cols>& The division of the two matrices.
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator+=(Matrix<T, Rows, Cols> &t_mat,
+                          const vector<T> &t_vec) -> Matrix<T, Rows, Cols> & {
+  assert(Cols == t_vec.size());
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) += t_vec[j];
+    }
+  }
+  return t_mat;
+}
+/**
+ * @brief This implementation is inspired from Numpy's broadcasting feature and
+ * is not a standard linear algebra operation. This is modified for inplace
+ * operations. See: https://numpy.org/doc/stable/user/basics.broadcasting.html.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param t_mat The left hand side matrix
+ * @param t_vec The right hand side scalar
+ * @return Matrix<T, Rows, Cols>& The division of the two matrices.
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator-=(Matrix<T, Rows, Cols> &t_mat,
+                          const vector<T> &t_vec) -> Matrix<T, Rows, Cols> & {
+  assert(Cols == t_vec.size());
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) -= t_vec[j];
+    }
+  }
+  return t_mat;
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator-=(Matrix<T, Rows, Cols> &lhs,
-                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs -= _rhs; });
-  return lhs;
+constexpr auto operator+(const Matrix<T, Rows, Cols> &t_mat,
+                         T t_scalar) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> result{};
+
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = t_mat(i, j) + t_scalar;
+    }
+  }
+
+  return result;
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator*=(Matrix<T, Rows, Cols> &lhs,
-                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs *= _rhs; });
-  return lhs;
+constexpr auto operator-(const Matrix<T, Rows, Cols> &t_mat,
+                         T t_scalar) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> result{};
+
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = t_mat(i, j) - t_scalar;
+    }
+  }
+
+  return result;
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto operator/=(Matrix<T, Rows, Cols> &lhs,
-                          const vector<T> &rhs) -> Matrix<T, Rows, Cols> & {
-  transform(lhs.begin(), lhs.end(), rhs.cbegin(), lhs.begin(),
-            [](auto &_lhs, auto &_rhs) { return _lhs /= _rhs; });
-  return lhs;
+constexpr auto operator*(const Matrix<T, Rows, Cols> &t_mat,
+                         T t_scalar) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> result{};
+
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = t_mat(i, j) * t_scalar;
+    }
+  }
+
+  return result;
 }
 
-// template <typename T, std::size_t Rows, std::size_t Cols>
-// constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs, int rhs)
-//     -> Matrix<common_type_t<T, int>> {
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator/(const Matrix<T, Rows, Cols> &t_mat,
+                         T t_scalar) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> result{};
 
-//   // static_assert(std::is_arithmetic_v<U>);
-//   Matrix<common_type_t<T, int>> res{};
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      result(i, j) = t_mat(i, j) / t_scalar;
+    }
+  }
 
-//   transform(lhs.cbegin(), lhs.cend(), res.begin(),
-//             [&rhs](const auto _lhs) { return _lhs + rhs; });
+  return result;
+}
 
-//   return res;
-// }
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator+=(Matrix<T, Rows, Cols> &t_mat,
+                          T t_scalar) -> Matrix<T, Rows, Cols> & {
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) += t_scalar;
+    }
+  }
+  return t_mat;
+}
+
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator-=(Matrix<T, Rows, Cols> &t_mat,
+                          T t_scalar) -> Matrix<T, Rows, Cols> & {
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) -= t_scalar;
+    }
+  }
+  return t_mat;
+}
+
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator*=(Matrix<T, Rows, Cols> &t_mat,
+                          T t_scalar) -> Matrix<T, Rows, Cols> & {
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) *= t_scalar;
+    }
+  }
+  return t_mat;
+}
+
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto operator/=(Matrix<T, Rows, Cols> &t_mat,
+                          T t_scalar) -> Matrix<T, Rows, Cols> & {
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      t_mat(i, j) /= t_scalar;
+    }
+  }
+  return t_mat;
+}
 
 template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto operator==(const Matrix<T, Rows, Cols> &lhs,
                           const Matrix<T, Rows, Cols> &rhs) -> bool {
-  return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+  for (std::size_t i{}; i < Rows; i++) {
+    for (std::size_t j{}; j < Cols; j++) {
+      if (lhs(i, j) != rhs(i, j))
+        return false;
+    }
+  }
+  return true;
 }
 
 template <typename T, std::size_t Rows, std::size_t Cols>
