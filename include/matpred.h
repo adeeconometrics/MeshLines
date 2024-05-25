@@ -13,10 +13,8 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto is_tril(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
   for (std::size_t i = 0; i < Rows; i++) {
     for (std::size_t j = i + 1; j < Cols; j++) {
-      if (j < Rows && i < Cols) {
-        if (M(i, j) != 0)
-          return false;
-      }
+      if (M(i, j) != 0)
+        return false;
     }
   }
   return true;

@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
+#include "../include/matdecompose.h"
 #include "../include/matfunc.h"
-#include "../include/matops.h" //resolve compiler error
+#include "../include/matops.h"
 #include "../include/matpred.h"
 #include "../include/meshlines.h"
 #include "../include/utils.h"
@@ -369,4 +370,33 @@ TEST(MatFunc, Trace) {
   Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
   EXPECT_EQ(trace(M), 15);
+}
+
+// TEST(MatFunc, Determinant) {
+//   const std::size_t Rows = 3;
+//   const std::size_t Cols = 3;
+
+//   Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+
+//   EXPECT_EQ(det(M), 0);
+// }
+
+TEST(MatPred, IsLowerTriangular) {
+  const Matrix<int, 3, 3> M = {{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
+  const Matrix<int, 4, 5> RM = {{1, 0, 0, 0, 0},
+                                {6, 7, 0, 0, 0},
+                                {11, 12, 13, 0, 0},
+                                {16, 17, 18, 19, 0}};
+
+  EXPECT_TRUE(is_tril(M));
+  EXPECT_TRUE(is_tril(RM));
+
+  const Matrix<int, 3, 3> N = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 4, 5> RN = {{1, 2, 3, 4, 5},
+                                {6, 7, 8, 9, 10},
+                                {11, 12, 13, 14, 15},
+                                {16, 17, 18, 19, 20}};
+
+  EXPECT_FALSE(is_tril(N));
+  EXPECT_FALSE(is_tril(RN));
 }
