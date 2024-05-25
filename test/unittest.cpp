@@ -338,3 +338,26 @@ TEST(MatFunc, LowerTriangularMatrix) {
   mask_tril(RM);
   EXPECT_EQ(RM, RLM);
 }
+
+TEST(MatFunc, DiagonalMatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<int, 4, 5> RM{{1, 2, 3, 4, 5},
+                       {6, 7, 8, 9, 10},
+                       {11, 12, 13, 14, 15},
+                       {16, 17, 18, 19, 20}};
+
+  const Matrix<int, Rows, Cols> DM{{1, 0, 0}, {0, 5, 0}, {0, 0, 9}};
+
+  const Matrix<int, 4, 5> RDM{
+      {1, 0, 0, 0, 0}, {0, 7, 0, 0, 0}, {0, 0, 13, 0, 0}, {0, 0, 0, 19, 0}};
+
+  EXPECT_EQ(diag(M), DM);
+  mask_diag(M);
+  EXPECT_EQ(M, DM);
+  EXPECT_EQ(diag(RM), RDM);
+  mask_diag(RM);
+  EXPECT_EQ(RM, RDM);
+}

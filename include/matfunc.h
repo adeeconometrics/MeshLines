@@ -142,6 +142,43 @@ auto mask_tril(Matrix<T, Rows, Cols> &A) -> void {
   }
 }
 /**
+ * @brief Returns a diagonal matrix.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A Base matrix
+ * @return Matrix<T, Rows, Cols>
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto diag(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
+  Matrix<T, Rows, Cols> D{};
+
+  for (std::size_t i = 0; i < Rows; i++) {
+    D(i, i) = A(i, i);
+  }
+
+  return D;
+}
+/**
+ * @brief Modifies the matrix to mask the diagonal part
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A Base matrix
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+auto mask_diag(Matrix<T, Rows, Cols> &A) -> void {
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = 0; j < Cols; j++) {
+      if (i != j) {
+        A(i, j) = 0;
+      }
+    }
+  }
+}
+/**
  * @brief Returns the trace of the Matrix;
  * this function requires a square matrix
  *
