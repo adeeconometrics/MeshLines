@@ -400,3 +400,21 @@ TEST(MatPred, IsLowerTriangular) {
   EXPECT_FALSE(is_tril(N));
   EXPECT_FALSE(is_tril(RN));
 }
+
+TEST(MatPred, IsUpperTriangular) {
+  const Matrix<int, 3, 3> M = {{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};
+  const Matrix<int, 4, 5> RM = {
+      {1, 2, 3, 4, 5}, {0, 7, 8, 9, 10}, {0, 0, 13, 14, 15}, {0, 0, 0, 19, 20}};
+
+  EXPECT_TRUE(is_triu(M));
+  EXPECT_TRUE(is_triu(RM));
+
+  const Matrix<int, 3, 3> N = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 4, 5> RN = {{1, 2, 3, 4, 5},
+                                {6, 7, 8, 9, 10},
+                                {11, 12, 13, 14, 15},
+                                {16, 17, 18, 19, 20}};
+
+  EXPECT_FALSE(is_triu(N));
+  EXPECT_FALSE(is_triu(RN));
+}
