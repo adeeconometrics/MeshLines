@@ -277,3 +277,15 @@ TEST(MatOps, MatrixScalarInplace) {
   a /= 2;
   EXPECT_EQ(a, c);
 }
+
+TEST(MatFunc, Transpose) {
+  const Matrix<int, 2, 3> a{{1, 3, 5}, {2, 4, 6}};
+  const Matrix<int, 3, 2> b{{1, 2}, {3, 4}, {5, 6}};
+
+  Matrix<int, 3, 3> c{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 3, 3> d{{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};
+
+  EXPECT_EQ(transpose(a), b);
+  T(c);
+  EXPECT_EQ(c, d);
+}

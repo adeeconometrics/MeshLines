@@ -31,29 +31,36 @@ using std::tuple;
 using std::vector;
 
 /**
- * @brief transpose function that returns a new Matrix
+ * @brief General transpose function that returns a new matrix.
  *
- * @tparam T
- * @param A
- * @return Matrix<T>
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A Base matrix to be transposed
+ * @return Matrix<T, Cols, Rows>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
-auto transpose(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
-  Matrix<T, Rows, Cols> TA = A;
+auto transpose(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Cols, Rows> {
+  Matrix<T, Cols, Rows> TA{};
 
-  for (std::size_t i = 0; i < Rows; i++)
-    for (std::size_t j = 0; j < Cols; j++)
+  for (std::size_t i = 0; i < Rows; i++) {
+    for (std::size_t j = 0; j < Cols; j++) {
       TA(j, i) = A(i, j);
+    }
+  }
 
   return TA;
 }
 /**
- * @brief In-place transpose
+ * @brief Inplace transpose function. Only works with square matrices.
  *
- * @tparam U arithmetic type
- * @param A Matrix
+ * @tparam T type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A matrix to be transposed
  */
-template <typename T, std::size_t Rows, std::size_t Cols>
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<Rows == Cols>>
 auto T(Matrix<T, Rows, Cols> &A) -> void {
   for (std::size_t i = 0; i < Rows; i++)
     for (std::size_t j = i + 1; j < Cols; j++)
