@@ -87,9 +87,11 @@ auto triu(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
   return res;
 }
 /**
- * @brief Modifies the matrix to mask upper triangular part
+ * @brief Masks the matrix's upper triangular part.
  *
- * @tparam T
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
  * @param A
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
@@ -103,8 +105,10 @@ auto mask_triu(Matrix<T, Rows, Cols> &A) -> void {
 /**
  * @brief Returns the lower triangular part of the matrix
  *
- * @tparam T
- * @param A
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A The matrix to be modified
  * @return Matrix<T>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
@@ -123,8 +127,10 @@ auto tril(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
 /**
  * @brief Modifies the matrix to mask the lower triangular part
  *
- * @tparam T
- * @param A
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A The matrix to be modified
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
 auto mask_tril(Matrix<T, Rows, Cols> &A) -> void {
