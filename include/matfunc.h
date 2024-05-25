@@ -182,9 +182,9 @@ auto mask_diag(Matrix<T, Rows, Cols> &A) -> void {
  * @brief Returns the trace of the Matrix;
  * this function requires a square matrix
  *
- * @tparam T
- * @param M
- * @return T
+ * @tparam T The type of the matrix
+ * @param M The matrix to be processed
+ * @return T The trace of the matrix
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
 auto trace(const Matrix<T, Rows, Cols> &M) -> T {

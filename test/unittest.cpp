@@ -361,3 +361,12 @@ TEST(MatFunc, DiagonalMatrix) {
   mask_diag(RM);
   EXPECT_EQ(RM, RDM);
 }
+
+TEST(MatFunc, Trace) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+
+  EXPECT_EQ(trace(M), 15);
+}
