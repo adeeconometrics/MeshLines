@@ -296,8 +296,20 @@ TEST(MatFunc, UpperTriangularMatrix) {
   const std::size_t Cols = 3;
 
   Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<int, 4, 5> RM{{1, 2, 3, 4, 5},
+                       {6, 7, 8, 9, 10},
+                       {11, 12, 13, 14, 15},
+                       {16, 17, 18, 19, 20}};
+
   const Matrix<int, Rows, Cols> UM{{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};
 
+  const Matrix<int, 4, 5> RUM{
+      {1, 2, 3, 4, 5}, {0, 7, 8, 9, 10}, {0, 0, 13, 14, 15}, {0, 0, 0, 19, 20}};
+
   EXPECT_EQ(triu(M), UM);
-  // EXPECT_EQ(triu(RM), RUM);
+  mask_triu(M);
+  EXPECT_EQ(M, UM);
+  EXPECT_EQ(triu(RM), RUM);
+  mask_triu(RM);
+  EXPECT_EQ(RM, RUM);
 }
