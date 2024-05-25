@@ -4,6 +4,7 @@
 #include "../include/matops.h" //resolve compiler error
 #include "../include/matpred.h"
 #include "../include/meshlines.h"
+#include "../include/utils.h"
 #include "../include/vecops.h"
 
 #include <type_traits>
@@ -288,4 +289,15 @@ TEST(MatFunc, Transpose) {
   EXPECT_EQ(transpose(a), b);
   T(c);
   EXPECT_EQ(c, d);
+}
+
+TEST(MatFunc, UpperTriangularMatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, Rows, Cols> UM{{1, 2, 3}, {0, 5, 6}, {0, 0, 9}};
+
+  EXPECT_EQ(triu(M), UM);
+  // EXPECT_EQ(triu(RM), RUM);
 }

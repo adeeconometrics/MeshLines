@@ -79,9 +79,8 @@ auto triu(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
   Matrix<T, Rows, Cols> res = A;
 
   for (std::size_t i = 0; i < Rows; i++) {
-    for (std::size_t j = i + 1; j < Cols; j++) {
-      if (j < Rows && i < Cols)
-        res(j, i) = 0;
+    for (std::size_t j = 0; j < i; j++) {
+      res(i, j) = 0;
     }
   }
 
@@ -97,7 +96,7 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 auto mask_triu(Matrix<T, Rows, Cols> &A) -> void {
 
   for (std::size_t i = 0; i < Rows; i++) {
-    for (std::size_t j = i + 1; j < Cols; j++) {
+    for (std::size_t j = 0; j < Cols; j++) {
       if (j < Rows && i < Cols) {
         A(j, i) = 0;
       }
