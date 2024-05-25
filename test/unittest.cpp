@@ -418,3 +418,21 @@ TEST(MatPred, IsUpperTriangular) {
   EXPECT_FALSE(is_triu(N));
   EXPECT_FALSE(is_triu(RN));
 }
+
+TEST(MatPred, IsDiagonal) {
+  const Matrix<int, 3, 3> M = {{1, 0, 0}, {0, 5, 0}, {0, 0, 9}};
+  const Matrix<int, 4, 5> RM = {
+      {1, 0, 0, 0, 0}, {0, 7, 0, 0, 0}, {0, 0, 13, 0, 0}, {0, 0, 0, 19, 0}};
+
+  EXPECT_TRUE(is_diag(M));
+  EXPECT_TRUE(is_diag(RM));
+
+  const Matrix<int, 3, 3> N = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 4, 5> RN = {{1, 2, 3, 4, 5},
+                                {6, 7, 8, 9, 10},
+                                {11, 12, 13, 14, 15},
+                                {16, 17, 18, 19, 20}};
+
+  EXPECT_FALSE(is_diag(N));
+  EXPECT_FALSE(is_diag(RN));
+}

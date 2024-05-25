@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <type_traits>
 
 namespace lin {
 
@@ -106,15 +107,15 @@ constexpr auto is_echelon(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
   return true;
 }
 
-template <typename T, std::size_t Rows, std::size_t Cols>
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<Rows == Cols>>
 constexpr auto is_sym(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
-  // prove that M != T(M) where M is a rectangular mat
   return M == transpose(M);
 }
 
-template <typename T, std::size_t Rows, std::size_t Cols>
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<Rows == Cols>>
 constexpr auto is_antisym(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
-  // prove that M != T(M) where M is a rectangular mat
   return transpose(M) == (-M);
 }
 
