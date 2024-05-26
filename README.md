@@ -14,6 +14,14 @@ I intend to learn about matrix factorization and develop insights to elide opera
 Note that there is no long-term initiative to support and resolve bugs on this project. The robustness of the codebase relies on the test coverage.
 You are welcome to submit an issue or drop a suggestion for this repo.
 
+## Design Principles
+
+Design for genericity and specialize later on performance
+
+- Add template mechanisms for interopt: it should be able to work with types that meets the operations required by Matrix semantics.
+- Zero cost abstraction: Imposing rules and expectations should come without cost
+- Minimal redundancies
+
 ---
 
 Matrix Decomposition:
@@ -34,7 +42,7 @@ Matrix Operations:
 - [x] Minor
 - [x] Cofactor
 - [x] Adjugate
-- [ ] Matrix-Scalar operations
+- [x] Matrix-Scalar operations
 - [ ] Inverse
 - [ ] Colspace
 - [ ] Rowspace
