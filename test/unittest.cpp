@@ -177,6 +177,26 @@ TEST(VecOps, Normalize) {
   }
 }
 
+TEST(MatOps, SwapRows) {
+  const Matrix<int, 3, 3> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 3, 3> N{{7, 8, 9}, {4, 5, 6}, {1, 2, 3}};
+
+  auto res = M;
+  swap_rows(res, 0, 2);
+
+  EXPECT_EQ(res, N);
+}
+
+TEST(MatOps, SwapCols) {
+  const Matrix<int, 3, 3> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 3, 3> N{{3, 2, 1}, {6, 5, 4}, {9, 8, 7}};
+
+  auto res = M;
+  swap_cols(res, 0, 2);
+
+  EXPECT_EQ(res, N);
+}
+
 TEST(MatOps, UnaryNegative) {
   const Matrix<int, 2, 2> a{{1, 2}, {3, 4}};
   const Matrix<int, 2, 2> b{{-1, -2}, {-3, -4}};
@@ -458,3 +478,14 @@ TEST(MatDecompose, LUCrout) {
   EXPECT_EQ(L_res, L);
   EXPECT_EQ(U_res, U);
 }
+
+// TEST(MatDecompose, LUGaussian) {
+//   const Matrix<int, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//   const Matrix<int, 3, 3> L = {{1, 0, 0}, {4, 1, 0}, {7, 2, 1}};
+//   const Matrix<int, 3, 3> U = {{1, 2, 3}, {0, -3, -6}, {0, 0, 0}};
+
+//   auto [L_res, U_res] = lu_gaussian(M);
+
+//   EXPECT_EQ(L_res, L);
+//   EXPECT_EQ(U_res, U);
+// }

@@ -28,6 +28,42 @@ namespace lin {
 using std::common_type_t;
 using std::transform;
 using std::vector;
+/**
+ * @brief Helper function to swap two rows in a matrix.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param t_mat The matrix
+ * @param row1 The row to be swapped
+ * @param row2 The row to be swapped
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+void swap_rows(Matrix<T, Rows, Cols> &t_mat, std::size_t row1,
+               std::size_t row2) {
+  assert(row1 < Rows && row2 < Rows);
+  for (std::size_t col = 0; col < Cols; ++col) {
+    std::swap(t_mat(row1, col), t_mat(row2, col));
+  }
+}
+/**
+ * @brief Helper function to swap two columns in a matrix.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param t_mat The matrix
+ * @param col1 The column to be swapped
+ * @param col2 The column to be swapped
+ */
+template <typename T, std::size_t Rows, std::size_t Cols>
+void swap_cols(Matrix<T, Rows, Cols> &t_mat, std::size_t col1,
+               std::size_t col2) {
+  assert(col1 < Cols && col2 < Cols);
+  for (std::size_t row = 0; row < Rows; ++row) {
+    std::swap(t_mat(row, col1), t_mat(row, col2));
+  }
+}
 
 template <typename T, typename U = T, std::size_t Rows, std::size_t Cols>
 constexpr auto operator+(const Matrix<T, Rows, Cols> &lhs,

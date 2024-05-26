@@ -69,7 +69,7 @@ auto lu_gaussian(const Matrix<T, Rows, Cols> &A)
 
   static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<T, Rows, Cols> U;
+  Matrix<T, Rows, Cols> U(A);
   Matrix<T, Rows, Cols> L;
 
   for (std::size_t i = 0; i < Rows; i++) {
