@@ -436,3 +436,25 @@ TEST(MatPred, IsDiagonal) {
   EXPECT_FALSE(is_diag(N));
   EXPECT_FALSE(is_diag(RN));
 }
+
+TEST(MatPred, IsSquare) {
+  const Matrix<int, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 4, 5> RM = {{1, 2, 3, 4, 5},
+                                {6, 7, 8, 9, 10},
+                                {11, 12, 13, 14, 15},
+                                {16, 17, 18, 19, 20}};
+
+  EXPECT_TRUE(is_square(M));
+  EXPECT_FALSE(is_square(RM));
+}
+
+TEST(MatDecompose, LUCrout) {
+  const Matrix<int, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 3, 3> L = {{1, 0, 0}, {4, 1, 0}, {7, 2, 1}};
+  const Matrix<int, 3, 3> U = {{1, 2, 3}, {0, -3, -6}, {0, 0, 0}};
+
+  auto [L_res, U_res] = lu_crout(M);
+
+  EXPECT_EQ(L_res, L);
+  EXPECT_EQ(U_res, U);
+}

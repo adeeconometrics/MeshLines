@@ -56,7 +56,7 @@ constexpr auto is_square(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
 
 template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto is_invertible(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
-  if (!is_square(M))
+  if (Rows != Cols)
     return false;
   const double det = det(M);
 
