@@ -24,12 +24,14 @@
 namespace lin {
 
 /**
- * @brief Crout's algorithm implementation of LU Decomposition; see if this can
- * work with rectangular matrices.
+ * @brief Crout's LU decomposition implementation. This function returns a tuple
+ * of two matrices L and U such that matmul(L,U) = A.
  *
- * @tparam T
- * @param A
- * @return tuple<Matrix<T>, Matrix<T>>
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A The matrix to be decomposed
+ * @return tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>>
  */
 template <typename T, std::size_t Rows, std::size_t Cols>
 auto lu_crout(const Matrix<T, Rows, Cols> &A)
@@ -302,8 +304,18 @@ auto ldl(const Matrix<T, Rows, Cols> &A)
   return std::make_tuple(L, D);
 }
 
-// cholesky decomposition (L*L^T): returns L
-// conditions: symmetric positive definite matrix
+/**
+ * @brief Cholesky decomposition implementation. This function returns a matrix
+ * L such that matmul(L, L^T) = A. Note that this function assumes that the
+ * matrix is symmetric positive definite. Future efforts will be added to check
+ * this condition before proceeding with the decomposition.
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A The matrix to be decomposed
+ * @return Matrix<T, Rows, Cols>
+ */
 template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 cholesky(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {

@@ -494,6 +494,21 @@ TEST(MatDecompose, LUGaussian) {
   }
 }
 
+// TEST(MatDecompose, PLU) {
+//   const Matrix<double, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//   const Matrix<double, 3, 3> P = {{0, 1, 0}, {0, 0, 1}, {1, 0, 0}};
+//   const Matrix<double, 3, 3> L = {
+//       {1, 0, 0}, {0.14285714285714285, 1, 0}, {0.5714285714285714, 0.5, 1}};
+//   const Matrix<double, 3, 3> U = {
+//       {7, 8, 9}, {0, 0.8571428571428571, 1.7142857142857142}, {0, 0, 0}};
+
+//   const auto [P_res, L_res, U_res] = plu(M);
+
+//   EXPECT_EQ(P_res, P);
+//   EXPECT_EQ(L_res, L);
+//   EXPECT_EQ(U_res, U);
+// }
+
 TEST(MatDecompose, Cholesky) {
   const Matrix<double, 3, 3> M = {
       {4., 12., -16.}, {12., 37., -43.}, {-16., -43., 98.}};

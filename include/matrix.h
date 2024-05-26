@@ -76,16 +76,17 @@ private:
 };
 
 /**
- * @brief Constructor for zero matrix.
+ * @brief Constructor for zero matrix which pertains to T{} constructor for
+ * compound objects.
  *
- * @tparam T
- * @param n
- * @return Matrix<T>
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @return Matrix<T, Rows, Cols>
  */
-template <typename T, std::size_t Rows, std::size_t Cols,
-          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto zero_mat() -> Matrix<T, Rows, Cols> {
-  return {std::vector<T>(Rows * Cols, 0), Rows, Cols};
+  return {std::vector<T>(Rows * Cols, T{}), Rows, Cols};
 }
 
 /**
