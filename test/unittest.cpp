@@ -8,6 +8,7 @@
 #include "../include/utils.h"
 #include "../include/vecops.h"
 
+#include <tuple>
 #include <type_traits>
 #include <vector>
 
@@ -479,13 +480,16 @@ TEST(MatDecompose, LUCrout) {
   EXPECT_EQ(U_res, U);
 }
 
-// TEST(MatDecompose, LUGaussian) {
-//   const Matrix<int, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-//   const Matrix<int, 3, 3> L = {{1, 0, 0}, {4, 1, 0}, {7, 2, 1}};
-//   const Matrix<int, 3, 3> U = {{1, 2, 3}, {0, -3, -6}, {0, 0, 0}};
+TEST(MatDecompose, LUGaussian) {
+  const Matrix<double, 3, 3> M = {{1., 2., 3.}, {4., 5., 6.}, {7., 8., 9.}};
+  const Matrix<double, 3, 3> L = {{1., 0., 0.}, {4., 1., 0.}, {7., 2., 1.}};
+  const Matrix<double, 3, 3> U = {{1., 2., 3.}, {0., -3., -6.}, {0., 0., 0.}};
 
-//   auto [L_res, U_res] = lu_gaussian(M);
+  const auto &[LG, UG] = lu_gaussian(M);
 
-//   EXPECT_EQ(L_res, L);
-//   EXPECT_EQ(U_res, U);
-// }
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      EXPECT_NEAR(UG(i, j), U(i, j), 1e-6);
+    }
+  }
+}

@@ -20,12 +20,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "
     message("macOS detected " ${CMAKE_OSX_ARCHITECTURES})
 
     # Set compiler flags for macOS
-    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic -Xclang")
-    set(CMAKE_CXX_FLAGS_RELEASE " -O3 -Wall -Wextra -pedantic -Xclang")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wdiv-by-zero -pedantic -Xclang")
+    set(CMAKE_CXX_FLAGS_RELEASE " -O3 -Wall -Wextra -Wdiv-by-zero -pedantic -Xclang")
 else()
     # Set compiler flags for other systems
-    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -pedantic")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -Wextra -pedantic -ffast-math -march=native -ftree-vectorize")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wdiv-by-zero -pedantic")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -Wextra -Wdiv-by-zero -pedantic -ffast-math -march=native -ftree-vectorize")
 endif()
 
 # Add source and include directories

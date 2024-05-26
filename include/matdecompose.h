@@ -54,42 +54,49 @@ auto lu_crout(const Matrix<T, Rows, Cols> &A)
   return std::make_tuple(L, U);
 }
 /**
- * @brief LU Decomposition using Gaussian Elimination -- ideal for sparse
- * matrix and more numerically stable than Crout's algorithm.
- * This implementation is also more efficient when the matrix is large. See if
- * it can work with rectangular matrices.
+ * @brief This is a Gaussian elimination implementation of LU Decomposition.
+ * WARNING: The current implementation is brittle for integer types as it may
+ * result to segfaults due to division by zero (which is why a conditional flag
+ * is temporarily set to call this method when T is a floating type). Future
+ * efforts will be made to investigate further on how to handle this.
  *
- * @tparam T
- * @param A
- * @return tuple<Matrix<T>, Matrix<T>>
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @tparam std::enable_if_t<std::is_floating_point_v<T>>
+ * @param A The matrix to be decomposed
+ * @return tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>>
  */
-template <typename T, std::size_t Rows, std::size_t Cols>
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<std::is_floating_point_v<T>>>
 auto lu_gaussian(const Matrix<T, Rows, Cols> &A)
     -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>> {
 
   static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<T, Rows, Cols> U(A);
-  Matrix<T, Rows, Cols> L;
+  Matrix<T, Rows, Cols> U = lin::scalar_mat<T, Rows, Cols>(T{});
+  Matrix<T, Rows, Cols> L = lin::scalar_mat<T, Rows, Cols>(T{});
 
-  for (std::size_t i = 0; i < Rows; i++) {
-    for (std::size_t upper_iter = i; upper_iter < Rows; upper_iter++) {
-      T sum = 0;
-      for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
-        sum += L(i, inner_iter) * U(inner_iter, upper_iter);
+  for (std::size_t i{}; i < Rows; i++) {
+    // upper triangular
+    for (std::size_t k{i}; k < Rows; k++) {
+      T sum{0.0};
+      for (std::size_t j{}; j < Rows; j++) {
+        sum += (L(i, j) * U(j, k));
       }
-      U(i, upper_iter) = A(i, upper_iter) - sum;
+      U(i, k) = A(i, k) - sum;
     }
 
-    for (std::size_t lower_iter = 0; lower_iter < Rows; lower_iter++) {
-      if (i == lower_iter) {
-        L(i, i) = 1;
+    // lower triangular
+    for (std::size_t k{i}; k < Rows; k++) {
+      if (i == k) {
+        L(i, i) = 1.0;
       } else {
-        T sum = 0;
-        for (std::size_t inner_iter = 0; inner_iter < i; inner_iter++) {
-          sum += L(lower_iter, inner_iter) * U(inner_iter, i);
+        T sum{0.0};
+        for (std::size_t j{}; j < i; j++) {
+          sum += (L(k, j) * U(j, i));
         }
-        L(lower_iter, i) = (A(lower_iter, i) - sum) / U(i, i);
+        L(k, i) = (A(k, i) - sum) / U(i, i);
       }
     }
   }
