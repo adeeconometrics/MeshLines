@@ -105,7 +105,19 @@ auto lu_gaussian(const Matrix<T, Rows, Cols> &A)
 
   return std::make_tuple(L, U);
 }
-
+/**
+ * @brief PLU decomposition is a variant of LU decomposition where the matrix A
+ * is decomposed into three matrices P, L, and U such that A = PLU. The current
+ * implementation needs to be refactored for imposing matrix properties. See:
+ * https://www.cfm.brown.edu/people/dobrush/cs52/Mathematica/Part2/PLU.html
+ *
+ * @tparam T The type of the matrix
+ * @tparam Rows The number of rows
+ * @tparam Cols The number of columns
+ * @param A The matrix to be decomposed
+ * @return tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>,
+ * Matrix<T, Rows, Cols>>
+ */
 template <typename T, std::size_t Rows, std::size_t Cols>
 auto plu(Matrix<T, Rows, Cols> A)
     -> tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>,
@@ -126,8 +138,8 @@ auto plu(Matrix<T, Rows, Cols> A)
       }
     }
     if (p != k) {
-      std::swap(A(k), A(p));
-      std::swap(P(k), P(p));
+      swap_rows(A, k, p);
+      swap_rows(P, k, p);
     }
 
     // Perform elimination
