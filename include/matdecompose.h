@@ -178,7 +178,7 @@ auto qr_gm(const Matrix<T, Rows, Cols> &A)
 
   static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<T, Rows, Cols> Q{};
+  Matrix<T, Rows, Cols> Q = lin::zero_mat<T, Rows, Cols>();
   Matrix<T, Rows, Cols> R = A;
 
   // Compute Q and R using the Gram-Schmidt process
@@ -361,7 +361,8 @@ cholesky(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Rows, Cols> {
  * @param LUMethod
  * @return double
  */
-template <typename T, std::size_t Rows, std::size_t Cols>
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<(Rows * Cols > 4)>>
 constexpr auto det(
     const Matrix<T, Rows, Cols> &M,
     std::function<tuple<Matrix<T, Rows, Cols>, Matrix<T, Rows, Cols>>(
@@ -390,8 +391,9 @@ constexpr auto det(
  * @param M
  * @return double
  */
-template <typename T, std::size_t Rows, std::size_t Cols>
-constexpr auto det_2(const Matrix<T, Rows, Cols> &M) -> double {
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<(Rows * Cols <= 4)>>
+constexpr auto det(const Matrix<T, Rows, Cols> &M) -> double {
   return M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0);
 }
 /**

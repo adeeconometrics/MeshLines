@@ -393,14 +393,27 @@ TEST(MatFunc, Trace) {
   EXPECT_EQ(trace(M), 15);
 }
 
-// TEST(MatFunc, Determinant) {
-//   const std::size_t Rows = 3;
-//   const std::size_t Cols = 3;
+TEST(MatFunc, MinorSubmatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
 
-//   Matrix<int, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<double, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  Matrix<double, 2, 2> N{{1, 2}, {4, 5}};
+  const double minor_N = -3;
 
-//   EXPECT_EQ(det(M), 0);
-// }
+  EXPECT_EQ(minor_submatrix(M, 2, 2), N);
+  EXPECT_EQ(minor(M, 2, 2), minor_N);
+}
+
+TEST(MatFunc, Determinant) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  const Matrix<double, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const double det_M = -9.51619735392994e-16;
+
+  EXPECT_NEAR(det(M), det_M, 1e-6);
+}
 
 TEST(MatPred, IsLowerTriangular) {
   const Matrix<int, 3, 3> M = {{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
@@ -513,6 +526,27 @@ TEST(MatDecompose, PLU) {
     }
   }
 }
+
+// TEST(MatDecompose, QR) {
+//   const Matrix<double, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//   const Matrix<double, 3, 3> Q = {
+//       {-0.12309149097933272, 0.9045340337332909, 0.4082482904638631},
+//       {-0.4923659639173309, 0.30151134457776363, -0.8164965809277261},
+//       {-0.8616404368553291, -0.30151134457776363, 0.4082482904638631}};
+//   const Matrix<double, 3, 3> R = {
+//       {-8.12403840463596, -9.60113629638795, -11.07823418813994},
+//       {0, 0.9045340337332909, 1.8090680674665818},
+//       {0, 0, 0}};
+
+//   const auto [Q_res, R_res] = qr_gm(M);
+
+//   for (int i = 0; i < 3; i++) {
+//     for (int j = 0; j < 3; j++) {
+//       EXPECT_NEAR(Q_res(i, j), Q(i, j), 1e-6);
+//       EXPECT_NEAR(R_res(i, j), R(i, j), 1e-6);
+//     }
+//   }
+// }
 
 TEST(MatDecompose, Cholesky) {
   const Matrix<double, 3, 3> M = {
