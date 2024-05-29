@@ -253,12 +253,11 @@ minor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
 
   static_assert(Rows == Cols, "Matrix must be square");
 
-  Matrix<double, Rows, Cols> minor_mat(Rows, vector<T>(Cols));
+  Matrix<double, Rows, Cols> minor_mat{};
 
   for (std::size_t i = 0; i < Rows; ++i) {
     for (std::size_t j = 0; j < Cols; ++j) {
-      const auto minor_det = minor(M, i, j);
-      minor_mat(i, j) = minor_det;
+      minor_mat(i, j) = minor(M, i, j);
     }
   }
 

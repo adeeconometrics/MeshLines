@@ -415,6 +415,16 @@ TEST(MatFunc, Determinant) {
   EXPECT_NEAR(det(M), det_M, 1e-6);
 }
 
+TEST(MatFunc, MinorMatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  const Matrix<double, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<double, Rows, Cols> N{{-3, -6, -3}, {-6, -12, -6}, {-3, -6, -3}};
+
+  EXPECT_EQ(minor_matrix(M), N);
+}
+
 TEST(MatPred, IsLowerTriangular) {
   const Matrix<int, 3, 3> M = {{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
   const Matrix<int, 4, 5> RM = {{1, 0, 0, 0, 0},
