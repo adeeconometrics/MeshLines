@@ -275,7 +275,7 @@ minor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
 template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 cofactor_submatrix(const Matrix<T, Rows, Cols> &M, std::size_t row = 0,
-                   std::size_t col = 0) -> Matrix<T, Rows, Cols> {
+                   std::size_t col = 0) -> Matrix<T, Rows - 1, Cols - 1> {
 
   Matrix<T, Rows - 1, Cols - 1> cofactor{};
 
@@ -326,6 +326,9 @@ cofactor_matrix(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
 template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto
 adj(const Matrix<T, Rows, Cols> &M) -> Matrix<double, Rows, Cols> {
+  // auto cofactor_mat = cofactor_matrix(M);
+  // T(cofactor_mat);
+  // return cofactor_mat;
   return transpose(cofactor_matrix(M));
 }
 #endif // __MATFUNC_H__

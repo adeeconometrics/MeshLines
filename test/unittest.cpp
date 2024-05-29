@@ -425,7 +425,18 @@ TEST(MatFunc, MinorMatrix) {
   EXPECT_EQ(minor_matrix(M), N);
 }
 
+TEST(MatFunc, CofactorSubmatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  const Matrix<double, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<double, Rows - 1, Cols - 1> N{{5, -6}, {-8, 9}};
+
+  EXPECT_EQ(cofactor_submatrix(M, 0, 0), N);
+}
+
 TEST(MatFunc, CofactorMatrix) {
+  // Also tests cofactor
   const std::size_t Rows = 3;
   const std::size_t Cols = 3;
 
