@@ -447,6 +447,15 @@ TEST(MatFunc, CofactorMatrix) {
   EXPECT_EQ(C, N);
 }
 
+TEST(MatFunc, AdjugateMatrix) {
+  const std::size_t Rows = 3;
+  const std::size_t Cols = 3;
+
+  const Matrix<double, Rows, Cols> M{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<double, Rows, Cols> Adj{{-3, 6, -3}, {6, -12, 6}, {-3, 6, -3}};
+  const auto A = adj(M);
+}
+
 TEST(MatPred, IsLowerTriangular) {
   const Matrix<int, 3, 3> M = {{1, 0, 0}, {4, 5, 0}, {7, 8, 9}};
   const Matrix<int, 4, 5> RM = {{1, 0, 0, 0, 0},
