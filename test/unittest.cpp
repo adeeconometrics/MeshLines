@@ -101,6 +101,23 @@ TEST(VecOps, Scalar) {
   EXPECT_EQ(a / 1, a);
 }
 
+TEST(VecOps, ScalarInplace) {
+  vector<int> a{1, 2, 3};
+  const vector<int> ap{2, 3, 4};
+  const vector<int> am{1, 2, 3};
+  const vector<int> amul{2, 4, 6};
+  const vector<int> adiv{1, 2, 3};
+
+  a += 1;
+  EXPECT_EQ(a, ap);
+  a -= 1;
+  EXPECT_EQ(a, am);
+  a *= 2;
+  EXPECT_EQ(a, amul);
+  a /= 2;
+  EXPECT_EQ(a, adiv);
+}
+
 TEST(VecOps, Equality) {
   const vector<int> a{1, 2, 3};
   const vector<int> b{2, 3, 4};
