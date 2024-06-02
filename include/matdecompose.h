@@ -180,40 +180,37 @@ auto qr_gm(const Matrix<T, Rows, Cols> &A)
 
   Matrix<T, Rows, Cols> Q = lin::zero_mat<T, Rows, Cols>();
   Matrix<T, Rows, Cols> R = A;
+  // Gram-Schmidt process
+  for (std::size_t k = 0; k < Cols; ++k) {
+    // Copy the k-th column of A to Q
+    for (std::size_t i = 0; i < Rows; ++i) {
+      Q(i, k) = A(i, k);
+    }
 
-  // Compute Q and R using the Gram-Schmidt process
-  for (std::size_t j = 0; j < Rows; ++j) {
-    // Compute the jth column of Q
-    for (std::size_t i = 0; i < Rows; ++i) {
-      Q(i, j) = R(i, j);
-    }
-    for (std::size_t k = 0; k < j; ++k) {
-      T dot_product = 0;
+    // Subtract the projections of Q onto the previous columns
+    for (std::size_t j = 0; j < k; ++j) {
+      R(j, k) = 0;
       for (std::size_t i = 0; i < Rows; ++i) {
-        dot_product += Q(i, k) * R(i, j);
+        R(j, k) += Q(i, j) * A(i, k);
       }
       for (std::size_t i = 0; i < Rows; ++i) {
-        Q(i, j) -= dot_product * Q(i, k);
+        Q(i, k) -= R(j, k) * Q(i, j);
       }
     }
-    // Normalize the jth column of Q
-    T norm = 0;
+
+    // Normalize the k-th column of Q
+    R(k, k) = 0;
     for (std::size_t i = 0; i < Rows; ++i) {
-      norm += Q(i, j) * Q(i, j);
+      R(k, k) += Q(i, k) * Q(i, k);
     }
-    norm = std::sqrt(norm);
+    R(k, k) = sqrt(R(k, k));
+
     for (std::size_t i = 0; i < Rows; ++i) {
-      Q(i, j) /= norm;
-    }
-    // Compute the jth row of R
-    for (std::size_t i = j; i < Rows; ++i) {
-      R(j, i) = 0;
-      for (std::size_t k = 0; k < Rows; ++k) {
-        R(j, i) += Q(k, j) * A(k, i);
-      }
+      Q(i, k) /= R(k, k);
     }
   }
-  mask_triu(R);
+
+  return std::make_tuple(Q, R);
 
   return std::make_tuple(Q, R);
 }
@@ -453,6 +450,11 @@ constexpr auto det(const Matrix<T, Rows, Cols> &M) -> double {
 // template <typename T> constexpr auto inv(const Matrix<T> &M) ->
 // Matrix<double> {
 //   return 1 / (det(A)) * transpose(cofactor_matrix(M));
+// }
+
+// template <typename T, std::size_t Rows, std::size_t Cols>
+// auto svd(const Matrix<T, Rows, Cols>& t_matrix) -> {
+
 // }
 
 // rowspace

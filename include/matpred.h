@@ -39,9 +39,29 @@ template <typename T, std::size_t Rows, std::size_t Cols>
 constexpr auto is_diag(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
 
   for (std::size_t i = 0; i < Rows; i++) {
+    if (M(i, i) == 0)
+      return false;
     for (std::size_t j = i + 1; j < Cols; j++) {
       if (j < Rows && i < Cols) {
         if (M(j, i) != 0 || M(i, j) != 0)
+          return false;
+      }
+    }
+  }
+  return true;
+}
+
+template <typename T, std::size_t Rows, std::size_t Cols>
+constexpr auto is_antidiag(const Matrix<T, Rows, Cols> &M) noexcept -> bool {
+  if (Rows != Cols)
+    return false;
+
+  for (std::size_t i = 0; i < Rows - 1; i++) {
+    if (M(i, Rows - i) != 0)
+      return false;
+    for (std::size_t j = 0; j < Cols; j++) {
+      if (i + j != Rows - 1) {
+        if (M(i, j) != 0)
           return false;
       }
     }

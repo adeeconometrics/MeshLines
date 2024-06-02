@@ -529,6 +529,28 @@ TEST(MatPred, IsDiagonal) {
   EXPECT_FALSE(is_diag(RN));
 }
 
+TEST(MatPred, IsAntiDiag) {
+  const Matrix<int, 3, 3> M = {{0, 0, 1}, {0, 5, 0}, {1, 0, 0}};
+  const Matrix<int, 5, 5> MM = {{0, 0, 0, 0, 1},
+                                {0, 0, 0, 1, 0},
+                                {0, 0, 1, 0, 0},
+                                {0, 1, 0, 0, 0},
+                                {1, 0, 0, 0, 0}};
+
+  EXPECT_TRUE(is_antidiag(M));
+  EXPECT_TRUE(is_antidiag(MM));
+
+  const Matrix<int, 3, 3> N = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+  const Matrix<int, 5, 5> NN = {{1, 0, 0, 0, 1},
+                                {0, 1, 0, 1, 0},
+                                {0, 0, 1, 0, 0},
+                                {0, 1, 0, 1, 0},
+                                {1, 0, 0, 0, 1}};
+
+  EXPECT_FALSE(is_antidiag(N));
+  EXPECT_FALSE(is_antidiag(NN));
+}
+
 TEST(MatPred, IsSquare) {
   const Matrix<int, 3, 3> M = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
   const Matrix<int, 4, 5> RM = {{1, 2, 3, 4, 5},
