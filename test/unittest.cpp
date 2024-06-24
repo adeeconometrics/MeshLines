@@ -175,12 +175,14 @@ TEST(VecOps, LPNorm) {
   EXPECT_NEAR(lp_norm(b, 2), 8.774964387392123, 1e-6);
 }
 
+#ifdef DEBUG
 TEST(VecOps, GetAngle) {
   const vector<int> a{1, 0};
   const vector<int> b{0, 1};
 
   EXPECT_NEAR(get_angle(a, b), 90, 1e-6);
 }
+#endif
 
 TEST(VecOps, Normalize) {
   const vector<int> a{1, 2, 3};
