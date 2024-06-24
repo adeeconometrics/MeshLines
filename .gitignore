@@ -6,3 +6,7 @@ docs/
 */bin
 */**.o
 */.exe
+docs_sphinx/_build/*
+docs_sphinx/_static/
+docs_sphinx/_templates/
+venv/
