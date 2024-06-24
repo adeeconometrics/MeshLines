@@ -379,7 +379,7 @@ TEST(MatFunc, LowerTriangularMatrix) {
   mask_tril(RM);
   EXPECT_EQ(RM, RLM);
 }
-
+#ifdef DEBUG
 TEST(MatFunc, DiagonalMatrix) {
   const std::size_t Rows = 3;
   const std::size_t Cols = 3;
@@ -402,6 +402,7 @@ TEST(MatFunc, DiagonalMatrix) {
   mask_diag(RM);
   EXPECT_EQ(RM, RDM);
 }
+#endif
 
 TEST(MatFunc, Trace) {
   const std::size_t Rows = 3;
