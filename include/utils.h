@@ -22,6 +22,7 @@
 #include <type_traits>
 #include <vector>
 
+#ifdef DEBUG
 template <typename T, std::size_t Rows, std::size_t Cols,
           typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
 auto operator<<(std::ostream &os,
@@ -49,6 +50,7 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   }
   return os << "]\n";
 };
+#endif
 
 template <typename Fn, typename ArgType>
 constexpr auto apply_fn(Fn &&fn, const lin::vector<ArgType> &v)
