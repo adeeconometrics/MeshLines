@@ -11,12 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: git
+      - name: Git
         run: git --version
-      - name: configure
-        run: sudo apt-get install make cmake build-essential
-      - name: gtest
-        run: | 
+      - name: Configure
+        run: |
+          sudo apt-get install make cmake build-essential
+          pip3 install sphinx
+          pip3 install breathe
+          pip3 install pydata-sphinx-theme
+          pip3 install sphinx-sitemap
+      - name: Gtest
+        run: |
           sudo apt-get install libgtest-dev
           cd ${{github.workspace}} 
           mkdir lib
@@ -27,14 +32,29 @@ jobs:
           cd build 
           cmake ../  
           make
-      - name: build
-        run: | 
+      - name: Build
+        run: |
           cd ${{github.workspace}} 
           mkdir build
           cd build 
           cmake ../ 
           make
-      - name: test
-        run: | 
+      - name: Test
+        run: |
           cd ${{github.workspace}}/build 
           ctest --output-on-failure
+      - name: Checkout repo
+        uses: actions/checkout@1.0.0
+      - name: Build docs
+        run: |
+          cd docs_sphinx
+          doxygen Doxyfile.in
+          make html
+          cd _build/html
+          touch .nojekyll
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs_sphinx/_build/html # The folder the action should deploy.
