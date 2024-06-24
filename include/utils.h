@@ -22,45 +22,24 @@
 #include <type_traits>
 #include <vector>
 
-template <typename T>
-auto operator<<(std::ostream &os, const lin::Matrix<T> &matrix)
-    -> std::ostream & {
-  static_assert(std::is_arithmetic_v<T>,
-                "template parameter must be of type arithmetic");
+#ifdef DEBUG
+template <typename T, std::size_t Rows, std::size_t Cols,
+          typename = typename std::enable_if_t<std::is_arithmetic_v<T>>>
+auto operator<<(std::ostream &os,
+                const lin::Matrix<T, Rows, Cols> &matrix) -> std::ostream & {
 
   if (matrix.empty()) {
     os << "[]" << std::endl;
     return os;
   }
-
-  std::size_t max_width = 0;
-  for (const auto &row : matrix) {
-    for (const auto &element : row) {
-      std::size_t width = std::to_string(element).size();
-      if (width > max_width) {
-        max_width = width;
-      }
-    }
-  }
-
-  os << "[";
-  for (std::size_t i = 0; i < matrix.size(); ++i) {
-    if (i != 0) {
-      os << " ";
-    }
+  for (std::size_t i{}; i < Rows; i++) {
     os << "[";
-    for (std::size_t j = 0; j < matrix[i].size(); ++j) {
-      os << std::setw(max_width) << matrix[i][j];
-      if (j != matrix[i].size() - 1) {
-        os << ", ";
-      }
+    for (std::size_t j{}; j < Cols; j++) {
+      os << std::setw(5) << matrix(i, j) << " ";
     }
-    os << "]";
-    if (i != matrix.size() - 1) {
-      os << '\n';
-    }
+    os << "]" << std::endl;
   }
-  return os << "]\n";
+  return os;
 }
 
 template <typename T>
@@ -71,6 +50,7 @@ auto operator<<(std::ostream &os, const std::vector<T> &v) -> std::ostream & {
   }
   return os << "]\n";
 };
+#endif
 
 template <typename Fn, typename ArgType>
 constexpr auto apply_fn(Fn &&fn, const lin::vector<ArgType> &v)
@@ -85,19 +65,19 @@ constexpr auto apply_fn(Fn &&fn, const lin::vector<ArgType> &v)
   return result;
 }
 
-template <typename Fn, typename ArgType>
-constexpr auto apply_fn(Fn &&functor, const lin::Matrix<ArgType> &v)
-    -> lin::Matrix<std::invoke_result_t<Fn &, const ArgType &>> {
+// template <typename Fn, typename ArgType>
+// constexpr auto apply_fn(Fn &&functor, const lin::Matrix<ArgType> &v)
+//     -> lin::Matrix<std::invoke_result_t<Fn &, const ArgType &>> {
 
-  using ResultType = std::invoke_result_t<Fn &, const ArgType &>;
-  lin::Matrix<ResultType> result{};
+//   using ResultType = std::invoke_result_t<Fn &, const ArgType &>;
+//   lin::Matrix<ResultType> result{};
 
-  for (const auto row : v) {
-    result.emplace_back(apply_fn(row, functor));
-  }
+//   for (const auto row : v) {
+//     result.emplace_back(apply_fn(row, functor));
+//   }
 
-  return result;
-}
+//   return result;
+// }
 
 // template <typename Collection>
 // constexpr auto flatten(const Collection &col)

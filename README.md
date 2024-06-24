@@ -14,6 +14,14 @@ I intend to learn about matrix factorization and develop insights to elide opera
 Note that there is no long-term initiative to support and resolve bugs on this project. The robustness of the codebase relies on the test coverage.
 You are welcome to submit an issue or drop a suggestion for this repo.
 
+## Design Principles
+
+Design for genericity and specialize later on performance
+
+- Add template mechanisms for interopt: it should be able to work with types that meets the operations required by Matrix semantics.
+- Zero cost abstraction: Imposing rules and expectations should come without cost
+- Minimal redundancies
+
 ---
 
 Matrix Decomposition:
@@ -34,17 +42,24 @@ Matrix Operations:
 - [x] Minor
 - [x] Cofactor
 - [x] Adjugate
-- [ ] Matrix-Scalar operations
+- [x] Matrix-Scalar operations
 - [ ] Inverse
 - [ ] Colspace
 - [ ] Rowspace
 - [ ] Nullspace
 - [ ] Span
 
-Algorithms for checking Matrix Properties
+Matrix Decompositions
 
-- [x] Determine Invertible Matrix
-- [x] Determine Square Matrix
-- [x] Determine Upper Triangular Matrix
-- [x] Determine Lower Triangular Matrix
-- [x] Find Trace of Matrix
+| Method                             | Description                                                                                                                                    | Type of Matrix              | Status |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ------ |
+| LU Decomposition                   | Factors a matrix into a product of a lower triangular matrix $L$ and an upper triangular matrix $U$.                                           | Square                      |        |
+| QR Decomposition                   | Factors a matrix into a product of an orthogonal matrix $Q$ and an upper triangular matrix $R$.                                                | Square, Rectangular         |        |
+| Cholesky Decomposition             | Factors a symmetric positive-definite matrix into a product of a lower triangular matrix $L$ and its transpose $𝐿^T$.                          | Symmetric Positive-Definite |        |
+| Singular Value Decomposition (SVD) | Factors a matrix into a product of three matrices: $U$ (orthogonal), $\sum$ (diagonal), and $VT$ (orthogonal).                                 | Square, Rectangular         |        |
+| Eigenvalue Decomposition           | Decomposes a matrix into its eigenvalues and eigenvectors.                                                                                     | Square                      |        |
+| Schur Decomposition                | Decomposes a matrix into a product of an orthogonal matrix $Q$ and an upper triangular matrix $T$.                                             | Square                      |        |
+| Hessenberg Decomposition           | Decomposes a matrix into a product of an orthogonal matrix $Q$ and a Hessenberg matrix $H$.                                                    | Square                      |        |
+| Jordan Decomposition               | Decomposes a matrix into its Jordan normal form.                                                                                               | Square                      |        |
+| Polar Decomposition                | Decomposes a matrix into a product of a unitary matrix $U$ and a positive semi-definite matrix $P$.                                            | Square                      |        |
+| Bunch-Kaufman Decomposition        | Factors a symmetric or Hermitian matrix into a product involving a permutation matrix, a lower triangular matrix, and a block diagonal matrix. | Symmetric, Hermitian        |        |
