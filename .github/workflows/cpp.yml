@@ -15,7 +15,7 @@ jobs:
         run: git --version
       - name: Configure
         run: |
-          sudo apt-get install make cmake build-essential
+          sudo apt-get install make cmake build-essential doxygen
           pip3 install sphinx
           pip3 install breathe
           pip3 install pydata-sphinx-theme
