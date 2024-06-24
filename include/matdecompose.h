@@ -170,6 +170,8 @@ auto plu(Matrix<T, Rows, Cols> A)
 
   return std::make_tuple(P, L, U);
 }
+
+#ifdef DEBUG
 // gram-schmidt process
 // conditions: linearly independent cols
 template <typename T, std::size_t Rows, std::size_t Cols>
@@ -280,6 +282,7 @@ auto qr_householder(const Matrix<T, Rows, Cols> &A)
 
   return std::make_tuple(Q, R);
 }
+#endif
 
 // ldl factorization
 // conditions: square, hermitian positive definite matrix. Check for rectangular
