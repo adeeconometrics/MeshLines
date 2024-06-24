@@ -53,14 +53,14 @@ auto transpose(const Matrix<T, Rows, Cols> &A) -> Matrix<T, Cols, Rows> {
 /**
  * @brief Inplace transpose function. Only works with square matrices.
  *
- * @tparam T type of the matrix
+ * @tparam Type type of the matrix
  * @tparam Rows The number of rows
  * @tparam Cols The number of columns
  * @param A matrix to be transposed
  */
-template <typename T, std::size_t Rows, std::size_t Cols,
+template <typename Type, std::size_t Rows, std::size_t Cols,
           typename = typename std::enable_if_t<Rows == Cols>>
-auto T(Matrix<T, Rows, Cols> &A) -> void {
+auto T(Matrix<Type, Rows, Cols> &A) -> void {
   for (std::size_t i = 0; i < Rows; i++)
     for (std::size_t j = i + 1; j < Cols; j++)
       std::swap(A(i, j), A(j, i));
